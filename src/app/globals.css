@@ -25,3 +25,12 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+.hash-lines {
+  background-image: url('https://wp.clarksglassworks.com/wp-content/uploads/2023/12/hash-lines-e1702235040222.png');
+  background-repeat: repeat;
+}
+
+.layer1 {
+  background-image: url('https://wp.clarksglassworks.com/wp-content/uploads/2023/12/layer1-e1702235087419.png');
+  background-repeat: repeat;
+}

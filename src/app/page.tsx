@@ -60,7 +60,7 @@ export default function Home() {
         alt="Clark Tape"
         width={500}
         height={300}
-        className='z-30 fixed bottom-[50px] left-[90px] animate-float'
+        className='z-30 fixed w-[80%] lg:w-auto top-[100px] lg:top-auto lg:bottom-[50px] lg:left-[90px] animate-float'
       />
 
       {/*  <Image

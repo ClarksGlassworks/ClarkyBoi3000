@@ -1,51 +1,33 @@
 'use client'
 import Image from 'next/image'
-import { createRoot } from 'react-dom/client'
-import { Canvas, useFrame, extend, MeshProps } from '@react-three/fiber'
-import { OrbitControls, useCursor } from '@react-three/drei'
-import { useRef, useState } from 'react'
-// import THREE from 'three'
-import { BufferGeometry, BoxGeometry } from 'three'
-import {Mesh, Euler, MathUtils} from 'three'
-import * as THREE from 'three'
 
-extend({ OrbitControls, BufferGeometry })
-
+import { useEffect, useRef, useState } from 'react'
 
 export default function Home() {
-  const gameboyRef = useRef();
-  const [gameboyRotation, setGameboyRotation] = useState([-Math.PI / 3, 0, -Math.PI / 4]);
+  const [gameboyRotation, setGameboyRotation] = useState(20);
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
+  const [animationClass, setAnimationClass] = useState('translate-y-[100%]');
+
+  useEffect(() => {
+    setAnimationClass('translate-y-[40px]');
+  }, []);
 
   const handleGameboyClick = () => {
     if (isGameboyRotated) {
-      setGameboyRotation([-Math.PI / 3, 0, -Math.PI / 4]);
+      setGameboyRotation(-Math.PI / 4);
     } else {
-      setGameboyRotation([0, 0, 0]);
+      setGameboyRotation(20);
     }
     setIsGameboyRotated(!isGameboyRotated);
   };
   return (
-
-
     <main className="flex min-h-screen flex-col items-center justify-between">
-
-
-
       <div className="hash-lines min-h-screen w-full h-full z-20 fixed left-0 right-0 top-0 bottom-0"></div>
       <div className="layer1 min-h-screen w-full h-full z-20 fixed left-0 right-0 top-0 bottom-0"></div>
       <div id="canvas-container" className='w-full h-screen z-30'>
-        <Canvas shadows camera={{ fov: 75, position: [0, 0, 20] }} onCreated={({ gl }) => {
-      gl.shadowMap.enabled = true;
-      gl.shadowMap.type = THREE.PCFSoftShadowMap; // or other types based on your preference
-   }} className='canvas1 w-full h-screen'>
+        <div style={{ width: "100vw", height: "100vh" }}>
 
-          <ambientLight />
-          <directionalLight position={[0, 10, 0]} intensity={1}  castShadow />
-          {/* <Box ref={gameboyRef} args={[8, 16, 1]}   position={[14, -10, 0]} rotation={gameboyRotation} 
-        onClick={handleGameboyClick} castShadow receiveShadow />
-          */}
-        </Canvas>
+        </div>
       </div>
 
       <Image
@@ -60,29 +42,59 @@ export default function Home() {
         alt="Clark Tape"
         width={500}
         height={300}
-        className='z-30 fixed w-[80%] lg:w-auto top-[100px] lg:top-auto lg:bottom-[50px] lg:left-[90px] animate-float'
+        className='z-30 fixed w-[80%] lg:w-auto top-[100px] lg:top-auto lg:bottom-[50px] lg:left-[90px] animate-float cursor-pointer'
       />
 
-      {/*  <Image
-        src="https://wp.clarksglassworks.com/wp-content/uploads/2023/12/gameboy-7.png"
-        alt="Gameboy"
-        width={500}
-        height={300}
-        className='z-30 relative'
-      /> */}
+      <div onClick={handleGameboyClick} className={`z-30 cursor-pointer fixed bottom-[-10%] lg:bottom-0 right-[-40%] lg:right-0 rotate-[${gameboyRotation}deg]  ${animationClass} translate-y-[20%] lg:translate-y-[50px] animated transition-all duration-500 scale-50 lg:scale-100`}>
+       
+       <div className='relative'>
+         <Image
+          src="https://wp.clarksglassworks.com/wp-content/uploads/2023/12/gameboy-7.png"
+          alt="Gameboy"
+          width={500}
+          height={300}
+          className='z-30 relative'
+        />
+
+      <div className='absolute top-10 left-20 z-10'>
+        <Image
+          src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406843489_10224453376305909_4200315121223775507_n-249x300.jpg"
+          alt="screen1"
+          width={300}
+          height={249}
+          className='z-10 '
+        />
+        {/* <Image
+          src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406242813_10224453376505914_7619948699842207230_n-226x300.jpg"
+          alt="screen1"
+          width={300}
+          height={249}
+          className='z-10 '
+        />
+        <Image
+          src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406256733_10224453376105904_7503758711031315498_n-1-300x291.jpg"
+          alt="screen1"
+          width={300}
+          height={249}
+          className='z-10 '
+        />
+        <Image
+          src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406339932_10224453376425912_8431945766142961895_n-2-300x288.jpg"
+          alt="screen1"
+          width={300}
+          height={249}
+          className='z-10 '
+        />
+        <Image
+          src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406244967_10224453376065903_4386710781484094465_n-241x300.jpg"
+          alt="screen1"
+          width={300}
+          height={249}
+          className='z-10 '
+        /> */}
+        </div>
+        </div>
+      </div>
     </main>
   )
 }
-// function Box(props) {
-//   const mesh = useRef();
-//   // const gradient = new THREE.MeshBasicMaterial({
-//   //   color: 'orange',
-//   //   gradientMap: new THREE.TextureLoader().load('path/to/gradient.png'),
-//   // });
-
-//   return (
-//     <mesh {...props} ref={mesh} material={globalMaterial} castShadow receiveShadow>
-//       <boxBufferGeometry args={props.args} />
-//     </mesh>
-//   );
-// }

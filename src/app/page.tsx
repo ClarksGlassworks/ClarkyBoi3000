@@ -4,24 +4,22 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 
 export default function Home() {
-  const [gameboyRotation, setGameboyRotation] = useState(20);
+  const [gameboyRotation, setGameboyRotation] = useState(0);
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
-  const [animationClass, setAnimationClass] = useState('bottom-[-10%] lg:bottom-0 translate-y-[100%]');
+  const [animationClass, setAnimationClass] = useState('-bottom-[100%]');
 
   useEffect(() => {
-    setAnimationClass('bottom-[-10%] lg:bottom-0 translate-y-[40px]');
+    setAnimationClass('bottom-[10%]');
   }, []);
 
   const handleGameboyClick = () => {
     if (isGameboyRotated) {
-      setGameboyRotation(-Math.PI / 4);
-
-      setAnimationClass('bottom-[30%] lg:bottom-[30%] translate-y-[100%]');
-      
+      setGameboyRotation(0);
+      setAnimationClass('');
     } else {
       setGameboyRotation(20);
 
-      setAnimationClass('bottom-[-10%] lg:bottom-0 translate-y-[40px]');
+      setAnimationClass('');
     }
 
 
@@ -52,7 +50,7 @@ export default function Home() {
         className='z-30 fixed w-[80%] lg:w-auto top-[100px] lg:top-auto lg:bottom-[50px] lg:left-[90px] animate-float cursor-pointer'
       />
 
-      <div onClick={handleGameboyClick} className={`z-30 cursor-pointer fixed  right-[-40%] lg:right-0 rotate-[${gameboyRotation}deg]  ${animationClass} translate-y-[20%] lg:translate-y-[50px] animated transition-all duration-500 scale-50 lg:scale-100`}>
+      <div onClick={handleGameboyClick} className={`z-30 cursor-pointer fixed  rotate-[${gameboyRotation}deg]  ${animationClass} translate-y-[20%] lg:translate-y-[50px] animated transition-all duration-500 scale-50 lg:scale-100`}>
        
        <div className='relative'>
          <Image
@@ -63,7 +61,7 @@ export default function Home() {
           className='z-30 relative'
         />
 
-      <div className='absolute top-10 left-20 z-10'>
+      <div className='absolute top-10 left-20 z-10 right-10'>
         <Image
           src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406843489_10224453376305909_4200315121223775507_n-249x300.jpg"
           alt="screen1"

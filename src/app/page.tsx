@@ -6,18 +6,25 @@ import { useEffect, useRef, useState } from 'react'
 export default function Home() {
   const [gameboyRotation, setGameboyRotation] = useState(20);
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
-  const [animationClass, setAnimationClass] = useState('translate-y-[100%]');
+  const [animationClass, setAnimationClass] = useState('bottom-[-10%] lg:bottom-0 translate-y-[100%]');
 
   useEffect(() => {
-    setAnimationClass('translate-y-[40px]');
+    setAnimationClass('bottom-[-10%] lg:bottom-0 translate-y-[40px]');
   }, []);
 
   const handleGameboyClick = () => {
     if (isGameboyRotated) {
       setGameboyRotation(-Math.PI / 4);
+
+      setAnimationClass('bottom-[30%] lg:bottom-[30%] translate-y-[100%]');
+      
     } else {
       setGameboyRotation(20);
+
+      setAnimationClass('bottom-[-10%] lg:bottom-0 translate-y-[40px]');
     }
+
+
     setIsGameboyRotated(!isGameboyRotated);
   };
   return (
@@ -45,7 +52,7 @@ export default function Home() {
         className='z-30 fixed w-[80%] lg:w-auto top-[100px] lg:top-auto lg:bottom-[50px] lg:left-[90px] animate-float cursor-pointer'
       />
 
-      <div onClick={handleGameboyClick} className={`z-30 cursor-pointer fixed bottom-[-10%] lg:bottom-0 right-[-40%] lg:right-0 rotate-[${gameboyRotation}deg]  ${animationClass} translate-y-[20%] lg:translate-y-[50px] animated transition-all duration-500 scale-50 lg:scale-100`}>
+      <div onClick={handleGameboyClick} className={`z-30 cursor-pointer fixed  right-[-40%] lg:right-0 rotate-[${gameboyRotation}deg]  ${animationClass} translate-y-[20%] lg:translate-y-[50px] animated transition-all duration-500 scale-50 lg:scale-100`}>
        
        <div className='relative'>
          <Image

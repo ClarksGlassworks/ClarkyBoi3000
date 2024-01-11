@@ -86,7 +86,7 @@ export default function Home() {
 
 
   const handleGameboyClick = () => {
-    if (isGameboyRotated) {
+    if (!isGameboyRotated) {
       setGameboyRotation(0);
       setGameboyScale(1.5)
       setAnimationClass("");
@@ -108,10 +108,6 @@ export default function Home() {
 
       setTitleOpacity(0)
 
-
-      // we then need to set a series of delays an animations
-
-      // 1. delay 1 second
       setTimeout(() => {
 
         setGameboyScale((window.matchMedia("(max-width: 768px)").matches ? 2.5 : 4))
@@ -191,7 +187,40 @@ export default function Home() {
           />
           <div className="absolute top-[60px] left-[60px] z-20 flex items-center justify-center h-[150px] w-[150px] overflow-hidden bg-green-800">
             <div className={``}>
-              <div className={`z-50 flex items-center justify-center text-center mx-auto top-[40%] left-[25%] absolute flex-col font-mono opacity-${titleOpacity}`}>
+
+            <AnimatePresence>
+              <motion.div className={`z-50 flex items-center justify-center text-center mx-auto top-[10%] left-[13%] absolute flex-col font-mono`}
+                initial={{ opacity: 1, y: 0 }}
+                animate={{ opacity: isGameboyRotated ? 1 : 0 }}
+                exit={{ opacity: 0, y: 50}}
+                transition={{ duration: 0.5, delay: isGameboyRotated ? 1 : 0 }}
+                key={'gameboyTitle'}
+              >
+                Menu 👀
+                <div className="w-full text-left place-self-start justify-self-start">
+                
+                <p className="text-xs underline text-blue-700 mb-1">1. Shop the gear</p>
+                
+                <p className="text-xs underline text-blue-700 mb-1">2. About me!</p>
+
+                <p className="text-xs underline text-blue-700 mb-1">3. Wholesalin'</p>
+                <p className="text-xs underline text-blue-700">4. Contact</p>
+                </div>
+                
+              </motion.div>
+              </AnimatePresence>
+
+
+
+              
+            <AnimatePresence>
+              <motion.div className={`z-50 flex items-center justify-center text-center mx-auto top-[40%] left-[25%] absolute flex-col font-mono`}
+                initial={{ opacity: 1, y: 0 }}
+                animate={{ opacity: isGameboyRotated ? 0 : 1 }}
+                exit={{ opacity: 0, y: 50 }}
+                transition={{ duration: 0.5, delay:0.5 }}
+                key={'gameboyTitle'}
+              >
                 Game Over
                 <div className="w-full">
                   <span className="text-[10px] opacity-50 animated absolute w-full left-0">
@@ -201,7 +230,8 @@ export default function Home() {
                     Click for menu{" "}
                   </span>
                 </div>
-              </div>
+              </motion.div>
+              </AnimatePresence>
 
 
               <AnimatePresence>

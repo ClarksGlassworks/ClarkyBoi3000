@@ -2,14 +2,17 @@
 import Image from "next/image";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
 
 export default function Home() {
-  const [gameboyRotation, setGameboyRotation] = useState('rotate-[20deg]');
+  const [gameboyRotation, setGameboyRotation] = useState(20);
+  const [gameboyScale, setGameboyScale] = useState(1)
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
   const [animationClass, setAnimationClass] = useState("opacity-0");
   const [position, setPosition] = useState({ x: 2000, y: 2000 });
   const [currentImage, setCurrentImage] = useState(0);
+  const [titleOpacity, setTitleOpacity] = useState(100);
+  const gameboyRef = useRef(null);
   useEffect(() => {
     setAnimationClass("opacity-100");
     setPosition({
@@ -28,7 +31,24 @@ export default function Home() {
 
     return () => clearInterval(timer); // Clean up on component unmount
   }, [nextImage]);
-
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (gameboyRef.current && !gameboyRef.current.contains(event.target)) {
+        // Click was outside the Gameboy, trigger it to close
+        handleGameboyClick();
+      }
+    };
+  
+    // Add the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+  
+    // Clean up on component unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  
+  const { scrollYProgress } = useScroll();
 
   const gameboyImages = [
     'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406843489_10224453376305909_4200315121223775507_n-249x300.jpg',
@@ -48,7 +68,8 @@ export default function Home() {
 
   const handleGameboyClick = () => {
     if (isGameboyRotated) {
-      setGameboyRotation('rotate-[0deg]');
+      setGameboyRotation(0);
+      setGameboyScale(1.5)
       setAnimationClass("");
       setPosition({
         x:
@@ -58,11 +79,36 @@ export default function Home() {
         y:
           window.innerHeight /
           (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
-          (window.matchMedia("(max-width: 768px)").matches ? 215 : 430),
+          (window.matchMedia("(max-width: 768px)").matches ? 215 : 350),
       });
+
+
+      setTitleOpacity(0)
+      // we then need to set a series of delays an animations
+
+      // 1. delay 1 second
+      setTimeout(()=>{
+
+          setGameboyScale( (window.matchMedia("(max-width: 768px)").matches ? 2.5 :4))
+          setPosition({
+            x:
+              window.innerWidth /
+              (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
+              (window.matchMedia("(max-width: 768px)").matches ? 125 : 300),
+            y:
+              window.innerHeight /
+              (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
+              (window.matchMedia("(max-width: 768px)").matches ? 120 : -150),
+          });
+      },1000)
+
     } else {
-      setGameboyRotation('rotate-[20deg]');
+      
+      setGameboyRotation(20);
+      setGameboyScale(1)
       setAnimationClass("");
+
+      setTitleOpacity(100)
       setPosition({
         x: window.innerWidth - 300, // Subtract half the width of the image
         y: window.innerHeight - 430, // Subtract half the height of the image
@@ -101,9 +147,10 @@ export default function Home() {
 
       <div className="absolute w-full h-full flex items-center justify-center cursor-pointer">
         <div
-          style={{ left: `${position.x}px`, top: `${position.y}px` }}
+          style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `rotate(${gameboyRotation}deg) scale(${gameboyScale})`,  }}
           onClick={handleGameboyClick}
-          className={`z-30 fixed ${gameboyRotation} ${animationClass} transition-all duration-500`}
+          ref={gameboyRef}
+          className={`z-30 fixed ${animationClass} transition-all duration-500`}
         >
           <Image
             src="https://wp.clarksglassworks.com/wp-content/uploads/2023/12/gameboy-7.png"
@@ -113,8 +160,8 @@ export default function Home() {
             className="w-[300px] z-30 relative"
           />
           <div className="absolute top-[60px] left-[60px] z-20 flex items-center justify-center h-[150px] w-[150px] overflow-hidden bg-green-800">
-            <div className="">
-              <div className="z-50 flex items-center justify-center text-center mx-auto top-[40%] left-[25%] absolute flex-col font-mono">
+            <div className={``}>
+              <div className={`z-50 flex items-center justify-center text-center mx-auto top-[40%] left-[25%] absolute flex-col font-mono opacity-${titleOpacity}`}>
                 Game Over
                 <div className="w-full">
                   <span className="text-[10px] opacity-50 animated absolute w-full left-0">

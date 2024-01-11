@@ -41,7 +41,7 @@ export default function Home() {
         clearInterval(timer);
     
     };
-  }, [nextImage, isGameboyRotated]);
+  }, [nextImage]);
 
 
   useEffect(() => {
@@ -123,7 +123,7 @@ export default function Home() {
           y:
             window.innerHeight /
             (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
-            (window.matchMedia("(max-width: 768px)").matches ? 120 : -150),
+            (window.matchMedia("(max-width: 768px)").matches ? 120 : -80),
         });
         // setOverlayOpacity('opacity-100')
       }, 500)
@@ -137,6 +137,10 @@ export default function Home() {
       setTitleOpacity(100)
 
       // setOverlayOpacity('opacity-50')
+      setPosition({
+        x: window.innerWidth - 300, // Subtract half the width of the image
+        y: window.innerHeight - 430, // Subtract half the height of the image
+      });
 
 
     }
@@ -199,18 +203,19 @@ export default function Home() {
                 </div>
               </div>
 
-    {isGameboyRotated && (
+
               <AnimatePresence>
                 <motion.div
                   className={`z-40 bg-black w-full h-full absolute left-0 top-0 right-0 bottom-0 font-mono`}
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  animate={{ opacity: isGameboyRotated ? 1 : 0 }}
                   exit={{ opacity: 0 }}
+                  key="gameboyOverlay"
                   transition={{ duration: 0.5, delay: 1 }}
 
                 ></motion.div>
               </AnimatePresence>
-)}
+
 
               <AnimatePresence mode="popLayout">
                 <motion.img

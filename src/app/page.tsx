@@ -203,7 +203,7 @@ export default function Home() {
                 
                 <p className="text-xs underline text-blue-700 mb-1">2. About me!</p>
 
-                <p className="text-xs underline text-blue-700 mb-1">3. Wholesalin'</p>
+                <p className="text-xs underline text-blue-700 mb-1">3. Wholesalin</p>
                 <p className="text-xs underline text-blue-700">4. Contact</p>
                 </div>
                 

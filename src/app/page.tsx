@@ -9,10 +9,13 @@ export default function Home() {
   const [gameboyScale, setGameboyScale] = useState(1)
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
   const [animationClass, setAnimationClass] = useState("opacity-0");
+  const [overlayOpacity, setOverlayOpacity] = useState('opacity-50');
   const [position, setPosition] = useState({ x: 2000, y: 2000 });
   const [currentImage, setCurrentImage] = useState(0);
   const [titleOpacity, setTitleOpacity] = useState(100);
   const gameboyRef = useRef(null);
+  const timerRef = useRef(null);
+
   useEffect(() => {
     setAnimationClass("opacity-100");
     setPosition({
@@ -24,30 +27,42 @@ export default function Home() {
   const [nextImage, setNextImage] = useState(1);
 
   useEffect(() => {
+    // Clear the previous interval
+ 
+
+    // Set up a new interval
     const timer = setInterval(() => {
       setCurrentImage(nextImage);
       setNextImage((nextImage + 1) % gameboyImages.length);
     }, 3000); // Change image every 3 seconds
 
-    return () => clearInterval(timer); // Clean up on component unmount
-  }, [nextImage]);
+    // Clean up on component unmount
+    return () => {
+        clearInterval(timer);
+    
+    };
+  }, [nextImage, isGameboyRotated]);
+
+
   useEffect(() => {
+     // @ts-ignore
     const handleClickOutside = (event) => {
+      // @ts-ignore
       if (gameboyRef.current && !gameboyRef.current.contains(event.target)) {
         // Click was outside the Gameboy, trigger it to close
         handleGameboyClick();
       }
     };
-  
+
     // Add the event listener
     document.addEventListener('mousedown', handleClickOutside);
-  
+
     // Clean up on component unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  
+
   const { scrollYProgress } = useScroll();
 
   const gameboyImages = [
@@ -57,6 +72,10 @@ export default function Home() {
     'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406339932_10224453376425912_8431945766142961895_n-2-300x288.jpg',
     'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406244967_10224453376065903_4386710781484094465_n-241x300.jpg',
   ];
+
+  const gameboyImages2 = [
+
+  ]
 
   const variants = {
     initial: { opacity: 0, scale: 1.2 },
@@ -71,6 +90,10 @@ export default function Home() {
       setGameboyRotation(0);
       setGameboyScale(1.5)
       setAnimationClass("");
+
+      // clearInterval(timerRef.current);
+
+      // setNextImage('https://example.com/fixed-image-url.jpg');
       setPosition({
         x:
           window.innerWidth /
@@ -84,35 +107,38 @@ export default function Home() {
 
 
       setTitleOpacity(0)
+
+
       // we then need to set a series of delays an animations
 
       // 1. delay 1 second
-      setTimeout(()=>{
+      setTimeout(() => {
 
-          setGameboyScale( (window.matchMedia("(max-width: 768px)").matches ? 2.5 :4))
-          setPosition({
-            x:
-              window.innerWidth /
-              (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
-              (window.matchMedia("(max-width: 768px)").matches ? 125 : 300),
-            y:
-              window.innerHeight /
-              (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
-              (window.matchMedia("(max-width: 768px)").matches ? 120 : -150),
-          });
-      },1000)
+        setGameboyScale((window.matchMedia("(max-width: 768px)").matches ? 2.5 : 4))
+        setPosition({
+          x:
+            window.innerWidth /
+            (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
+            (window.matchMedia("(max-width: 768px)").matches ? 125 : 300),
+          y:
+            window.innerHeight /
+            (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
+            (window.matchMedia("(max-width: 768px)").matches ? 120 : -150),
+        });
+        // setOverlayOpacity('opacity-100')
+      }, 500)
 
     } else {
-      
+
       setGameboyRotation(20);
       setGameboyScale(1)
       setAnimationClass("");
 
       setTitleOpacity(100)
-      setPosition({
-        x: window.innerWidth - 300, // Subtract half the width of the image
-        y: window.innerHeight - 430, // Subtract half the height of the image
-      });
+
+      // setOverlayOpacity('opacity-50')
+
+
     }
 
     setIsGameboyRotated(!isGameboyRotated);
@@ -147,7 +173,7 @@ export default function Home() {
 
       <div className="absolute w-full h-full flex items-center justify-center cursor-pointer">
         <div
-          style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `rotate(${gameboyRotation}deg) scale(${gameboyScale})`,  }}
+          style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `rotate(${gameboyRotation}deg) scale(${gameboyScale})`, }}
           onClick={handleGameboyClick}
           ref={gameboyRef}
           className={`z-30 fixed ${animationClass} transition-all duration-500`}
@@ -172,8 +198,19 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-              <div className="z-40 bg-black opacity-50 w-full h-full absolute left-0 top-0 right-0 bottom-0 font-mono"></div>
 
+    {isGameboyRotated && (
+              <AnimatePresence>
+                <motion.div
+                  className={`z-40 bg-black w-full h-full absolute left-0 top-0 right-0 bottom-0 font-mono`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, delay: 1 }}
+
+                ></motion.div>
+              </AnimatePresence>
+)}
 
               <AnimatePresence mode="popLayout">
                 <motion.img

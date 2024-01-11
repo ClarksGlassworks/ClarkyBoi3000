@@ -6,7 +6,7 @@ import { motion, AnimatePresence, useScroll } from "framer-motion";
 
 export default function Home() {
   const [gameboyRotation, setGameboyRotation] = useState(20);
-  const [gameboyScale, setGameboyScale] = useState(1)
+  const [gameboyScale, setGameboyScale] = useState(0.8)
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
   const [animationClass, setAnimationClass] = useState("opacity-0");
   const [overlayOpacity, setOverlayOpacity] = useState('opacity-50');
@@ -16,13 +16,7 @@ export default function Home() {
   const gameboyRef = useRef(null);
   const timerRef = useRef(null);
 
-  useEffect(() => {
-    setAnimationClass("opacity-100");
-    setPosition({
-      x: window.innerWidth - 300, // Subtract half the width of the image
-      y: window.innerHeight - 430, // Subtract half the height of the image
-    });
-  }, []);
+
 
   const [nextImage, setNextImage] = useState(1);
 
@@ -49,21 +43,15 @@ export default function Home() {
     const handleClickOutside = (event) => {
       // @ts-ignore
       if (gameboyRef.current && !gameboyRef.current.contains(event.target)) {
-        // Click was outside the Gameboy, trigger it to close
         handleGameboyClick();
       }
     };
-
-    // Add the event listener
     document.addEventListener('mousedown', handleClickOutside);
-
-    // Clean up on component unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  const { scrollYProgress } = useScroll();
 
   const gameboyImages = [
     'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406843489_10224453376305909_4200315121223775507_n-249x300.jpg',
@@ -73,17 +61,19 @@ export default function Home() {
     'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406244967_10224453376065903_4386710781484094465_n-241x300.jpg',
   ];
 
-  const gameboyImages2 = [
-
-  ]
-
   const variants = {
     initial: { opacity: 0, scale: 1.2 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.8 },
   };
 
-
+  useEffect(() => {
+    setAnimationClass("opacity-100");
+    setPosition({
+      x: window.innerWidth - 300, // Subtract half the width of the image
+      y: window.innerHeight - 430, // Subtract half the height of the image
+    });
+  }, []);
 
   const handleGameboyClick = () => {
     if (!isGameboyRotated) {
@@ -127,7 +117,7 @@ export default function Home() {
     } else {
 
       setGameboyRotation(20);
-      setGameboyScale(1)
+      setGameboyScale(0.8)
       setAnimationClass("");
 
       setTitleOpacity(100)
@@ -173,7 +163,7 @@ export default function Home() {
 
       <div className="absolute w-full h-full flex items-center justify-center cursor-pointer">
         <div
-          style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `rotate(${gameboyRotation}deg) scale(${gameboyScale})`, }}
+          style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `rotate(${gameboyRotation}deg) scale(${gameboyScale}) translateX(${isGameboyRotated ? '0px':'50px'})`, }}
           onClick={handleGameboyClick}
           ref={gameboyRef}
           className={`z-30 fixed ${animationClass} transition-all duration-500`}

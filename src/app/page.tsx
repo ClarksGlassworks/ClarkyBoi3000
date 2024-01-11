@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { ImageResponse } from "next/server";
 
 export default function Home() {
   const [gameboyRotation, setGameboyRotation] = useState(20);
@@ -161,6 +162,15 @@ export default function Home() {
         />
       </div>
 
+    <div  className="z-30 fixed left-0 top-0">
+      <Image
+      src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/20240108_191900-1.png"
+      alt="bong"
+      width={500}
+      height={300}
+      className="z-30 cursor-pointer scale-100 lg:scale-75"
+       />
+    </div>
       <div className="absolute w-full h-full flex items-center justify-center cursor-pointer">
         <div
           style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `rotate(${gameboyRotation}deg) scale(${gameboyScale}) translateX(${isGameboyRotated ? '0px':'50px'})`, }}
@@ -178,6 +188,7 @@ export default function Home() {
           <div className="absolute top-[60px] left-[60px] z-20 flex items-center justify-center h-[150px] w-[150px] overflow-hidden bg-green-800">
             <div className={``}>
 
+
             <AnimatePresence>
               <motion.div className={`z-50 flex items-center justify-center text-center mx-auto top-[10%] left-[13%] absolute flex-col font-mono`}
                 initial={{ opacity: 1, y: 0 }}
@@ -189,12 +200,12 @@ export default function Home() {
                 Menu 👀
                 <div className="w-full text-left place-self-start justify-self-start">
                 
-                <p className="text-xs underline text-blue-700 mb-1">1. Shop the gear</p>
+                <p className="text-xs underline text-blue-700 mb-1">1. Shop-the-gear</p>
                 
-                <p className="text-xs underline text-blue-700 mb-1">2. About me!</p>
+                <p className="text-xs underline text-blue-700 mb-1">2. About-me.mp3</p>
 
                 <p className="text-xs underline text-blue-700 mb-1">3. Wholesalin</p>
-                <p className="text-xs underline text-blue-700">4. Contact</p>
+                <p className="text-xs underline text-blue-700">4. Contact.exe</p>
                 </div>
                 
               </motion.div>

@@ -15,12 +15,12 @@ const Top8Friends = ({ products }) => {
 						height={150}
 						className="max-h-[150px] max-w-[120px]  border-2 object-fill border-[#ca6707] overflow-hidden"
 					/>
-					<div className="text-blue-500 text-sm underline mt-2">Tom</div>
+					<div className="text-blue-500 text-sm underline mt-2">Tom<br />Online</div>
 				</div>
 
 				{products.map((product, index) => {
                     console.log({product})
-                    const { name, image: {sourceUrl: src}, description, price, slug } = product
+                    const { name, image: {sourceUrl: src}, description, price, regularPrice, salePrice, slug } = product
 					return (
                         <Link href={`/${product.slug}`} key={index}>
 						<div className="bg-white col-span-1  flex flex-col items-center justify-center ">
@@ -33,6 +33,10 @@ const Top8Friends = ({ products }) => {
 							/>
 							<div className="text-blue-500 text-sm underline mt-2 text-center line-clamp-1">
 								{name}
+							</div>
+							<div className="flex flex-row items-center gap-2">
+							<div className={`semibold  ${salePrice ? 'line-through text-red-500 text-xs opacity-50':'text-green-500 text-sm '}`}>{regularPrice}</div>
+							{salePrice && <div className="text-sm semibold text-green-500">{salePrice}</div>}
 							</div>
 						</div>
                         </Link>

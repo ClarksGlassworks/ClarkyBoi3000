@@ -66,6 +66,7 @@ export async function getWooCommerceProduct(slug){
         name
         slug
         description
+        purchasable
         shortDescription
         image {
           id
@@ -75,6 +76,11 @@ export async function getWooCommerceProduct(slug){
           nodes {
             sourceUrl
           }
+        }
+        ... on ProductWithPricing {
+          price
+          regularPrice
+          salePrice
         }
       }
     }
@@ -97,10 +103,17 @@ export async function getWooCommerceProducts({featured = null}) {
             id
             name
             slug
+            purchasable
             image {
               id
               sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
             }
+            ... on ProductWithPricing {
+              price
+              regularPrice
+              salePrice
+            }
+
           }
         }
       }
@@ -120,6 +133,7 @@ export async function getAllPostsForHome(preview) {
             excerpt
             slug
             date
+            purchasable
             featuredImage {
               node {
                 sourceUrl

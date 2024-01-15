@@ -15,7 +15,7 @@ import { getAllPostsWithSlug, getPostAndMorePosts, getWooCommerceProduct,  getWo
 // import { CMS_NAME } from "../../lib/constants";
 import Layout from "../components/layout";
 import Product from "../components/product";
-
+import Image from "next/image";
 export default function Post({ product, preview }) {
   const router = useRouter();
   // const morePosts = posts?.edges;
@@ -43,8 +43,9 @@ export default function Post({ product, preview }) {
                   content={product.image?.node?.sourceUrl}
                 />
               </Head>
-             
+
              <h1>{product.name}</h1>
+             <Image src={product.image?.sourceUrl} alt={product.name} width="500" height="300" />
             </article>
 
           </>

@@ -54,19 +54,11 @@ export async function getAllPostsWithSlug() {
           }
         }
       }
-      wooCommerceProducts(first: 10000) {
-        edges {
-          node {
-            slug
-          }
-        }
-      }
     }
   `);
   return data?.posts;
 }
 export async function getWooCommerceProduct(slug){
-  console.log('------->', slug)
   const data = await fetchAPI(`
     query ($slug: ID!) {
       product(id: $slug, idType: SLUG) {
@@ -77,7 +69,7 @@ export async function getWooCommerceProduct(slug){
         shortDescription
         image {
           id
-          sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+          sourceUrl
         }
         galleryImages {
           nodes {
@@ -92,8 +84,6 @@ export async function getWooCommerceProduct(slug){
       slug,
     }
   });
-
-  console.log('------->', data)
   return data?.product;
 }
 
@@ -109,7 +99,7 @@ export async function getWooCommerceProducts({featured = null}) {
             slug
             image {
               id
-              sourceUrl
+              sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
             }
           }
         }

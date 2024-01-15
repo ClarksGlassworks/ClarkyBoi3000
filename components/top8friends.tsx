@@ -43,6 +43,7 @@ const Top8Friends = ({ products }) => {
 					);
 				})}
 			</div>
+			<div className="border-t border-[#ca6707] pt-2 mt-2 text-right text-blue-500 underline cursor-pointer"><Link href="/shop">View All of Clarks Friends</Link></div>
 		</div>
 	);
 };

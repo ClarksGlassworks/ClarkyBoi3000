@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 const Top8Friends = ({ products }) => {
 	return (
-		<div className="z-30 fixed left-[8%] right-[8%] top-[40%] lg:top-10  w-auto  lg:w-[600px] p-2 border-2 border-[#ca6707] bg-white ">
+		<div className="z-30  relative   w-auto  lg:w-[600px] p-2  overflow-auto">
+			<div className="mt-[350px] bg-white border-2 border-[#ca6707] w-full">
 			<div className="w-full  bg-[#fdd5a8] text-[#ca6707] p-2">
 				Clark's Top 8 Friends
 			</div>
@@ -44,6 +45,7 @@ const Top8Friends = ({ products }) => {
 				})}
 			</div>
 			<div className="border-t border-[#ca6707] pt-2 mt-2 text-right text-blue-500 underline cursor-pointer"><Link href="/shop">View All of Clarks Friends</Link></div>
+		</div>
 		</div>
 	);
 };

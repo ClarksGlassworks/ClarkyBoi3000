@@ -27,9 +27,9 @@ export default function Index({ allPosts: { edges }, preview }) {
       </Head>
       <Container>
       <>
+      <Corner />
       <Top8Friends products={products} />
       <Casette />
-      <Corner />
       <Gamebody />
       </>
       </Container>

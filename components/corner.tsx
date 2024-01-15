@@ -6,7 +6,7 @@ const Corner = () => {
         alt="Corner Leopard"
         width={500}
         height={300}
-        className="z-30 fixed top-0 right-0"
+        className="z-20 fixed top-0 right-0"
       />
    
       );

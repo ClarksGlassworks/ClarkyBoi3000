@@ -59,7 +59,12 @@ export default function Post({ product, preview }) {
 
              </div>        
              
-             <div className="w-full px-4 absolute bottom-[20px]"><div  className="bg-black p-4 text-[20px] text-white text-center rounded-full ">Add to Cart</div></div>
+             <div>
+              {product.galleryImages?.nodes?.map((image, index) => { return (
+                <Image src={image?.sourceUrl} alt={product.name} width="500" height="300" className="object-cover w-full h-full" key={index} />
+              )})}
+             </div>
+             <div className="w-full px-4 fixed bottom-[20px]"><div  className="bg-black p-4 text-[20px] text-white text-center rounded-full ">Add to Cart</div></div>
             </article>
 
           </>

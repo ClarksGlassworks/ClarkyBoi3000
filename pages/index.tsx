@@ -54,10 +54,10 @@ export default function Index({ allPosts: { edges }, preview }) {
 		scale: isMobile ? 0.5 : 1,
 	};
   const zoomInToGameboyStep1State = {
-		x: -100,
-		y: -150,
-		rotate: 20,
-		scale: isMobile ? 0.5 : 1,
+		x: isMobile ? 30 : 400,
+		y: isMobile ? 180 : -250,
+		rotate: 0,
+		scale: isMobile ? 2.1 : 4,
 	};
 
   const zoomInToGameboyStep2State = {
@@ -117,11 +117,11 @@ export default function Index({ allPosts: { edges }, preview }) {
 
 	useEffect(() => {
 		if (scrollState === "initial") {
-			setGameboyState(initialGameboyState);
+			setGameboyState(menuActive ? zoomInToGameboyStep1State : initialGameboyState);
 			setCasetteState(initialCasetteState);
 			setHeaderBarState(initialHeaderBarState);
 		} else if (scrollState === "scrolling") {
-			setGameboyState(scrollingGameboyState);
+			setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
 			setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
       setHasScrolled(true)
@@ -132,6 +132,14 @@ export default function Index({ allPosts: { edges }, preview }) {
 		}
 	}, [scrollState]);
 
+
+  useEffect(() => {
+    if(menuActive){
+      setGameboyState(zoomInToGameboyStep1State)
+    }else{
+      setGameboyState(initialGameboyState)
+    }
+  }, [menuActive]) 
 	console.log({ scrollState });
 
 	// console.log({products})

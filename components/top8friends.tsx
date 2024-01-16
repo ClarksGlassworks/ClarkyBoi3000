@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 const Top8Friends = ({ products }) => {
 	return (
-		<div className="z-30  absolute   w-auto left-4 right-4  lg:w-[600px]  overflow-auto top-[20%]">
-			<div className=" bg-white border-2 border-[#ca6707] w-full relative mt-[350px] mb-[200px]">
+		<div className="z-30  absolute   w-auto left-4 right-4  lg:w-[600px]   top-[20%] lg:top-[30px] lg:left-[30px]">
+			<div className=" bg-white border-2 border-[#ca6707] w-full relative mt-[350px] lg:mt-auto mb-[200px]">
 			<div className="w-full  bg-[#fdd5a8] text-[#ca6707] p-2">
 				Clark's Top 8 Friends
 			</div>
@@ -20,7 +20,6 @@ const Top8Friends = ({ products }) => {
 				</div>
 
 				{products.map((product, index) => {
-                    console.log({product})
                     const { name, image: {sourceUrl: src}, description, price, regularPrice, salePrice, slug } = product
 					return (
                         <Link href={`/${product.slug}`} key={index}>
@@ -44,7 +43,7 @@ const Top8Friends = ({ products }) => {
 					);
 				})}
 			</div>
-			<div className="border-t border-[#ca6707] pt-2 mt-2 text-right text-blue-500 underline cursor-pointer"><Link href="/shop">View All of Clarks Friends</Link></div>
+			<div className="border-t border-[#ca6707] p-2 mt-2 text-right text-blue-500 underline cursor-pointer"><Link href="/shop">View All of Clarks Friends</Link></div>
 		</div>
 		</div>
 	);

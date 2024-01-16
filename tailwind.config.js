@@ -42,6 +42,9 @@ module.exports = {
       animation: {
         float: 'float 2s ease-in-out infinite',
       },
+      backgroundImage: theme => ({
+        'custom-bg': "url('/bg.svg')",
+      })
     },
   },
   plugins: [],

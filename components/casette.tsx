@@ -15,7 +15,7 @@ const Casette = memo(({isScrolled, scrollYProgress, casetteScale, casetteRotate,
 	<>
 	<div className=''>
     <motion.div
-      className={`z-40 fixed p-4 ml-2 transition-all duration-300 ${isScrolled ? '':'animate-float'}`}
+      className={`z-40 h-[300px] fixed p-4 ml-2 transition-all duration-300 ${isScrolled ? '':'animate-float'}`}
 	  ref={ref}
 	  id={'casette'}
       style={{
@@ -23,8 +23,8 @@ const Casette = memo(({isScrolled, scrollYProgress, casetteScale, casetteRotate,
         rotate: casetteRotate,
         // bottom: isScrolled ? 'auto' : '10%',
         top: isMobile ? casetteY : 'auto',
-		bottom: isMobile ? 'auto' :casetteY
-        // left: casetteX,
+		bottom: isMobile ? 'auto' :casetteY,
+        left: casetteX,
       }}
     >
       <img

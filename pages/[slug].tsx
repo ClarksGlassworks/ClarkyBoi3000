@@ -16,6 +16,7 @@ import { getAllPostsWithSlug, getPostAndMorePosts, getWooCommerceProduct,  getWo
 import Layout from "../components/layout";
 import Product from "../components/product";
 import Image from "next/image";
+import Link from "next/link";
 export default function Post({ product, preview }) {
   const router = useRouter();
   // const morePosts = posts?.edges;
@@ -27,7 +28,7 @@ export default function Post({ product, preview }) {
 
   return (
     <Product preview={preview}>
-      <Container>
+
         <Header />
         {router.isFallback ? (
           <PostTitle>Loading…</PostTitle>
@@ -43,14 +44,26 @@ export default function Post({ product, preview }) {
                   content={product.image?.node?.sourceUrl}
                 />
               </Head>
+              <div className="relative">
 
-             <h1>{product.name}</h1>
-             <Image src={product.image?.sourceUrl} alt={product.name} width="500" height="300" />
+         
+             <div className=" z-10 h-[50vh] bg-green-400 w-full border-b-8 border-white shadow-2xl shadow-black"> 
+             <Image src={product.image?.sourceUrl} alt={product.name} width="500" height="300" className="object-cover w-full h-full" />
+             </div>
+             <div className="absolute z-20 text-[40px] font-semibold text-white p-4  leading-none bottom-[10px]"><h1 className="">{product.name}</h1></div>
+             {product.price && (<div className="absolute z-20 text-[20px] font-semibold text-white bg-black rounded-full p-2 right-[20px] top-[20px]">{product.price}</div>)}
+
+             <Link href="../"><div className="absolute z-20 text-[30px] font-semibold text-black  rounded-full p-2 left-[10px] top-[10px]">&larr;</div></Link>
+
+  
+
+             </div>        
+             
+             <div className="w-full px-4 absolute bottom-[20px]"><div  className="bg-black p-4 text-[20px] text-white text-center rounded-full ">Add to Cart</div></div>
             </article>
 
           </>
         )}
-      </Container>
     </Product>
   );
 }

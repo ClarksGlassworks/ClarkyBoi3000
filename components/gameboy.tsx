@@ -2,13 +2,24 @@
 import { useState, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+const gameboyImages = [
+  'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406843489_10224453376305909_4200315121223775507_n-249x300.jpg',
+  'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406242813_10224453376505914_7619948699842207230_n-226x300.jpg',
+  'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406256733_10224453376105904_7503758711031315498_n-1-300x291.jpg',
+  'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406339932_10224453376425912_8431945766142961895_n-2-300x288.jpg',
+  'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406244967_10224453376065903_4386710781484094465_n-241x300.jpg',
+];
 
 //@ts-ignore
-const Gamebody = memo(({ isScrolled, scrollYProgress, gameboyContainerScale, gameboyContainerRotate, gameboyContainerX, gameboyContainerY, ref, isMobile }) => {
+const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile }) => {
 
+  const { x, y, rotate, scale } = gameboyState
+  const gameboyWidth = 280
+  const gameboyHeight = 440
+
+  const isScrolled = scrollState === 'scrolling'
   console.log('gameboy', isScrolled)
-  const [gameboyRotation, setGameboyRotation] = useState(20);
-  const [gameboyScale, setGameboyScale] = useState(0.8)
+
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
   const [animationClass, setAnimationClass] = useState("opacity-0");
   const [overlayOpacity, setOverlayOpacity] = useState('opacity-50');
@@ -53,13 +64,7 @@ const Gamebody = memo(({ isScrolled, scrollYProgress, gameboyContainerScale, gam
   }, [isGameboyRotated])
 
 
-  const gameboyImages = [
-    'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406843489_10224453376305909_4200315121223775507_n-249x300.jpg',
-    'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406242813_10224453376505914_7619948699842207230_n-226x300.jpg',
-    'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406256733_10224453376105904_7503758711031315498_n-1-300x291.jpg',
-    'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406339932_10224453376425912_8431945766142961895_n-2-300x288.jpg',
-    'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/406244967_10224453376065903_4386710781484094465_n-241x300.jpg',
-  ];
+
 
   const variants = {
     initial: { opacity: 0, scale: 1.2 },
@@ -145,17 +150,17 @@ const Gamebody = memo(({ isScrolled, scrollYProgress, gameboyContainerScale, gam
   return (
     <motion.div
       style={{
-        scale: isScrolled ? isMobile ? 0.6 : gameboyContainerScale :  0.5,
-        rotate: isScrolled ? gameboyContainerRotate : 20,
-        bottom: isScrolled ? '-30%' : '-25%',
-        right: isScrolled ? isMobile ? '-25%' : '25%' : isMobile ? '-15%': '15%',
+        scale: scale,
+        rotate: rotate,
+        bottom: y,
+        right: x,
         // top: scrollYProgress * 100,
         // left: 300 + (gameboyContainerX),
         zIndex: 100,
       }}
       id='gameboyContainer'
       ref={ref}
-      className="fixed w-full h-full cursor-pointer overflow-hidden max-w-[300px] max-h-[600px]" >
+      className={`fixed cursor-pointer overflow-hidden transition-all w-[${gameboyWidth}px] h-[${gameboyHeight}px]`} >
       <div
         // style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `rotate(${gameboyRotation}deg)  translateX(${isGameboyRotated ? '0px' : '50px'})`, }}
         onClick={handleGameboyClick}

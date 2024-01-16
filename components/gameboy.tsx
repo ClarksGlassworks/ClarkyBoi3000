@@ -20,7 +20,7 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile, setMenuActive
   const gameboyHeight = 440
 
   const isScrolled = scrollState === 'scrolling'
-  console.log('gameboy', isScrolled)
+
 
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
   const [animationClass, setAnimationClass] = useState("opacity-0");
@@ -48,24 +48,24 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile, setMenuActive
     };
   }, [nextImage]);
 
-
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // @ts-ignore
-      if (gameboyRef.current && !gameboyRef.current.contains(event.target)) {
-        handleGameboyClick();
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    // @ts-ignore
+    if (gameboyRef.current && !gameboyRef.current.contains(event.target)) {
+      // Check if the clicked element is a Link component
+      if (event.target.closest('a')) {
+        return;
       }
-    };
-    if (isGameboyRotated) {
-      document.addEventListener('mousedown', handleClickOutside);
+      handleGameboyClick();
     }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isGameboyRotated])
-
-
+  };
+  if (isGameboyRotated) {
+    document.addEventListener('mousedown', handleClickOutside);
+  }
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [isGameboyRotated])
 
 
   const variants = {
@@ -83,70 +83,25 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile, setMenuActive
   }, []);
 
   const handleGameboyClick = () => {
+
+    
+
     if (!isGameboyRotated) {
-      // setGameboyRotation(0);
-      // setGameboyScale(1.5)
       setMenuActive(true)
       setAnimationClass("");
-
-      // clearInterval(timerRef.current);
-
-      // setNextImage('https://example.com/fixed-image-url.jpg');
-      // setPosition({
-      //   x:
-      //     window.innerWidth /
-      //     (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
-      //     (window.matchMedia("(max-width: 768px)").matches ? 150 : 300),
-      //   y:
-      //     window.innerHeight /
-      //     (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
-      //     (window.matchMedia("(max-width: 768px)").matches ? 215 : 350),
-      // });
-
-
       setTitleOpacity(0)
-
-      setTimeout(() => {
-
-        // setGameboyScale((window.matchMedia("(max-width: 768px)").matches ? 2.5 : 4))
-        // setPosition({
-        //   x:
-        //     window.innerWidth /
-        //     (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
-        //     (window.matchMedia("(max-width: 768px)").matches ? 125 : 300),
-        //   y:
-        //     window.innerHeight /
-        //     (window.matchMedia("(max-width: 768px)").matches ? 2 : 1.5) -
-        //     (window.matchMedia("(max-width: 768px)").matches ? 120 : -80),
-        // });
-        // setOverlayOpacity('opacity-100')
-      }, 500)
-
     } else {
-
-      // setGameboyRotation(20);
-      // setGameboyScale(0.8)
       setAnimationClass("");
-    setMenuActive(false)
+      setMenuActive(false)
       setTitleOpacity(100)
-
-      // setOverlayOpacity('opacity-50')
-      // setPosition({
-      //   x: window.innerWidth - 300, // Subtract half the width of the image
-      //   y: window.innerHeight - 430, // Subtract half the height of the image
-      // });
-
-
     }
 
     setIsGameboyRotated(!isGameboyRotated);
   };
 
-
-
-
-
-
+  const handleInnerDivClick = (event) => {
+    event.stopPropagation();
+  };
 
 
 
@@ -157,16 +112,13 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile, setMenuActive
         rotate: rotate,
         bottom: y,
         right: x,
-        // top: scrollYProgress * 100,
-        // left: 300 + (gameboyContainerX),
         zIndex: 100,
       }}
       id='gameboyContainer'
       ref={ref}
+      onClick={()=> {handleGameboyClick()}}
       className={`fixed cursor-pointer overflow-hidden transition-all duration-500 w-[${gameboyWidth}px] h-[${gameboyHeight}px]`} >
       <div
-        // style={{ left: `${position.x}px`, top: `${position.y}px`, transform: `rotate(${gameboyRotation}deg)  translateX(${isGameboyRotated ? '0px' : '50px'})`, }}
-        onClick={handleGameboyClick}
         ref={gameboyRef}
         className={`z-30 ${animationClass} transition-all duration-500`}
       >
@@ -175,25 +127,25 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile, setMenuActive
           alt="Gameboy"
           width={500}
           height={300}
-          className="w-[300px] z-30 relative"
+          className="w-[300px] z-30 relative select-none"
         />
-        <div className="absolute top-[60px] left-[60px] z-20 flex items-center justify-center h-[150px] w-[150px] overflow-hidden bg-green-800">
-          <div className={``}>
+        <div className="absolute top-[66px] left-[69px] z-[999] flex items-center justify-center h-[133px] w-[142px] overflow-hidden bg-green-800 shadow-inner shadow-black">
+          <div className={`disable-click-bubling`} onClick={handleInnerDivClick}>
 
             <Image src={'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/fxk4.gif'} alt="" width="600" height={400} />
             <AnimatePresence>
-              <motion.div className={`z-50 flex items-center justify-center text-center mx-auto top-[6%] left-[18%] absolute flex-col text-white font-vt323`}
+              <motion.div className={`z-[999] flex items-center justify-center text-center mx-auto top-[2%] left-[18%] absolute flex-col text-white font-vt323`}
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: isGameboyRotated ? 1 : 0 }}
                 exit={{ opacity: 0, y: 50 }}
                 transition={{ duration: 0.5, delay: isGameboyRotated ? 1 : 0 }}
                 key={'gameboyTitle'}
-                onClick={(e)=> { e.stopPropagation(); console.log('goo oogogogo')}}
+                // onClick={(e) => { e.stopPropagation(); console.log('goo oogogogo') }}
               >
                 Menu 👀
-                <div className="w-full text-left place-self-start justify-self-start flex flex-col gap-0" onClick={(e)=> { e.stopPropagation(); console.log('goo oogogogo')}}>
+                <div className="w-full text-left place-self-start justify-self-start flex flex-col gap-0" >
 
-                  <Link href="/shop" onClick={(e)=> { e.stopPropagation(); console.log('goo oogogogo')}}><p className="text-sm underline text-blue-700 font-vt323">1. Shop-the-gear</p></Link>
+                  <Link href="/shop" className="z-[999] relative" onClick={(e) => { e.stopPropagation(); console.log('goo oogogogo') }}><p className="text-sm underline text-blue-700 font-vt323">1. Shop-the-gear</p></Link>
 
                   <p className="text-sm underline text-blue-700 font-vt323">2. Custom Order</p>
                   <p className="text-sm underline text-blue-700  font-vt323">3. About-me.mp3</p>

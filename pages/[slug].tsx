@@ -78,7 +78,7 @@ export default function Post({ product, preview }) {
 							</Link>
 						</div>
 
-						<div>
+						<div className="bg-white">
 							{product.galleryImages?.nodes?.map((image, index) => {
 								return (
 									<Image

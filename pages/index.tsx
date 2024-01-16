@@ -32,8 +32,8 @@ export default function Index({ allPosts: { edges }, preview }) {
   const gameboyContainerX = useTransform(scrollYProgress, [0, 1], ['5%', '-40%']);
   const casetteScale = useTransform(scrollYProgress, [0, 1], [1, 0.45]);
   const casetteRotate = useTransform(scrollYProgress, [0, 1], [0, -10]);
-  const casetteY = useTransform(scrollYProgress, [0, 1], [isMobile ? '50px':'0px', isMobile ? '-85px':'0px']);
-  const casetteX = useTransform(scrollYProgress, [0, 1], ['0px', '-100px']);
+  const casetteY = useTransform(scrollYProgress, [0, 1], [isMobile ? '50px':'0px', isMobile ? '-85px':'30px']);
+  const casetteX = useTransform(scrollYProgress, [0, 1], [isMobile ? '0px': '20px', isMobile ? '-100px':'5px']);
 
   const gameboyRef=useRef(null)
   const casetteRef=useRef(null)

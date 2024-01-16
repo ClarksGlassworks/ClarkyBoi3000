@@ -28,6 +28,9 @@ module.exports = {
         "7xl": "4.5rem",
         "8xl": "6.25rem",
       },
+      fontFamily: {
+        'vt323': ['VT323', 'monospace'],
+      },
       boxShadow: {
         small: "0 5px 10px rgba(0, 0, 0, 0.12)",
         medium: "0 8px 30px rgba(0, 0, 0, 0.12)",

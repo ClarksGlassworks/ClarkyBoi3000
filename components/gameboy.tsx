@@ -11,7 +11,7 @@ const gameboyImages = [
 ];
 
 //@ts-ignore
-const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile }) => {
+const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile, setMenuActive }) => {
 
   const { x, y, rotate, scale } = gameboyState
   const gameboyWidth = 280
@@ -84,6 +84,7 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile }) => {
     if (!isGameboyRotated) {
       // setGameboyRotation(0);
       // setGameboyScale(1.5)
+      setMenuActive(true)
       setAnimationClass("");
 
       // clearInterval(timerRef.current);
@@ -124,7 +125,7 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile }) => {
       // setGameboyRotation(20);
       // setGameboyScale(0.8)
       setAnimationClass("");
-
+      setMenuActive(false)
       setTitleOpacity(100)
 
       // setOverlayOpacity('opacity-50')
@@ -199,28 +200,28 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile }) => {
 
               </motion.div>
 
-              <motion.div className={`z-50 flex items-center justify-center text-center mx-auto top-[40%] left-[25%] absolute flex-col font-mono`}
+              <motion.div className={`z-50 flex items-center justify-center text-center mx-auto top-[40px] left-[26px] absolute flex-col font-vt323 text-white text-2xl`}
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: isGameboyRotated ? 0 : 1 }}
                 exit={{ opacity: 0, y: 50 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
                 key={'gameboyScreen'}
               >
-                Game Over
+                <span className=" text-white text-[30px] font-vt323">Game Over</span>
                 <div className="w-full">
-                  <span className="text-[10px] opacity-50 animated absolute w-full left-0">
-                    Click for menu{" "}
+                  <span className="text-[35px] opacity-100 animated absolute w-full left-0  text-white font-vt323 font-thin">
+                    MENU{" "}
                   </span>
-                  <span className="text-[10px] opacity-50 animated animate-ping absolute w-full left-0">
-                    Click for menu{" "}
+                  <span className="text-[35px] opacity-50 animated animate-ping absolute w-full left-0 text-white font-vt323 font-thin">
+                    MENU{" "}
                   </span>
                 </div>
               </motion.div>
 
               <motion.div
                 className={`z-40 bg-black w-full h-full absolute left-0 top-0 right-0 bottom-0 font-mono`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isGameboyRotated ? 1 : 0 }}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: isGameboyRotated ? 1 : 0.5 }}
                 exit={{ opacity: 0 }}
                 key="gameboyOverlay"
                 transition={{ duration: 0.5, delay: 1 }}

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 
+//@ts-ignore
 const Gamebody = memo(({ isScrolled, scrollYProgress, gameboyContainerScale, gameboyContainerRotate, gameboyContainerX, gameboyContainerY, ref, isMobile }) => {
 
   console.log('gameboy', isScrolled)
@@ -144,7 +145,7 @@ const Gamebody = memo(({ isScrolled, scrollYProgress, gameboyContainerScale, gam
   return (
     <motion.div
       style={{
-        scale: isScrolled ? gameboyContainerScale : isMobile ? 0.6 : 0.5,
+        scale: isScrolled ? isMobile ? 0.6 : gameboyContainerScale :  0.5,
         rotate: isScrolled ? gameboyContainerRotate : 20,
         bottom: isScrolled ? '-30%' : '-25%',
         right: isScrolled ? isMobile ? '-25%' : '25%' : isMobile ? '-15%': '15%',

@@ -57,7 +57,9 @@ export default function Index({ allPosts: { edges }, preview }) {
       </Head>
       <Corner />
       <Top8Friends products={products} />
+      {/* @ts-ignore */}
       <Casette isScrolled={isScrolled} scrollYProgress={scrollYProgress} casetteScale={casetteScale} casetteRotate={casetteRotate} casetteX={casetteX} casetteY={casetteY} ref={casetteRef} isMobile={isMobile} />
+        {/* @ts-ignore */}
       <Gamebody isScrolled={isScrolled} scrollYProgress={scrollYProgress} gameboyContainerScale={gameboyContainerScale} gameboyContainerRotate={gameboyContainerRotate} gameboyContainerX={gameboyContainerX} gameboyContainerY={gameboyContainerY} ref={gameboyRef} isMobile={isMobile}/>
     </Layout>
   );

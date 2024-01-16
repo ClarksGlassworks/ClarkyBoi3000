@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, memo } from 'react';
 import { motion, useTransform, useScroll } from 'framer-motion';
 // import Image from 'next/image';
 import animatedBg from './bg.svg';
+//@ts-ignore
 const Casette = memo(({isScrolled, scrollYProgress, casetteScale, casetteRotate, casetteX, casetteY, ref, isMobile}) => {
  
   
@@ -50,7 +51,7 @@ const Casette = memo(({isScrolled, scrollYProgress, casetteScale, casetteRotate,
 		<section className='w-full h-full flex justify-between items-center'>
 			<div></div>
 			<div className='text-white pr-8 opacity-50'>
-				
+
 		Cart Empty</div>
 		</section>
 	  </motion.div>

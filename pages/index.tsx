@@ -179,13 +179,13 @@ export default function Index({ allPosts: { edges }, preview }) {
 				headerBarState={headerBarState}
 			/>
 			{/* @ts-ignore */}
-			<Gamebody gameboyState={gameboyState}
+			{/* <Gamebody gameboyState={gameboyState}
 				scrollState={scrollState}
 				ref={gameboyRef}
 				isMobile={isMobile}
 				setMenuActive={setMenuActive}
 
-			/>
+			/> */}
 
 			<ClarkyBoi clarkyBoiState={clarkyBoiState}  />
 

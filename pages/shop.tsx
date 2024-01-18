@@ -28,13 +28,14 @@ const Shop = ({ preview }) => {
 			<div>
 				<Casette
 					casetteState={{
-						x: "26%",
+						x: "0%",
 						y: -40,
-						mobileX: 0,
-						mobileY: 0,
-						rotate: 0,
-						scale: 0.5,
+						mobileX: -190,
+						mobileY: -90,
+						rotate: -20,
+						scale: isMobile ? 0.4 : 0.8,
 						position: "top",
+                        zIndex:9999,
 					}}
 				/>
 			</div>

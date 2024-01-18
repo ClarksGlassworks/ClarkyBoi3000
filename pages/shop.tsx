@@ -21,7 +21,7 @@ const Shop = ({ preview }) => {
 			<Head>
 				<title>Shop all Glass | Clark's Glassworks</title>
 			</Head>
-           
+           <div className="  backdrop-blur-sm w-full h-screen -z-10 fixed "></div>
 			<div>
 				<ShoppingCartButton />
 			</div>
@@ -40,12 +40,12 @@ const Shop = ({ preview }) => {
 				/>
 			</div>
 
-			<div className="w-full max-w-screen-lg mx-auto mt-[150px] mb-[150px]">
+			<div className="w-full max-w-screen-lg mx-auto pt-[100px] mb-[150px]">
 				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-auto lg:w-full mx-4 lg:mx-0 ">
 					{products?.map((product) => {
 						return (
 							
-								<div className="bg-white rounded-lg">
+								<div className="bg-white rounded-lg shadow-lg shadow-[rgba(0,0,0,0.5)]">
                                     <Link
 								href={`/${product.slug}`}
 								key={product.id}

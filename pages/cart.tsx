@@ -5,8 +5,8 @@ import { useGetCart } from "../lib/api";
 import Image from "next/image";
 import Head from "next/head";
 import toast, { toastConfig } from 'react-simple-toasts';
-import 'react-simple-toasts/dist/theme/chroma.css'; // choose your theme
-toastConfig({ theme: 'chroma', position: 'bottom-center' }); // configure global toast settings, like theme
+import 'react-simple-toasts/dist/theme/dark.css'; // choose your theme
+toastConfig({ theme: 'dark', position: 'bottom-center' }); // configure global toast settings, like theme
 
 const ShoppingCartPage = ({ preview }) => {
 

@@ -9,11 +9,12 @@ import Head from "next/head";
 import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useWindowSize from "../hooks/useWindowSize";
 const Shop = ({ preview }) => {
 	// const [products, setProducts] = useState(null)
 	// const { cart, mutate } = useGetCart()
 	const { products } = useWooCommerceProducts();
-
+    const { isMobile } = useWindowSize()
 	return (
 		<Layout preview={preview}>
             
@@ -39,31 +40,32 @@ const Shop = ({ preview }) => {
 			</div>
 
 			<div className="w-full max-w-screen-lg mx-auto mt-[150px] mb-[150px]">
-				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full ">
+				<div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-auto lg:w-full mx-4 lg:mx-0 ">
 					{products?.map((product) => {
 						return (
-							<Link
+							
+								<div className="bg-white rounded-lg">
+                                    <Link
 								href={`/${product.slug}`}
 								key={product.id}
 							>
-								<div className="bg-white rounded-lg">
 									<img
 										src={product.image.sourceUrl}
 										alt=""
 										className="rounded-t-lg"
 									/>
 									<h1
-										className="text-4xl font-vt323 p-4 pb-0"
-										style={{ minHeight: "3.8em" }}
+										className="text-2xl lg:text-4xl font-vt323 p-4 pb-0 underline"
+										style={{ minHeight: isMobile ? "4.5em":"3.8em" }}
 									>
 										{product.name}
 										<div>
-											<div className="text-2xl font-vt323 text-green-600">
+											<div className="text-xl lg:text-2xl font-vt323 text-green-600">
 												{product.price}
 											</div>
 										</div>
 									</h1>
-
+                                    </Link>
 									{product.purchasable && (
 										<div className="p-4">
 											<AddToCartButton
@@ -80,7 +82,7 @@ const Shop = ({ preview }) => {
 										</div>
 									)}
 								</div>
-							</Link>
+							
 						);
 					})}
 				</div>

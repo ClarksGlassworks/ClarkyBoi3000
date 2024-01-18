@@ -5,10 +5,10 @@ import MoreStories from "../components/more-stories";
 import HeroPost from "../components/hero-post";
 import Intro from "../components/intro";
 import Layout from "../components/layout";
-import { getAllPostsForHome, getWooCommerceProducts } from "../lib/api";
+import { getWooCommerceProduct, getWooCommerceProducts, useWooCommerceProducts } from "../lib/api";
 import { CMS_NAME } from "../lib/constants";
 import Top8Friends from "../components/top8friends";
-import Casette from "../components/casette";
+import Casette from "../components/homepage-header";
 import Corner from "../components/corner";
 import Gamebody from "../components/gameboy";
 import { useEffect, useRef, useState } from "react";
@@ -16,6 +16,7 @@ import { useScroll, useTransform } from "framer-motion";
 import useWindowSize from "../hooks/useWindowSize";
 import { set } from "date-fns";
 import Image from "next/image";
+import HomepageHeader from "../components/homepage-header";
 
 export default function Index({ allPosts: { edges }, preview }) {
 	const heroPost = edges[0]?.node;
@@ -126,9 +127,10 @@ export default function Index({ allPosts: { edges }, preview }) {
 			setHeaderBarState(scrollingHeaderBarState);
       setHasScrolled(true)
 		} else if (scrollState === "end") {
-			// setGameboyState(scrollingGameboyState)
-			// setCasetteState(scrollingCasetteState)
-			// setHeaderBarState(scrollingHeaderBarState)
+      setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
+			setCasetteState(scrollingCasetteState);
+			setHeaderBarState(scrollingHeaderBarState);
+      setHasScrolled(true)
 		}
 	}, [scrollState]);
 
@@ -151,7 +153,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 			<Corner />
 			<Top8Friends products={products} />
 			{/* @ts-ignore */}
-			<Casette casetteState={casetteState}
+			<HomepageHeader casetteState={casetteState}
 				scrollState={scrollState}
 				ref={casetteRef}
 				isMobile={isMobile}

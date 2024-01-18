@@ -1,6 +1,7 @@
-const API_URL = process.env.WORDPRESS_API_URL;
+const API_URL = "https://wp.clarksglassworks.com/graphql";
+import useSWR, { mutate } from 'swr';
 
-async function fetchAPI(query = "", { variables }: Record<string, any> = {}) {
+async function fetcher(query = "", { variables }: Record<string, any> = {}) {
   const headers = { "Content-Type": "application/json" };
 
   if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
@@ -9,7 +10,6 @@ async function fetchAPI(query = "", { variables }: Record<string, any> = {}) {
     ] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
   }
 
-  // WPGraphQL Plugin must be enabled
   const res = await fetch(API_URL, {
     headers,
     method: "POST",
@@ -27,25 +27,68 @@ async function fetchAPI(query = "", { variables }: Record<string, any> = {}) {
   return json.data;
 }
 
-export async function getPreviewPost(id, idType = "DATABASE_ID") {
-  const data = await fetchAPI(
-    `
+export function useFetchAPI(query, variables) {
+  const { data, error, mutate } = useSWR([query, variables], fetcher);
+
+  return {
+    data,
+    isLoading: !error && !data,
+    isError: error,
+    mutate,
+  };
+}
+
+export function useGetCart() {
+  
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const { data,  mutate, error } = useSWR('/api/getCart', fetcher);
+
+  return {
+    cart: data,
+    isLoading : !data && !error,
+    isError : error,
+    mutate,
+  };
+}
+export async function addToCart(productId, quantity) {
+
+  console.log('----->', productId, quantity)
+  const response = await fetch('/api/addToCart', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ productId, quantity }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  const data = await response.json();
+  return data;
+}
+export function usePreviewPost(id, idType = "DATABASE_ID") {
+  const query = `
     query PreviewPost($id: ID!, $idType: PostIdType!) {
       post(id: $id, idType: $idType) {
         databaseId
         slug
         status
       }
-    }`,
-    {
-      variables: { id, idType },
-    },
-  );
-  return data.post;
-}
+    }`;
 
-export async function getAllPostsWithSlug() {
-  const data = await fetchAPI(`
+  const { data, isLoading, isError, mutate } = useFetchAPI(query, { id, idType });
+
+  return {
+    post: data?.post,
+    isLoading,
+    isError,
+    mutate,
+  };
+}
+export function useAllPostsWithSlug() {
+  const query = `
     {
       posts(first: 10000) {
         edges {
@@ -55,11 +98,103 @@ export async function getAllPostsWithSlug() {
         }
       }
     }
-  `);
-  return data?.posts;
+  `;
+
+  const { data, isLoading, isError, mutate } = useFetchAPI(query);
+
+  return {
+    posts: data?.posts,
+    isLoading,
+    isError,
+    mutate,
+  };
 }
-export async function getWooCommerceProduct(slug){
-  const data = await fetchAPI(`
+export function useWooCommerceProduct(slug) {
+  
+  const { data, mutate, error } = useSWR(`/api/product?id=${slug}`, fetcher);
+
+  return {
+    product: data,
+    isLoading : !data && !error,
+    isError : error,
+    mutate,
+  };
+}
+
+export function useWooCommerceProducts() {
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const { data,  mutate, error } = useSWR('/api/products', fetcher);
+
+  return {
+    products: data,
+    isLoading : !data && !error,
+    isError : error,
+    mutate,
+  };
+}
+
+async function fetchAPI(query = "", { variables } = {}) {
+  const headers = { "Content-Type": "application/json" };
+
+  if (process.env.WORDPRESS_AUTH_REFRESH_TOKEN) {
+    headers[
+      "Authorization"
+    ] = `Bearer ${process.env.WORDPRESS_AUTH_REFRESH_TOKEN}`;
+  }
+
+
+  const res = await fetch(API_URL, {
+    headers,
+    method: "POST",
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  });
+
+  const json = await res.json();
+  if (json.errors) {
+    console.error(json.errors);
+    throw new Error("Failed to fetch API");
+  }
+  return json.data;
+}
+
+
+export async function getWooCommerceProducts({featured = null}) {
+  const whereClause = featured !== null ? `, where: { featured: ${featured} }` : '';
+  const query = `
+    {
+      products(first: 10000${whereClause}) {
+        edges {
+          node {
+            id
+            name
+            slug
+            purchasable
+            image {
+              id
+              sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+            }
+            ... on ProductWithPricing {
+              price
+              regularPrice
+              salePrice
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const data = await fetchAPI(query);
+
+  return data?.products;
+}
+
+export async function getWooCommerceProduct(slug) {
+  console.log("------->slug", slug)
+  const query = `
     query ($slug: ID!) {
       product(id: $slug, idType: SLUG) {
         id
@@ -84,193 +219,9 @@ export async function getWooCommerceProduct(slug){
         }
       }
     }
-  `,
-  {
-    variables: {
-      slug,
-    }
-  });
+  `;
+
+  const data = await fetchAPI(query, { slug } );
+
   return data?.product;
-}
-
-export async function getWooCommerceProducts({featured = null}) {
-  const whereClause = featured !== null ? `, where: { featured: ${featured} }` : '';
-  const data = await fetchAPI(`
-    {
-      products(first: 10000${whereClause}) {
-        edges {
-          node {
-            id
-            name
-            slug
-            purchasable
-            image {
-              id
-              sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
-            }
-            ... on ProductWithPricing {
-              price
-              regularPrice
-              salePrice
-            }
-
-          }
-        }
-      }
-    }
-  `);
-  return data?.products;
-}
-
-export async function getAllPostsForHome(preview) {
-  const data = await fetchAPI(
-    `
-    query AllPosts {
-      posts(first: 20, where: { orderby: { field: DATE, order: DESC } }) {
-        edges {
-          node {
-            title
-            excerpt
-            slug
-            date
-            purchasable
-            featuredImage {
-              node {
-                sourceUrl
-              }
-            }
-            author {
-              node {
-                name
-                firstName
-                lastName
-                avatar {
-                  url
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `,
-    {
-      variables: {
-        onlyEnabled: !preview,
-        preview,
-      },
-    },
-  );
-
-  return data?.posts;
-}
-
-export async function getPostAndMorePosts(slug, preview, previewData) {
-  const postPreview = preview && previewData?.post;
-  // The slug may be the id of an unpublished post
-  const isId = Number.isInteger(Number(slug));
-  const isSamePost = isId
-    ? Number(slug) === postPreview.id
-    : slug === postPreview.slug;
-  const isDraft = isSamePost && postPreview?.status === "draft";
-  const isRevision = isSamePost && postPreview?.status === "publish";
-  const data = await fetchAPI(
-    `
-    fragment AuthorFields on User {
-      name
-      firstName
-      lastName
-      avatar {
-        url
-      }
-    }
-    fragment PostFields on Post {
-      title
-      excerpt
-      slug
-      date
-      featuredImage {
-        node {
-          sourceUrl
-        }
-      }
-      author {
-        node {
-          ...AuthorFields
-        }
-      }
-      categories {
-        edges {
-          node {
-            name
-          }
-        }
-      }
-      tags {
-        edges {
-          node {
-            name
-          }
-        }
-      }
-    }
-    query PostBySlug($id: ID!, $idType: PostIdType!) {
-      post(id: $id, idType: $idType) {
-        ...PostFields
-        content
-        ${
-          // Only some of the fields of a revision are considered as there are some inconsistencies
-          isRevision
-            ? `
-        revisions(first: 1, where: { orderby: { field: MODIFIED, order: DESC } }) {
-          edges {
-            node {
-              title
-              excerpt
-              content
-              author {
-                node {
-                  ...AuthorFields
-                }
-              }
-            }
-          }
-        }
-        `
-            : ""
-        }
-      }
-      posts(first: 3, where: { orderby: { field: DATE, order: DESC } }) {
-        edges {
-          node {
-            ...PostFields
-          }
-        }
-      }
-    }
-  `,
-    {
-      variables: {
-        id: isDraft ? postPreview.id : slug,
-        idType: isDraft ? "DATABASE_ID" : "SLUG",
-      },
-    },
-  );
-
-  // Draft posts may not have an slug
-  if (isDraft) data.post.slug = postPreview.id;
-  // Apply a revision (changes in a published post)
-  if (isRevision && data.post.revisions) {
-    const revision = data.post.revisions.edges[0]?.node;
-
-    if (revision) Object.assign(data.post, revision);
-    delete data.post.revisions;
-  }
-
-  // Filter out the main post
-  data.posts.edges = data.posts.edges.filter(({ node }) => node.slug !== slug);
-  // If there are still 3 posts, remove the last one
-  if (data.posts.edges.length > 2) data.posts.edges.pop();
-
-  return data;
 }

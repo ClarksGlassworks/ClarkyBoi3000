@@ -19,7 +19,7 @@ const Gamebody = memo(({ gameboyState, scrollState, ref, isMobile, setMenuActive
   const gameboyWidth = 280
   const gameboyHeight = 440
 
-  const isScrolled = scrollState === 'scrolling'
+  const isScrolled = scrollState === 'scrolling' || scrollState === 'end'
 
 
   const [isGameboyRotated, setIsGameboyRotated] = useState(false);
@@ -83,9 +83,6 @@ useEffect(() => {
   }, []);
 
   const handleGameboyClick = () => {
-
-    
-
     if (!isGameboyRotated) {
       setMenuActive(true)
       setAnimationClass("");
@@ -125,8 +122,8 @@ useEffect(() => {
         <Image
           src="https://wp.clarksglassworks.com/wp-content/uploads/2023/12/gameboy-7.png"
           alt="Gameboy"
-          width={500}
-          height={300}
+          width={gameboyWidth}
+          height={gameboyHeight}
           className="w-[300px] z-30 relative select-none"
         />
         <div className="absolute top-[66px] left-[69px] z-[999] flex items-center justify-center h-[133px] w-[142px] overflow-hidden bg-green-800 shadow-inner shadow-black">
@@ -135,12 +132,7 @@ useEffect(() => {
             <Image src={'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/fxk4.gif'} alt="" width="600" height={400} />
             <AnimatePresence>
               <motion.div className={`z-[999] flex items-center justify-center text-center mx-auto top-[2%] left-[18%] absolute flex-col text-white font-vt323`}
-                initial={{ opacity: 1, y: 0 }}
-                animate={{ opacity: isGameboyRotated ? 1 : 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                transition={{ duration: 0.5, delay: isGameboyRotated ? 1 : 0 }}
                 key={'gameboyTitle'}
-                // onClick={(e) => { e.stopPropagation(); console.log('goo oogogogo') }}
               >
                 Menu 👀
                 <div className="w-full text-left place-self-start justify-self-start flex flex-col gap-0" >
@@ -185,19 +177,6 @@ useEffect(() => {
               ></motion.div>
             </AnimatePresence>
             <Image src={'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/fxk4.gif'} alt="" fill />
-
-            {/* <AnimatePresence mode="popLayout">
-              <motion.img
-                key={gameboyImages[currentImage]}
-                src={'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/fxk4.gif'}
-                className=""
-                // variants={variants}
-                // initial="initial"
-                // animate="animate"
-                // exit="exit"
-                transition={{ duration: 0.5 }}
-              />
-            </AnimatePresence> */}
 
           </div>
         </div>

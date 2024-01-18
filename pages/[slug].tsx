@@ -133,21 +133,63 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	console.log('-------- GET STATIC PROPS -----------')
 
 
-	const serverURL = process.env.SERVER_URL
-	const url = `${serverURL}/api/product?id=${params.slug}`
-	
+	// const serverURL = process.env.SERVER_URL
+	// const url = `${serverURL}/api/product?id=${params.slug}`
 
-	if(params.slug == '/cart' || params.slug == '/shop' || params.slug == '/checkout'){
-		console.log('---------->>>>>>>', params.slug)
-	}
 
-	const response = await fetch(url, {
-		method: "GET",
+	// if(params.slug == '/cart' || params.slug == '/shop' || params.slug == '/checkout'){
+	// 	console.log('---------->>>>>>>', params.slug)
+	// }
+
+	// const response = await fetch(url, {
+	// 	method: "GET",
+	// 	headers: {
+	// 		"Content-Type": "application/json",
+	// 	},
+	// 	});
+	// const data = await response.json();
+
+	const response = await fetch('https://wp.clarksglassworks.com/graphql', {
+		method: 'POST',
 		headers: {
-			"Content-Type": "application/json",
+			'Content-Type': 'application/json',
 		},
-		});
-	const data = await response.json();
+		body: JSON.stringify({
+			query: `
+			query ($slug: ID!) {
+			  product(id: $slug, idType: SLUG) {
+				id
+				name
+				slug
+				description
+				purchasable
+				shortDescription
+				image {
+				  id
+				  sourceUrl
+				}
+				galleryImages {
+				  nodes {
+					sourceUrl
+				  }
+				}
+				... on ProductWithPricing {
+				  price
+				  regularPrice
+				  salePrice
+				}
+			  }
+			}
+		  `,
+			variables: {
+				slug: params.slug,
+			},
+		}),
+	});
+
+
+	const { data } = await response.json();
+
 
 	return {
 		props: {
@@ -159,10 +201,49 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const allPosts = await getWooCommerceProducts({ featured: null });
-	console.log({ allPosts });
-	const paths = allPosts?.edges?.map(({ node }) => `/${node.slug}`) || [];
-	console.log('Paths-', { paths });
+	// const allPosts = await getWooCommerceProducts({ featured: null });
+	// console.log({ allPosts });
+	// const paths = allPosts?.edges?.map(({ node }) => `/${node.slug}`) || [];
+	// console.log('Paths-', { paths });
+
+	const response = await fetch("https://wp.clarksglassworks.com/graphql", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			query: `
+                query {
+                    products(first: 10000) {
+                    edges {
+                        node {
+                        id
+                        name
+                        slug
+                        purchasable
+                        image {
+                            id
+                            sourceUrl(size: WOOCOMMERCE_THUMBNAIL)
+                        }
+                        ... on ProductWithPricing {
+                            price
+                            regularPrice
+                            salePrice
+                        }
+                        }
+                    }
+                  }
+                }
+                `,
+		}),
+	});
+
+	if (!response.ok) {
+		throw new Error("Network response was not ok");
+	}
+
+	const { data } = await response.json();
+	const paths = data.products.edges.map((product) => { return product.node; }).reverse().map((product) => `/${product.slug}`) || [];
 	return {
 		paths: paths,
 		fallback: true,

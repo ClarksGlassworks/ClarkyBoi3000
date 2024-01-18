@@ -8,9 +8,11 @@ import toast, { toastConfig } from 'react-simple-toasts';
 import 'react-simple-toasts/dist/theme/dark.css'; // choose your theme
 toastConfig({ theme: 'dark', position: 'bottom-center' }); // configure global toast settings, like theme
 
+import useWindowSize from "../hooks/useWindowSize";
 const ShoppingCartPage = ({ preview }) => {
 
     const { cart, mutate } = useGetCart()
+    const { isMobile } = useWindowSize()
 
     const handleRemoveFromCart = async (key) => {
         console.log('remove from cart')
@@ -33,7 +35,7 @@ const ShoppingCartPage = ({ preview }) => {
             mobileX: 0,
             mobileY: 0,
             rotate: 0,
-            scale: 0.5,
+            scale: isMobile ? 0.8 : 0.5,
             position: "top",
         }} />
 
@@ -42,8 +44,9 @@ const ShoppingCartPage = ({ preview }) => {
                 <div className="w-full  bg-[#fdd5a8] text-[#ca6707] p-2">
                     Your shopping cart!
                 </div>
-                <div className="mt-2 w-full p-4">
-                    {cart?.contents.nodes.length === 0 && <div className="text-center">Your cart is empty bro, go grab some glass</div>}
+                <div className="mt-2 w-full p-4 over">
+                    {cart?.contents.nodes.length === 0 && (<div className="text-center h-[300px] justify-center items-center flex overflow-hidden"><div className="h-[300px] w-full relative z-10"><Image src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/MInL.gif" alt="" fill className="" /></div>
+                        <div className="text-white z-20 font-vt323 text-[30px] absolute shadow-xl p-4 rounded-xl">Your coming up bananas bud,<br/> go grab some glass</div></div>)}
                     {cart?.contents.nodes.map((item, index) => {
 
                         const { quantity, key, subtotal, product: { node: { id, title } } } = item

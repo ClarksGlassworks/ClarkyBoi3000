@@ -22,6 +22,7 @@ export default function withSession(handler) {
           path: '/',
         }));
       }
+      //@ts-ignore
       return originalResEnd.apply(this, arguments);
     };
 

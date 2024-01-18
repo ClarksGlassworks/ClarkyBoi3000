@@ -36,7 +36,7 @@ const HomepageHeader = memo(({ casetteState, ref, isMobile, scrollState, headerB
           <Image src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/7SGv.gif" alt="" width={500} height={300} className='absolute z-20 opacity-50' />
           <section className='w-full h-full flex justify-between items-center z-40 absolute'>
             <div></div>
-            <ShoppingCartButton className={`text-white mr-2 opacity-100 bg-black rounded-full text-center p-2 max-w-[200px]`} text="Cart Empty" />
+            <ShoppingCartButton />
           </section>
         </motion.div>)}
       </div>

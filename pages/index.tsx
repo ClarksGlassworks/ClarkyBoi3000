@@ -17,6 +17,7 @@ import useWindowSize from "../hooks/useWindowSize";
 import { set } from "date-fns";
 import Image from "next/image";
 import HomepageHeader from "../components/homepage-header";
+import ClarkyBoi from "../components/clarky";
 
 export default function Index({ allPosts: { edges }, preview }) {
 	const heroPost = edges[0]?.node;
@@ -25,6 +26,21 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const { isMobile } = useWindowSize();
 
 	// component states
+
+	const initialClarkyBoiState = {
+		x: 0,
+		y: 0,
+		rotate: 0,
+		scale: 1,
+
+	}
+	const scrollingClarkyBoiState = {
+		x: 0,
+		y: 0,
+		rotate: 0,
+		scale: 1,
+	};
+
 	const initialCasetteState = {
 		x: 0,
 		y: 20,
@@ -54,14 +70,14 @@ export default function Index({ allPosts: { edges }, preview }) {
 		rotate: 20,
 		scale: isMobile ? 0.5 : 1,
 	};
-  const zoomInToGameboyStep1State = {
+	const zoomInToGameboyStep1State = {
 		x: isMobile ? 30 : 400,
 		y: isMobile ? 180 : -250,
 		rotate: 0,
 		scale: isMobile ? 2.1 : 4,
 	};
 
-  const zoomInToGameboyStep2State = {
+	const zoomInToGameboyStep2State = {
 		x: -100,
 		y: -150,
 		rotate: 20,
@@ -80,14 +96,15 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const products = edges.map(({ node }) => node).reverse();
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [scrollState, setScrollState] = useState("initial");
-  const [hasScrolled, setHasScrolled] = useState(false)
-  const [menuActive, setMenuActive] = useState(false)
+	const [hasScrolled, setHasScrolled] = useState(false)
+	const [menuActive, setMenuActive] = useState(false)
 	// x = left, y = top
 	const [casetteState, setCasetteState] = useState(initialCasetteState);
 	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
 
 	// x = right, y = bottom
 	const [gameboyState, setGameboyState] = useState(initialGameboyState);
+	const [clarkyBoiState, setClarkyBoiState] = useState(initialClarkyBoiState);
 	const { scrollYProgress } = useScroll();
 
 	const gameboyRef = useRef(null);
@@ -121,28 +138,30 @@ export default function Index({ allPosts: { edges }, preview }) {
 			setGameboyState(menuActive ? zoomInToGameboyStep1State : initialGameboyState);
 			setCasetteState(initialCasetteState);
 			setHeaderBarState(initialHeaderBarState);
+			setClarkyBoiState(initialClarkyBoiState);
 		} else if (scrollState === "scrolling") {
 			setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
 			setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
-      setHasScrolled(true)
+			setClarkyBoiState(scrollingClarkyBoiState);
+			setHasScrolled(true)
 		} else if (scrollState === "end") {
-      setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
+			setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
 			setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
-      setHasScrolled(true)
+			setClarkyBoiState(scrollingClarkyBoiState);
+			setHasScrolled(true)
 		}
 	}, [scrollState]);
 
 
-  useEffect(() => {
-    if(menuActive){
-      setGameboyState(zoomInToGameboyStep1State)
-    }else{
-      setGameboyState(initialGameboyState)
-    }
-  }, [menuActive]) 
-	console.log({ scrollState });
+	useEffect(() => {
+		if (menuActive) {
+			setGameboyState(zoomInToGameboyStep1State)
+		} else {
+			setGameboyState(initialGameboyState)
+		}
+	}, [menuActive])
 
 	// console.log({products})
 	return (
@@ -164,9 +183,11 @@ export default function Index({ allPosts: { edges }, preview }) {
 				scrollState={scrollState}
 				ref={gameboyRef}
 				isMobile={isMobile}
-        setMenuActive={setMenuActive}
+				setMenuActive={setMenuActive}
 
 			/>
+
+			<ClarkyBoi clarkyBoiState={clarkyBoiState}  />
 
 			{isMobile && scrollState == 'initial' && !hasScrolled && (<div className="text-white p-4 rounded-full text-2xl items-center fixed bottom-4 left-1/2 transform translate-x-[-50%] z-[999] opacity-100 w-full">
 				<div className="flex flex-row items-center bg-black rounded-full justify-center mx-10 p-2">

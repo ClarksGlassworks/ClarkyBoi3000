@@ -23,12 +23,14 @@ import Product from "../components/product";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "../components/add-to-cart";
+import Casette from "../components/casette";
+import useWindowSize from "../hooks/useWindowSize";
+import ShoppingCartButton from "../components/shoppingCartButton";
+import { FaArrowLeft, FaBackward } from "react-icons/fa";
 export default function Post({ product, preview }) {
 	const router = useRouter();
 	// const morePosts = posts?.edges;
-
-	console.log("------->", product);
-
+	const { isMobile } = useWindowSize();
 
 	if (!router.isFallback && !product?.slug) {
 		return <ErrorPage statusCode={404} />;
@@ -41,15 +43,28 @@ export default function Post({ product, preview }) {
 				<PostTitle>Loading…</PostTitle>
 			) : (
 				<>
-					<article>
-						<Head>
-							<title>{`${product.name} | Clark's Glassworks`}</title>
-							<meta
-								property="og:image"
-								content={product.image?.node?.sourceUrl}
-							/>
-						</Head>
-						<div className="relative">
+					<Head>
+						<title>{`${product.name} | Clark's Glassworks`}</title>
+						<meta
+							property="og:image"
+							content={product.image?.node?.sourceUrl}
+						/>
+					</Head>
+					<div className="  backdrop-blur-sm w-full h-screen -z-10 fixed "></div>
+					<article className=" m-4 mt-0 lg:m-0 max-w-screen-xl pt-[180px] mb-[150px] mx-4 lg:mx-auto">
+
+						<Casette casetteState={{
+							x: "0%",
+							y: -40,
+							mobileX: -190,
+							mobileY: -90,
+							rotate: -20,
+							scale: isMobile ? 0.4 : 0.8,
+							position: "top",
+							zIndex: 9999,
+						}} />
+						<ShoppingCartButton />
+						<div className="relative mx-auto border-4 border-white">
 							<div className=" z-10 h-[50vh] bg-green-400 w-full border-b-8 border-white shadow-2xl shadow-black">
 								<Image
 									src={product.image?.sourceUrl}
@@ -68,37 +83,46 @@ export default function Post({ product, preview }) {
 									></div>
 								)}
 							</div>
+							<div className="absolute top-4 left-4 bg-white rounded-full p-2" onClick={() => { router.back() }}><FaArrowLeft /></div>
 							{product.price && (
-								<div className="fixed z-20 text-[20px] font-semibold text-white bg-black rounded-full p-2 right-[20px] top-[20px]">
+								<div className="absolute z-20 text-[20px] font-semibold text-white bg-black rounded-full p-2 right-[20px] top-[20px]">
 									{product.price}
 								</div>
 							)}
 
-							<Link href="../">
-								<div className="absolute z-20 text-[30px] font-semibold text-black  rounded-full p-2 left-[10px] top-[10px]">
-									&larr;
-								</div>
-							</Link>
 						</div>
 
-						<div className="bg-white">
+						<div className="relative w-full flex flex-row gap-2 mt-2">
 							{product.galleryImages?.nodes?.map((image, index) => {
 								return (
-									<Image
-										src={image?.sourceUrl}
-										alt={product.name}
-										width="500"
-										height="300"
-										className="object-cover w-full h-full min-h-screen"
-										key={index}
-									/>
+									<div className="aspect-square overflow-hidden w-1/3 border-4 border-white">
+										<Image
+											src={image?.sourceUrl}
+											alt={product.name}
+											width="300"
+											height="300"
+											className="object-cover w-full h-full"
+											key={index}
+										/>
+									</div>
 								);
 							})}
 						</div>
-						<div className="w-full px-4 fixed bottom-[20px]">
+
+					</article>
+					{product?.purchasable && (
+						<div className="w-full px-4 fixed bottom-[20px] mx-auto left-0 right-0 max-w-screen-xl">
 							<AddToCartButton text="Add to cart" product={product} />
 						</div>
-					</article>
+					)}
+					{!product?.purchasable && (
+						<div className="w-full px-4 fixed bottom-[20px] mx-auto left-0 right-0 max-w-screen-xl">
+							<div className=" text-gray-400 p-4 rounded-full text-center text-xs bg-[rgba(0,0,0,0.5)]">
+								Hasn't dropped yet or somebody snagged it!
+							</div>
+						</div>
+					)}
+
 				</>
 			)}
 		</Product>
@@ -106,29 +130,26 @@ export default function Post({ product, preview }) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-	// const data = await getWooCommerceProduct(params?.slug);
-
-	const req = await fetch('http://localhost:3000/api/product?id=' + params?.slug, { method: 'GET' });
-	const data = await req.json();
-
+	const data = await getWooCommerceProduct(params?.slug);
 	console.log({ data });
-
+	if (!data) {
+		return {
+			notFound: true,
+		}
+	}
 	return {
 		props: {
 			product: data,
 		},
 		revalidate: 10,
 	};
+
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const allPostsData = await fetch('http://localhost:3000/api/products');
-
-	const allPosts = await allPostsData.json();
-
-	// console.log({ allPosts });
-	const paths = allPosts.map(({ slug }) => `/${slug}`) || [];
-	console.log({ paths });
+	const allPosts = await getWooCommerceProducts({ featured: null });
+	const paths = allPosts?.edges?.map(({ node }) => `/${node.slug}`) || [];
+	console.log('Paths-', { paths });
 	return {
 		paths: paths,
 		fallback: true,

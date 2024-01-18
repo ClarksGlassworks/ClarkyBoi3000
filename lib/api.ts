@@ -204,5 +204,7 @@ export async function getWooCommerceProduct(slug) {
 		});
 	const data = await response.json();
 
-	return data || null;
+  console.log('data', data)
+  console.log('response', response)
+	return data;
 }

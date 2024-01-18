@@ -130,16 +130,37 @@ export default function Post({ product, preview }) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-	const data = await getWooCommerceProduct(params?.slug);
-	console.log({ data });
-	if (!data) {
-		return {
-			notFound: true,
-		}
+	console.log('-------- GET STATIC PROPS -----------')
+	// console.log(params.slug)
+	// const data = await getWooCommerceProduct(params?.slug);
+
+	// console.log(data)
+	// console.log({ data });
+	// if (!data) {
+	// 	return {
+	// 		notFound: true,
+	// 	}
+	// }
+
+	const serverURL = process.env.SERVER_URL
+	const url = `${serverURL}/api/product?id=${params.slug}`
+	
+
+	if(params.slug == '/cart' || params.slug == '/shop' || params.slug == '/checkout'){
+		console.log('---------->>>>>>>', params.slug)
 	}
+
+	const response = await fetch(url, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		});
+	const data = await response.json();
+
 	return {
 		props: {
-			product: data,
+			product: data?.product,
 		},
 		revalidate: 10,
 	};
@@ -148,6 +169,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
 	const allPosts = await getWooCommerceProducts({ featured: null });
+	console.log({ allPosts });
 	const paths = allPosts?.edges?.map(({ node }) => `/${node.slug}`) || [];
 	console.log('Paths-', { paths });
 	return {

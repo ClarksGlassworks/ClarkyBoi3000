@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import { ToastContainer } from "react-toastify";
 
 export default function Document() {
   return (
@@ -7,6 +8,7 @@ export default function Document() {
       <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
       </Head>
       <body>
+        {/* <div className="z-[98] w-full h-screen fixed"><ToastContainer /></div> */}
         <Main />
         <NextScript />
       </body>

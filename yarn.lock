@@ -794,6 +794,11 @@ react-icons@^5.0.1:
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.0.1.tgz#1694e11bfa2a2888cab47dcc30154ce90485feee"
   integrity sha512-WqLZJ4bLzlhmsvme6iFdgO8gfZP17rfjYEJ2m9RsZjZ+cc4k1hTzknEz63YS1MeT50kVzoa1Nz36f4BEx+Wigw==
 
+react-simple-toasts@^5.10.0:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/react-simple-toasts/-/react-simple-toasts-5.10.0.tgz#cfa692cd06fe858ea327adf32e72db2199459fa7"
+  integrity sha512-GIsBaLkZnyqeTzs0fSmXoLr5GtSnHv9C35tEx/2mc8H7/OaTlwXRHjm0ssDP454gvI4rZFS+rnj2HOL5zuiiwA==
+
 react-toastify@^10.0.3:
   version "10.0.3"
   resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-10.0.3.tgz#1b948fabf63393464eb2f82119485de58b9a9b2f"

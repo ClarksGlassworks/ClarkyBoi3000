@@ -1,40 +1,29 @@
 import { FaShoppingCart } from "react-icons/fa";
 import { addToCart, useGetCart } from "../lib/api";
 import { useRouter } from "next/router";
+import toast, { toastConfig } from 'react-simple-toasts';
+import 'react-simple-toasts/dist/theme/chroma.css'; // choose your theme
+
+toastConfig({ theme: 'chroma', position: 'top-center' }); // configure global toast settings, like theme
 
 const AddToCartButton = ({ text, product }) => {
     const { id } = product
-    // console.log({ product })
-
     const router = useRouter()
-    // const { mutate } = useGetCart()
     const { mutate } = useGetCart()
-       
 
-    
     const handleAddToCart = async (e) => {
 
-
-        console.log('add to cart')
-        // e.stopPropagation()
-
-        const decodedId = Number(atob(id).split(':')[1]);
-        // console.log({ decodedId })
-        // const result = await addToCart(decodedId, 1);
-
-
+        const decodedId = Number(atob(id).split(':')[1]); 
         const req = await fetch('/api/addToCart?id=' + decodedId + '&quantity=1', { method: 'POST' })
         const res = await req.json()
-        console.log({ res })
-        // console.log({ result })
         if(!res) {
             console.log('Error adding to cart')
         }
-
-        router.push('/cart')
-        // addToCart(decodedId, 1);
-        // mutate()
-        // alert('Added to cart')
+        mutate()
+        toast('Added your item to the cart')
+        setTimeout(() => {
+            router.push('/cart')
+        }, 2000);
     }
 
     if(!product) return null

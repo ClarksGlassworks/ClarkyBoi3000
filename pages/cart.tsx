@@ -4,6 +4,9 @@ import Layout from "../components/layout";
 import { useGetCart } from "../lib/api";
 import Image from "next/image";
 import Head from "next/head";
+import toast, { toastConfig } from 'react-simple-toasts';
+import 'react-simple-toasts/dist/theme/chroma.css'; // choose your theme
+toastConfig({ theme: 'chroma', position: 'bottom-center' }); // configure global toast settings, like theme
 
 const ShoppingCartPage = ({ preview }) => {
 
@@ -13,7 +16,7 @@ const ShoppingCartPage = ({ preview }) => {
         console.log('remove from cart')
         const req = await fetch ('/api/removeFromCart?key=' + key)
         const res = await req.json()
-        console.log({res})
+        toast('Removed item from your cart')
         mutate()
 
     }
@@ -40,6 +43,7 @@ const ShoppingCartPage = ({ preview }) => {
                     Your shopping cart!
                 </div>
                 <div className="mt-2 w-full p-4">
+                    {cart?.contents.nodes.length === 0 && <div className="text-center">Your cart is empty bro, go grab some glass</div>}
                     {cart?.contents.nodes.map((item, index) => {
 
                         const { quantity, key, subtotal, product: { node: { id, title } } } = item

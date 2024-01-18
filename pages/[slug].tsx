@@ -131,16 +131,7 @@ export default function Post({ product, preview }) {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
 	console.log('-------- GET STATIC PROPS -----------')
-	// console.log(params.slug)
-	// const data = await getWooCommerceProduct(params?.slug);
 
-	// console.log(data)
-	// console.log({ data });
-	// if (!data) {
-	// 	return {
-	// 		notFound: true,
-	// 	}
-	// }
 
 	const serverURL = process.env.SERVER_URL
 	const url = `${serverURL}/api/product?id=${params.slug}`

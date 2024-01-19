@@ -190,6 +190,7 @@ export async function getWooCommerceProducts({ featured = null }) {
   `;
 
 	const data = await fetchAPI(query);
+
 	return data?.products;
 }
 

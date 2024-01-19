@@ -6,11 +6,18 @@ if (!URL.canParse(process.env.WORDPRESS_API_URL)) {
 }
 
 const { protocol, hostname, port, pathname } = new URL(
-  process.env.WORDPRESS_API_URL,
+  process.env.WORDPRESS_API_URL
 );
 
 /** @type {import('next').NextConfig} */
 module.exports = {
+  env: {
+    WORDPRESS_API_URL: process.env.WORDPRESS_API_URL,
+    CLIENTURL: process.env.CLIENTURL,
+    PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID,
+    PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET,
+    NEXT_PUBLIC_PAYPAL_CLIENT_ID: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID
+  },
   images: {
     remotePatterns: [
       {

@@ -11,30 +11,57 @@ async function handler(req, res) {
         body: JSON.stringify({
           query: `
             query GetCart {
-            cart {
-                isEmpty
-                needsShippingAddress
-                subtotal
-                total
-                subtotalTax
-                contents {
-                nodes {
-                    product {
-                    node {
-                        id
-                        title
-                    }
-                    }
-                    quantity
+                cart {
+                    isEmpty
+                    needsShippingAddress
                     subtotal
-                    subtotalTax
-                    tax
                     total
-                    key
-                }
-                productCount
-                }
-            }
+                    subtotalTax
+                    contents {
+                      nodes {
+                        product {
+                          node {
+                            id
+                            title
+                            onSale
+                            purchasable
+                            slug
+                            sku
+                            type
+                          }
+                        }
+                        quantity
+                        subtotal
+                        subtotalTax
+                        tax
+                        total
+                        key
+                      }
+                      productCount
+                    }
+                    discountTax
+                    discountTotal
+                    shippingTotal
+                    shippingTax
+                    totalTax
+                    appliedCoupons {
+                      code
+                      description
+                      discountAmount
+                      discountTax
+                    }
+                    availableShippingMethods {
+                      rates {
+                        cost
+                        id
+                        instanceId
+                        label
+                        methodId
+                      }
+                      packageDetails
+                    }
+                    chosenShippingMethods
+                  }
         }
           `
         }),

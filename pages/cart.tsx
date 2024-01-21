@@ -49,8 +49,9 @@ const ShoppingCartPage = ({ preview }) => {
                         <div className="text-white z-20 font-vt323 text-[30px] absolute shadow-xl p-4 rounded-xl">Your coming up bananas bud,<br/> go grab some glass</div></div>)}
                     {cart?.contents.nodes.map((item, index) => {
 
-                        const { quantity, key, subtotal, product: { node: { id, title } } } = item
+                        const { quantity, key, subtotal, product: { node: { id, title, stockStatus } } } = item
                         return <div className="flex flex-row justify-between items-center w-full border-b border-[#ca6707] last:border-0 pb-2 mb-2">
+                            {stockStatus === 'OUT_OF_STOCK' && (<div className="text-red-500 absolute bg-[rgba(255,255,255,0.9)] w-3/4 text-center font-vt323">Sorry my dude, somebody snagged it!</div>)}
                             {/* <div></div> */}
                             <div className="w-1/3">{title}</div>
                             <div>{quantity}</div>

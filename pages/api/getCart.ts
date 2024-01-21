@@ -2,6 +2,8 @@ import withSession from "../../lib/withSession";
 async function handler(req, res) {
 
     try {
+      
+      
       const response = await fetch('https://wp.clarksglassworks.com/graphql', {
         method: 'POST',
         headers: {
@@ -28,6 +30,10 @@ async function handler(req, res) {
                             slug
                             sku
                             type
+                            ... on InventoriedProduct {
+                              stockStatus
+                              stockQuantity
+                            }
                           }
                         }
                         quantity

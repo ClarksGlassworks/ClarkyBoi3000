@@ -31,8 +31,8 @@ export default function Post({ product, preview }) {
 	const router = useRouter();
 	// const morePosts = posts?.edges;
 	const { isMobile } = useWindowSize();
-
-	if (!router.isFallback && !product?.slug) {
+console.log({product})
+	if (!router.isFallback && !product) {
 		return <ErrorPage statusCode={404} />;
 	}
 
@@ -110,18 +110,12 @@ export default function Post({ product, preview }) {
 						</div>
 
 					</article>
-					{product?.purchasable && (
+					
 						<div className="w-full px-4 fixed bottom-[20px] mx-auto left-0 right-0 max-w-screen-xl">
 							<AddToCartButton text="Add to cart" product={product} />
 						</div>
-					)}
-					{!product?.purchasable && (
-						<div className="w-full px-4 fixed bottom-[20px] mx-auto left-0 right-0 max-w-screen-xl">
-							<div className=" text-gray-400 p-4 rounded-full text-center text-xs bg-[rgba(0,0,0,0.5)]">
-								Hasn't dropped yet or somebody snagged it!
-							</div>
-						</div>
-					)}
+				
+					
 
 				</>
 			)}
@@ -132,22 +126,6 @@ export default function Post({ product, preview }) {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
 	console.log('-------- GET STATIC PROPS -----------')
 
-
-	// const serverURL = process.env.SERVER_URL
-	// const url = `${serverURL}/api/product?id=${params.slug}`
-
-
-	// if(params.slug == '/cart' || params.slug == '/shop' || params.slug == '/checkout'){
-	// 	console.log('---------->>>>>>>', params.slug)
-	// }
-
-	// const response = await fetch(url, {
-	// 	method: "GET",
-	// 	headers: {
-	// 		"Content-Type": "application/json",
-	// 	},
-	// 	});
-	// const data = await response.json();
 
 	const response = await fetch('https://wp.clarksglassworks.com/graphql', {
 		method: 'POST',
@@ -162,6 +140,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 				name
 				slug
 				description
+				isRestricted
 				purchasable
 				shortDescription
 				image {
@@ -178,6 +157,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 				  regularPrice
 				  salePrice
 				}
+				... on InventoriedProduct {
+					id
+					stockQuantity
+					stockStatus
+				  }
 			  }
 			}
 		  `,
@@ -195,7 +179,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		props: {
 			product: data?.product,
 		},
-		revalidate: 10,
+		revalidate: 1,
 	};
 
 };

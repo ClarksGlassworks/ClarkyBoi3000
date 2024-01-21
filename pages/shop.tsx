@@ -67,21 +67,14 @@ const Shop = ({ preview }) => {
 										</div>
 									</h1>
                                     </Link>
-									{product.purchasable && (
+
 										<div className="p-4">
 											<AddToCartButton
 												text={"Add to cart"}
 												product={product}
 											/>
 										</div>
-									)}
-									{!product.purchasable && (
-										<div className="p-4">
-											<div className=" text-gray-400 p-4 rounded-lg text-center text-xs">
-												Hasn't dropped yet or somebody snagged it!
-											</div>
-										</div>
-									)}
+									
 								</div>
 							
 						);

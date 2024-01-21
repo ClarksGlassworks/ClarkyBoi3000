@@ -20,7 +20,6 @@ export default async function Handler(req, res) {
       intent: 'CAPTURE',
       purchase_units: [
         {
-          reference_id: 'd9f80740-38f0-11e8-b467-0ed5f89f718b', // wooCommerce Product ID?
           amount: {
             currency_code: 'CAD',
             value: req.body.order_price+"",
@@ -30,10 +29,7 @@ export default async function Handler(req, res) {
     })
     const response = await PaypalClient.execute(request)
 
-    console.log("RES: ", response)
-
     if (response.statusCode !== 201) {
-      console.log("RES: ", response)
       return res.status(500).json({success: false, message: "Some Error Occured at backend"})
     }
 

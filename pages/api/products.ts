@@ -26,6 +26,9 @@ export default async function handler(req, res) {
                             regularPrice
                             salePrice
                         }
+                        ... on InventoriedProduct {
+                            stockStatus
+                          }
                         }
                     }
                   }

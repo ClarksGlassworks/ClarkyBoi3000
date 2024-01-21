@@ -33,6 +33,12 @@ export default async function handler(req, res) {
                 regularPrice
                 salePrice
               }
+              status
+              ... on InventoriedProduct {
+                id
+                stockQuantity
+                stockStatus
+              }
             }
           }
         `,
@@ -47,7 +53,7 @@ export default async function handler(req, res) {
     }
 
     const { data } = await response.json();
-
+    console.log('PRODUCT API >', {data})
     res.status(200).json(data);
   } catch (error) {
     console.error(error);

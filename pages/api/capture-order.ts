@@ -16,16 +16,20 @@ export default async function Handler(req, res) {
   const request = new paypal.orders.OrdersCaptureRequest(orderID)
   request.requestBody({})
   const response = await PaypalClient.execute(request)
+
   if (!response) {
     return res.status(500).json({success: false, message: "Some Error Occured at backend"})
   }
 
 
-  // Your Custom Code to Update Order Status
-  // And Other stuff that is related to that order, like wallet
-  // Here I am updateing the wallet and sending it back to frontend to update it on frontend
+
+  // this is effectively on successful payment
+
+
+  // so here we want to create a wooCommerce order as well
+
 
 
   //@ts-ignore
-  res.status(200).json({success: true, data: {wallet}})
+  res.status(200).json({success: true, data: response})
 }

@@ -2,8 +2,10 @@
 import withSession from "../../lib/withSession";
 
 async function handler(req, res) {
-  const { id, quantity } = req.query;
+  const { id, quantity } = JSON.parse(req.body);
 
+  console.log('---->', req.body)
+  console.log(id, quantity)
   const variables = { id: parseInt(id, 10), quantity: parseInt(quantity) };
 
   try {
@@ -33,11 +35,21 @@ async function handler(req, res) {
       }),
     });
 
+
+    // console.log('---->', response)
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
 
-    const { data } = await response.json();
+    const responseBody = await response.json();
+    if (responseBody.errors) {
+      console.error('GraphQL Errors:', responseBody.errors);
+      throw new Error('Error in GraphQL query or mutation');
+    }
+    
+    const { data } = responseBody;
+
+
     console.log({data})
 
     if (!req.sessionToken) {

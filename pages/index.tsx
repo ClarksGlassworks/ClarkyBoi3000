@@ -5,7 +5,11 @@ import MoreStories from "../components/more-stories";
 import HeroPost from "../components/hero-post";
 import Intro from "../components/intro";
 import Layout from "../components/layout";
-import { getWooCommerceProduct, getWooCommerceProducts, useWooCommerceProducts } from "../lib/api";
+import {
+	getWooCommerceProduct,
+	getWooCommerceProducts,
+	useWooCommerceProducts,
+} from "../lib/api";
 import { CMS_NAME } from "../lib/constants";
 import Top8Friends from "../components/top8friends";
 import Casette from "../components/homepage-header";
@@ -19,6 +23,7 @@ import Image from "next/image";
 import HomepageHeader from "../components/homepage-header";
 import ClarkyBoi from "../components/clarky";
 import { useRouter } from "next/router";
+import HomepageMenu from "../components/HomepageMenu";
 
 export default function Index({ allPosts: { edges }, preview }) {
 	const heroPost = edges[0]?.node;
@@ -33,8 +38,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 		y: 0,
 		rotate: 0,
 		scale: 1,
-
-	}
+	};
 	const scrollingClarkyBoiState = {
 		x: 0,
 		y: 0,
@@ -43,12 +47,12 @@ export default function Index({ allPosts: { edges }, preview }) {
 	};
 
 	const initialCasetteState = {
-		x: -200,
+		x: 0,
 		y: -80,
 		mobileX: -170,
 		mobileY: -60,
 		rotate: -20,
-		scale: 0.5
+		scale: isMobile ? 0.5 : 0.6,
 	};
 	const scrollingCasetteState = {
 		x: -200,
@@ -56,7 +60,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 		mobileX: -180,
 		mobileY: -80,
 		rotate: -20,
-		scale: 0.4
+		scale: 0.4,
 		// scale: isMobile ? 0.4 : 1,
 	};
 
@@ -98,8 +102,8 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const products = edges.map(({ node }) => node).reverse();
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [scrollState, setScrollState] = useState("initial");
-	const [hasScrolled, setHasScrolled] = useState(false)
-	const [menuActive, setMenuActive] = useState(false)
+	const [hasScrolled, setHasScrolled] = useState(false);
+	const [menuActive, setMenuActive] = useState(false);
 	const [casetteState, setCasetteState] = useState(initialCasetteState);
 	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
 	const [gameboyState, setGameboyState] = useState(initialGameboyState);
@@ -109,34 +113,27 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const gameboyRef = useRef(null);
 	const casetteRef = useRef(null);
 
-
-	const router = useRouter()
+	const router = useRouter();
 	useEffect(() => {
 		window.scrollTo(0, 0);
 		// setScrollState("initial");
 	}, []);
 
+	useEffect(() => {
+		const handleWindowScroll = () => {
+			if (window.pageYOffset > 0) {
+				setScrollState("scrolling");
+			} else {
+				setScrollState("initial");
+			}
+		};
 
-const handleScroll = () => {
-	// Your scroll handling logic here
-	console.log('Handling scroll...');
-};
+		window.addEventListener("scroll", handleWindowScroll);
 
-useEffect(() => {
-	const handleWindowScroll = () => {
-		if(window.pageYOffset > 0){
-			setScrollState("scrolling");
-		} else {
-			setScrollState("initial");
-		}
-	};
-
-	window.addEventListener('scroll', handleWindowScroll);
-
-	return () => {
-		window.removeEventListener('scroll', handleWindowScroll);
-	};
-}, []);
+		return () => {
+			window.removeEventListener("scroll", handleWindowScroll);
+		};
+	}, []);
 
 	useEffect(() => {
 		if (router.asPath === "/") {
@@ -149,35 +146,40 @@ useEffect(() => {
 	}, [router.asPath]);
 
 	useEffect(() => {
-		console.log({ scrollState })
+		console.log({ scrollState });
 		if (scrollState === "initial") {
-			setGameboyState(menuActive ? zoomInToGameboyStep1State : initialGameboyState);
-			// setCasetteState(initialCasetteState);
+			setGameboyState(
+				menuActive ? zoomInToGameboyStep1State : initialGameboyState
+			);
+			setCasetteState(initialCasetteState);
 			setHeaderBarState(initialHeaderBarState);
 			setClarkyBoiState(initialClarkyBoiState);
 		} else if (scrollState === "scrolling") {
-			setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
-			// setCasetteState(scrollingCasetteState);
+			setGameboyState(
+				menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
+			);
+			setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
 			setClarkyBoiState(scrollingClarkyBoiState);
-			setHasScrolled(true)
+			setHasScrolled(true);
 		} else if (scrollState === "end") {
-			setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
-			// setCasetteState(scrollingCasetteState);
+			setGameboyState(
+				menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
+			);
+			setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
 			setClarkyBoiState(scrollingClarkyBoiState);
-			setHasScrolled(true)
+			setHasScrolled(true);
 		}
 	}, [scrollState]);
 
-
 	useEffect(() => {
 		if (menuActive) {
-			setGameboyState(zoomInToGameboyStep1State)
+			setGameboyState(zoomInToGameboyStep1State);
 		} else {
-			setGameboyState(initialGameboyState)
+			setGameboyState(initialGameboyState);
 		}
-	}, [menuActive])
+	}, [menuActive]);
 
 	// console.log({products})
 	return (
@@ -185,10 +187,18 @@ useEffect(() => {
 			<Head>
 				<title>{`Clark's Glassworks | Canadian Made Bongs, Rigs, Dab Rigs & More`}</title>
 			</Head>
-			<Corner />
+			<Corner scrollState={scrollState} />
 			<Top8Friends products={products} />
+			<HomepageMenu />
+			<div className="h-screen bg-black relative">
+
+					<Image src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif" alt="" layout="fill" objectFit="cover" className="opacity-50" />
+
+			</div>
 			{/* @ts-ignore */}
-			<HomepageHeader casetteState={casetteState}
+
+			<HomepageHeader
+				casetteState={casetteState}
 				scrollState={scrollState}
 				ref={casetteRef}
 				isMobile={isMobile}
@@ -203,22 +213,24 @@ useEffect(() => {
 
 			/> */}
 
-			<ClarkyBoi clarkyBoiState={clarkyBoiState}  />
+			<ClarkyBoi clarkyBoiState={clarkyBoiState} />
 
-			{isMobile && scrollState == 'initial' && !hasScrolled && (<div className="text-white p-4 rounded-full text-2xl items-center fixed bottom-4 left-1/2 transform translate-x-[-50%] z-[999] opacity-100 w-full">
-				<div className="flex flex-row items-center bg-black rounded-full justify-center mx-10 p-2">
-					<div className="flex-shrink-0">
-						<Image
-							src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/giphy-1.gif"
-							alt=""
-							width={50}
-							height={50}
-							className=""
-						/>
+			{isMobile && scrollState == "initial" && !hasScrolled && (
+				<div className="text-white p-4 rounded-full text-2xl items-center fixed bottom-4 left-1/2 transform translate-x-[-50%] z-[999] opacity-100 w-full">
+					<div className="flex flex-row items-center bg-black rounded-full justify-center mx-10 p-2">
+						<div className="flex-shrink-0">
+							<Image
+								src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/giphy-1.gif"
+								alt=""
+								width={50}
+								height={50}
+								className=""
+							/>
+						</div>
+						<div className="whitespace-nowrap">Swipe up to scroll</div>
 					</div>
-					<div className="whitespace-nowrap">Swipe up to scroll</div>
 				</div>
-			</div>)}
+			)}
 		</Layout>
 	);
 }

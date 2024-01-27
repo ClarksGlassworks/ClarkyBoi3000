@@ -17,7 +17,7 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
         y: isMobile ? "40%": '40%',
     };
     const endState = {
-        x: `30%`,
+        x: `35%`,
         y: "5%",
         opacity:1,
     };

@@ -2,11 +2,11 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import useWindowSize from '../hooks/useWindowSize'
 import Link from 'next/link'
-const Casette = ({ casetteState }) => {
+const Casette = ({ casetteState, isScrolled }) => {
 
   const { x, y, rotate, scale, mobileX, mobileY, position, translateX, zIndex } = casetteState
-  // const { isMobile } = useWindowSize();
-  const isMobile = true
+  const { isMobile } = useWindowSize();
+  // const isMobile = true
 
   const left = isMobile ? mobileX : x;
   const transform = translateX ? `translateX(calc(${left} + ${translateX}))` : `translateX(${left})`;
@@ -18,8 +18,8 @@ const Casette = ({ casetteState }) => {
       style={{
         scale: scale,
         rotate: rotate,
-        top: position ==='top' ? isMobile ? mobileY : y : isMobile ? mobileY : null,
-        bottom: position !== 'top' ? isMobile? mobileY : y : isMobile ? null : y,
+        top: isMobile ? mobileY : y ,
+        // bottom: position !== 'top' ? isMobile? mobileY : y : isMobile ? null : y,
         left: isMobile ? mobileX : x,
         transform: transform,
         zIndex:zIndex, 

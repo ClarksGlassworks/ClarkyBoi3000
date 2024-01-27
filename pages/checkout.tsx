@@ -358,7 +358,7 @@ const CheckoutPage = ({ preview }) => {
 						zIndex: 9999,
 					}}
 				/>
-				<div className="bg-white max-w-[500px] mx-auto p-4 pt-0 mt-[150px] mb-[150px]">
+				<div className="bg-white max-w-[500px] mx-4 lg:mx-auto p-4 pt-0 mt-[120px] lg:mt-[150px] mb-[150px] ">
 					{isPending ? <div className="spinner" /> : null}
 					{!showThankYou && (
 						<>
@@ -569,6 +569,7 @@ const CheckoutPage = ({ preview }) => {
 										style={{ layout: "vertical", label: "pay" }}
 										onApprove={onApprove}
 										createOrder={createOrder}
+                                        //@ts-ignore
 										onClick={onClick}
 										onCancel={cancelOrder}
 									/>

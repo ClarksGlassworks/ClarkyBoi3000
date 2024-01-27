@@ -43,20 +43,21 @@ export default function Index({ allPosts: { edges }, preview }) {
 	};
 
 	const initialCasetteState = {
-		x: 0,
-		y: 20,
-		mobileX: 0,
-		mobileY: 80,
-		rotate: 0,
-		scale: 1,
+		x: -200,
+		y: -80,
+		mobileX: -170,
+		mobileY: -60,
+		rotate: -20,
+		scale: 0.5
 	};
 	const scrollingCasetteState = {
-		x: 0,
-		y: 20,
-		mobileX: -200,
+		x: -200,
+		y: -80,
+		mobileX: -180,
 		mobileY: -80,
 		rotate: -20,
-		scale: isMobile ? 0.4 : 1,
+		scale: 0.4
+		// scale: isMobile ? 0.4 : 1,
 	};
 
 	const initialGameboyState = {
@@ -111,53 +112,58 @@ export default function Index({ allPosts: { edges }, preview }) {
 
 	const router = useRouter()
 	useEffect(() => {
-		setScrollState("initial");
+		window.scrollTo(0, 0);
+		// setScrollState("initial");
 	}, []);
 
-	useEffect(()=>{
-		console.log('router changed, resetting casette')
-		setScrollState("initial");
-		window.scrollY = 0
-	},[router.asPath])
-	
-	console.log({scrollState})
+
+const handleScroll = () => {
+	// Your scroll handling logic here
+	console.log('Handling scroll...');
+};
+
 useEffect(() => {
-  let isMounted = true; // Add a flag to track whether the component is mounted
+	const handleWindowScroll = () => {
+		if(window.pageYOffset > 0){
+			setScrollState("scrolling");
+		} else {
+			setScrollState("initial");
+		}
+	};
 
-  setScrollState("initial");
-  const unsubscribe = scrollYProgress.onChange((v) => {
-    if (!isMounted) return; // If the component is not mounted, do not set the scrollState
+	window.addEventListener('scroll', handleWindowScroll);
 
-    if (v === 0) {
-      setScrollState("initial");
-    } else if (v > 0 && v < 1) {
-      setScrollState("scrolling");
-    } else if (v === 1) {
-      setScrollState("end");
-    }
-  });
-
-  return () => {
-    unsubscribe(); // Unsubscribe from the scrollYProgress.onChange callback
-    isMounted = false; // Set isMounted to false when the component unmounts
-  };
-}, [scrollYProgress]);
+	return () => {
+		window.removeEventListener('scroll', handleWindowScroll);
+	};
+}, []);
 
 	useEffect(() => {
+		if (router.asPath === "/") {
+			setCasetteState(initialCasetteState);
+			setHeaderBarState(initialHeaderBarState);
+		} else {
+			setCasetteState(scrollingCasetteState);
+			setHeaderBarState(scrollingHeaderBarState);
+		}
+	}, [router.asPath]);
+
+	useEffect(() => {
+		console.log({ scrollState })
 		if (scrollState === "initial") {
 			setGameboyState(menuActive ? zoomInToGameboyStep1State : initialGameboyState);
-			setCasetteState(initialCasetteState);
+			// setCasetteState(initialCasetteState);
 			setHeaderBarState(initialHeaderBarState);
 			setClarkyBoiState(initialClarkyBoiState);
 		} else if (scrollState === "scrolling") {
 			setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
-			setCasetteState(scrollingCasetteState);
+			// setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
 			setClarkyBoiState(scrollingClarkyBoiState);
 			setHasScrolled(true)
 		} else if (scrollState === "end") {
 			setGameboyState(menuActive ? zoomInToGameboyStep1State : scrollingGameboyState);
-			setCasetteState(scrollingCasetteState);
+			// setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
 			setClarkyBoiState(scrollingClarkyBoiState);
 			setHasScrolled(true)

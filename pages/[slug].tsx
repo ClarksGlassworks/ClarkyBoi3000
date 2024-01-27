@@ -27,15 +27,59 @@ import Casette from "../components/casette";
 import useWindowSize from "../hooks/useWindowSize";
 import ShoppingCartButton from "../components/shoppingCartButton";
 import { FaArrowLeft, FaBackward } from "react-icons/fa";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import HomepageHeader from "../components/homepage-header";
+import { init } from "next/dist/compiled/webpack/webpack";
 export default function Post({ product, preview }) {
 	const router = useRouter();
 	// const morePosts = posts?.edges;
 	const { isMobile } = useWindowSize();
+	const initialCasetteState = {
+		x: -200,
+		y: -80,
+		mobileX: -170,
+		mobileY: -60,
+		rotate: -20,
+		scale: 0.5,
+	};
+	const scrollingCasetteState = {
+		x: -200,
+		y: -80,
+		mobileX: -180,
+		mobileY: -80,
+		rotate: -20,
+		scale: 0.4,
+		// scale: isMobile ? 0.4 : 1,
+	};
 
-	useEffect(()=>{
-		window.scrollY = 0
-	},[router.asPath])
+	const initialHeaderBarState = { x: 0, y: 0, rotate: 0, scale: 1, height: 50 };
+	const scrollingHeaderBarState = {
+		x: 0,
+		y: 0,
+		rotate: 0,
+		scale: 1,
+		height: 100,
+	};
+	const [casetteState, setCasetteState] = useState(initialCasetteState);
+	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
+
+	const casetteRef = useRef(null);
+
+	useEffect(() => {
+		window.scrollY = 0;
+		window.scrollTo(0, 0);
+		
+	}, [router.asPath]);
+
+	useEffect(() => {
+		if (router.asPath === "/") {
+			setCasetteState(initialCasetteState);
+			setHeaderBarState(initialHeaderBarState);
+		} else {
+			setCasetteState(scrollingCasetteState);
+			setHeaderBarState(scrollingHeaderBarState);
+		}
+	}, [router.asPath]);
 
 	if (!router.isFallback && !product) {
 		return <ErrorPage statusCode={404} />;
@@ -57,17 +101,24 @@ export default function Post({ product, preview }) {
 					</Head>
 					<div className="  backdrop-blur-sm w-full h-screen -z-10 fixed "></div>
 					<article className=" m-4 mt-0 lg:m-0 max-w-screen-xl pt-[180px] mb-[150px] mx-4 lg:mx-auto">
-
-						<Casette casetteState={{
+						<HomepageHeader
+						//@ts-ignore
+							casetteState={casetteState}
+							scrollState={"scrolling"}
+							ref={casetteRef}
+							isMobile={isMobile}
+							headerBarState={headerBarState}
+						/>
+						{/* <Casette casetteState={{
 							x: "0%",
 							y: -40,
-							mobileX: -190,
-							mobileY: -90,
+							mobileX: -170,
+							mobileY: -60,
 							rotate: -20,
-							scale: isMobile ? 0.4 : 0.8,
+							scale: 0.5,
 							position: "top",
 							zIndex: 9999,
-						}} />
+						}} /> */}
 						<ShoppingCartButton />
 						<div className="relative mx-auto border-4 border-white">
 							<div className=" z-10 h-[50vh] bg-green-400 w-full border-b-8 border-white shadow-2xl shadow-black">
@@ -88,13 +139,19 @@ export default function Post({ product, preview }) {
 									></div>
 								)}
 							</div>
-							<div className="absolute top-4 left-4 bg-white rounded-full p-2" onClick={() => { router.back() }}><FaArrowLeft /></div>
+							<div
+								className="absolute top-4 left-4 bg-white rounded-full p-2"
+								onClick={() => {
+									router.back();
+								}}
+							>
+								<FaArrowLeft />
+							</div>
 							{product.price && (
 								<div className="absolute z-20 text-[20px] font-semibold text-white bg-black rounded-full p-2 right-[20px] top-[20px]">
 									{product.price}
 								</div>
 							)}
-
 						</div>
 
 						<div className="relative w-full flex flex-row gap-2 mt-2">
@@ -113,15 +170,14 @@ export default function Post({ product, preview }) {
 								);
 							})}
 						</div>
-
 					</article>
-					
-						<div className="w-full px-4 fixed bottom-[20px] mx-auto left-0 right-0 max-w-screen-xl">
-							<AddToCartButton text="Add to cart" product={product} />
-						</div>
-				
-					
 
+					<div className="w-full px-4 fixed bottom-[20px] mx-auto left-0 right-0 max-w-screen-xl">
+						<AddToCartButton
+							text="Add to cart"
+							product={product}
+						/>
+					</div>
 				</>
 			)}
 		</Product>
@@ -129,13 +185,12 @@ export default function Post({ product, preview }) {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-	console.log('-------- GET STATIC PROPS -----------')
+	console.log("-------- GET STATIC PROPS -----------");
 
-
-	const response = await fetch('https://wp.clarksglassworks.com/graphql', {
-		method: 'POST',
+	const response = await fetch("https://wp.clarksglassworks.com/graphql", {
+		method: "POST",
 		headers: {
-			'Content-Type': 'application/json',
+			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
 			query: `
@@ -176,9 +231,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		}),
 	});
 
-
 	const { data } = await response.json();
-
 
 	return {
 		props: {
@@ -186,7 +239,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		},
 		revalidate: 1,
 	};
-
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -232,7 +284,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
 	}
 
 	const { data } = await response.json();
-	const paths = data.products.edges.map((product) => { return product.node; }).reverse().map((product) => `/${product.slug}`) || [];
+	const paths =
+		data.products.edges
+			.map((product) => {
+				return product.node;
+			})
+			.reverse()
+			.map((product) => `/${product.slug}`) || [];
 	return {
 		paths: paths,
 		fallback: true,

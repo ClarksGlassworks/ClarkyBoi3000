@@ -5,7 +5,8 @@ import Link from 'next/link'
 const Casette = ({ casetteState }) => {
 
   const { x, y, rotate, scale, mobileX, mobileY, position, translateX, zIndex } = casetteState
-  const { isMobile } = useWindowSize();
+  // const { isMobile } = useWindowSize();
+  const isMobile = true
 
   const left = isMobile ? mobileX : x;
   const transform = translateX ? `translateX(calc(${left} + ${translateX}))` : `translateX(${left})`;

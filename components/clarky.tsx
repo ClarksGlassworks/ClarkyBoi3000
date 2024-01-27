@@ -73,7 +73,7 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
                     className={`absolute top-5 right-20 z-0 blur-sm opacity-80 `} // Updated class with lower z-index
                 />
                 <Image
-                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-transparent-new.png"
+                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-transparent-not-simps.png"
                     width="600"
                     height="300"
                     alt="ClarkyBoi"

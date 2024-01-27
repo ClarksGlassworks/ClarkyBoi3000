@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import useWindowSize from '../hooks/useWindowSize'
 import Link from 'next/link'
-const Casette = ({ casetteState, isScrolled }) => {
+const Casette = ({ casetteState, isScrolled = false }) => {
 
   const { x, y, rotate, scale, mobileX, mobileY, position, translateX, zIndex } = casetteState
   const { isMobile } = useWindowSize();

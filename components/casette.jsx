@@ -21,7 +21,7 @@ const Casette = ({ casetteState, isScrolled = false }) => {
         top: isMobile ? mobileY : y ,
         // bottom: position !== 'top' ? isMobile? mobileY : y : isMobile ? null : y,
         left: isMobile ? mobileX : x,
-        transform: transform,
+        // transform: transform,
         zIndex:zIndex, 
 
       }}

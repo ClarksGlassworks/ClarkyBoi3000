@@ -2,6 +2,7 @@ import { motion, useAnimation, useScroll } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import useWindowSize from "../hooks/useWindowSize";
+import { start } from "repl";
 const ClarkyBoi = ({ clarkyBoiState }) => {
     const controls = useAnimation();
     const { scrollY, scrollYProgress } = useScroll();
@@ -15,11 +16,21 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
         x: isMobile ? `70%`: `70%`,
         opacity: 0,
         y: isMobile ? "40%": '40%',
+        scale:1
     };
     const endState = {
         x: `35%`,
         y: "5%",
         opacity:1,
+        scale:1
+    };
+
+    let finalState = {
+        
+        x: isMobile ? `0%`: `70%`,
+        opacity: 1,
+        scale:0.8,
+        y: isMobile ? "60%": '20%',
     };
     const slideInTransition = {
         type: "tween",
@@ -33,7 +44,7 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
         } else if(scrollState === "initial"){
             controls.start(startState)
         } else if(scrollState === "end"){ 
-            controls.start(endState)
+            controls.start(finalState)
         }
     },[scrollState])
     useEffect(() => {
@@ -41,13 +52,13 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
           const totalHeight = document.body.scrollHeight - window.innerHeight;
           const scrollPosition = window.scrollY;
       
-          if (scrollPosition < 400) {
+        if (scrollPosition < 500) {
             setScrollState("initial");
-          } else if (scrollPosition > 400 && scrollPosition < totalHeight) {
+        } else if (scrollPosition > 500 && scrollPosition < 1300) {
             setScrollState("scrolling");
-          } else if (scrollPosition >= totalHeight) {
+        } else if (scrollPosition >= 1300) {
             setScrollState("end");
-          }
+        }
         };
       
         window.addEventListener("scroll", handleScroll);

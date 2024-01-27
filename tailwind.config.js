@@ -30,6 +30,7 @@ module.exports = {
       },
       fontFamily: {
         'vt323': ['VT323', 'monospace'],
+        'honk': ['Honk', 'monospace'],
       },
       boxShadow: {
         small: "0 5px 10px rgba(0, 0, 0, 0.12)",

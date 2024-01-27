@@ -195,7 +195,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 					<Image src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif" alt="" layout="fill" objectFit="cover" className="opacity-50 absolute z-0" />
 
 					<div className="p-8 pt-[150px]">
-						<h1 className="text-white text-[60px] leading-[50px] font-vt323">Welcome to Clark's Glassworks</h1>
+						<h1 className="text-white text-[55px] leading-[40px] font-honk">Welcome to Clark's Glassworks</h1>
 						<p className="text-xl lg:text-[40px] text-white font-vt323 mt-10">One of Canadae's premier boro glass artists. Looking for a new bong, rig, or dab setup? You've come correct and direct to the source!</p>
 					</div>
 

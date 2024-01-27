@@ -189,16 +189,72 @@ export default function Index({ allPosts: { edges }, preview }) {
 			</Head>
 			<Corner scrollState={scrollState} />
 			<Top8Friends products={products} />
-			<HomepageMenu />
+			{/* <HomepageMenu /> */}
+			<div className="h-[500px] bg-black relative mx-4 my-4">
+				<Image
+					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif"
+					alt=""
+					layout="fill"
+					objectFit="cover"
+					className="opacity-50 absolute z-0"
+				/>
+
+				<div className="p-8 pt-[150px]">
+					<h1 className="text-white text-[55px] leading-[40px] font-vt323">
+						Welcome to Clark's Glassworks
+					</h1>
+					<p className="text-xl lg:text-[40px] text-white font-vt323 mt-10">
+						One of Canada's premier boro glass artists. Looking for a new bong,
+						rig, or dab setup? You've come correct and direct to the source!
+					</p>
+
+					
+				</div>
+			</div>
+
+			<div
+				className="min-h-[500px] bg-black border-4 border-black relative bg-cover bg-repeat bg-center mx-4 my-4"
+				style={{
+					backgroundImage:
+						"url('https://wp.clarksglassworks.com/wp-content/uploads/2024/01/MIkl.gif')",
+					backgroundSize: "300px 300px",
+					backgroundRepeat: "repeat",
+				}}
+			>
+		
+
+				<div className="p-8 pt-[150px] relative z-20">
+					<h1 className="text-white text-[55px] leading-[40px] font-honk">
+						Wholesale boss?
+					</h1>
+					<div className="mt-2">
+					<span className="text-xl lg:text-[40px] text-white font-vt323 mt-10 bg-black leading-[18px] p-1">
+						Lets make some cheddar together! I offer wholesale pricing on all my work to brick and mortar shops.
+					</span></div>
+
+					<button className="p-4 bg-pink-500 text-white mt-4">Download Catalog</button>
+					<button className="p-4 text-pink-500 border border-pink-500 text-lg mt-2 bg-[rgba(255,255,255,1)]">Make 'n order</button>
+				</div>
+			</div>
+
 			<div className="h-screen bg-black relative">
+				{/* <Image
+					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/MIkl.gif"
+					alt=""
+					layout="fill"
+					objectFit="cover"
+					className="opacity-50 absolute z-0"
+				/> */}
 
-					<Image src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif" alt="" layout="fill" objectFit="cover" className="opacity-50 absolute z-0" />
-
-					<div className="p-8 pt-[150px]">
-						<h1 className="text-white text-[55px] leading-[40px] font-honk">Welcome to Clark's Glassworks</h1>
-						<p className="text-xl lg:text-[40px] text-white font-vt323 mt-10">One of Canadae's premier boro glass artists. Looking for a new bong, rig, or dab setup? You've come correct and direct to the source!</p>
-					</div>
-
+				<div className="p-8 pt-[150px] relative z-20">
+					<h1 className="text-white text-[55px] leading-[40px] font-honk">
+						Want a custom?
+					</h1>
+					<p className="text-xl lg:text-[40px] text-white font-vt323 mt-10">
+						One of Canadae's premier boro glass artists. Looking for a new bong,
+						rig, or dab setup? You've come correct and direct to the source!
+					</p>
+				</div>
 			</div>
 			{/* @ts-ignore */}
 

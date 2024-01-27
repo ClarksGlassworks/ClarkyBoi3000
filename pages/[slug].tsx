@@ -27,11 +27,16 @@ import Casette from "../components/casette";
 import useWindowSize from "../hooks/useWindowSize";
 import ShoppingCartButton from "../components/shoppingCartButton";
 import { FaArrowLeft, FaBackward } from "react-icons/fa";
+import { useEffect } from "react";
 export default function Post({ product, preview }) {
 	const router = useRouter();
 	// const morePosts = posts?.edges;
 	const { isMobile } = useWindowSize();
-console.log({product})
+
+	useEffect(()=>{
+		window.scrollY = 0
+	},[router.asPath])
+
 	if (!router.isFallback && !product) {
 		return <ErrorPage statusCode={404} />;
 	}

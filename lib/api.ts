@@ -50,6 +50,18 @@ export function useGetCart() {
 		mutate,
 	};
 }
+
+export function useGetCustomer() {
+	const fetcher = (url) => fetch(url).then((res) => res.json());
+	const { data, mutate, error } = useSWR("/api/getCustomer", fetcher);
+
+	return {
+		customer: data,
+		isLoading: !data && !error,
+		isError: error,
+		mutate,
+	};
+}
 export async function addToCart(productId, quantity) {
 	console.log("----->", productId, quantity);
 	const response = await fetch("/api/addToCart", {

@@ -18,6 +18,7 @@ import { set } from "date-fns";
 import Image from "next/image";
 import HomepageHeader from "../components/homepage-header";
 import ClarkyBoi from "../components/clarky";
+import { useRouter } from "next/router";
 
 export default function Index({ allPosts: { edges }, preview }) {
 	const heroPost = edges[0]?.node;
@@ -45,7 +46,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 		x: 0,
 		y: 20,
 		mobileX: 0,
-		mobileY: 20,
+		mobileY: 80,
 		rotate: 0,
 		scale: 1,
 	};
@@ -98,40 +99,49 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const [scrollState, setScrollState] = useState("initial");
 	const [hasScrolled, setHasScrolled] = useState(false)
 	const [menuActive, setMenuActive] = useState(false)
-	// x = left, y = top
 	const [casetteState, setCasetteState] = useState(initialCasetteState);
 	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
-
-	// x = right, y = bottom
 	const [gameboyState, setGameboyState] = useState(initialGameboyState);
 	const [clarkyBoiState, setClarkyBoiState] = useState(initialClarkyBoiState);
 	const { scrollYProgress } = useScroll();
 
 	const gameboyRef = useRef(null);
 	const casetteRef = useRef(null);
+
+
+	const router = useRouter()
 	useEffect(() => {
-		const handleScroll = () => {
-			setIsScrolled(window.scrollY > 50);
-		};
-		window.addEventListener("scroll", handleScroll);
-		return () => {
-			window.removeEventListener("scroll", handleScroll);
-		};
+		setScrollState("initial");
 	}, []);
 
-	useEffect(() => {
-		const unsubscribe = scrollYProgress.onChange((v) => {
-			if (v === 0) {
-				setScrollState("initial");
-			} else if (v > 0 && v < 1) {
-				setScrollState("scrolling");
-			} else if (v === 1) {
-				setScrollState("end");
-			}
-		});
+	useEffect(()=>{
+		console.log('router changed, resetting casette')
+		setScrollState("initial");
+		window.scrollY = 0
+	},[router.asPath])
+	
+	console.log({scrollState})
+useEffect(() => {
+  let isMounted = true; // Add a flag to track whether the component is mounted
 
-		return () => unsubscribe();
-	}, [scrollYProgress]);
+  setScrollState("initial");
+  const unsubscribe = scrollYProgress.onChange((v) => {
+    if (!isMounted) return; // If the component is not mounted, do not set the scrollState
+
+    if (v === 0) {
+      setScrollState("initial");
+    } else if (v > 0 && v < 1) {
+      setScrollState("scrolling");
+    } else if (v === 1) {
+      setScrollState("end");
+    }
+  });
+
+  return () => {
+    unsubscribe(); // Unsubscribe from the scrollYProgress.onChange callback
+    isMounted = false; // Set isMounted to false when the component unmounts
+  };
+}, [scrollYProgress]);
 
 	useEffect(() => {
 		if (scrollState === "initial") {

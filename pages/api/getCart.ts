@@ -12,63 +12,76 @@ async function handler(req, res) {
         },
         body: JSON.stringify({
           query: `
-            query GetCart {
-                cart {
-                    isEmpty
-                    needsShippingAddress
-                    subtotal
-                    total
-                    subtotalTax
-                    contents {
-                      nodes {
-                        product {
-                          node {
-                            id
-                            title
-                            onSale
-                            purchasable
-                            slug
-                            sku
-                            type
-                            ... on InventoriedProduct {
-                              stockStatus
-                              stockQuantity
-                            }
-                          }
+          query GetCart {
+            cart(recalculateTotals: true) {
+              isEmpty
+              needsShippingAddress
+              subtotal
+              total
+              subtotalTax
+              contents {
+                nodes {
+                  product {
+                    node {
+                      id
+                      title
+                      onSale
+                      purchasable
+                      slug
+                      sku
+                      type
+                      ... on InventoriedProduct {
+                        stockStatus
+                        stockQuantity
+                      }
+                      featuredImage {
+                        node {
+                          sourceUrl
+                          sizes(size: WOOCOMMERCE_THUMBNAIL)
                         }
-                        quantity
-                        subtotal
-                        subtotalTax
-                        tax
-                        total
-                        key
                       }
-                      productCount
-                    }
-                    discountTax
-                    discountTotal
-                    shippingTotal
-                    shippingTax
-                    totalTax
-                    appliedCoupons {
-                      code
-                      description
-                      discountAmount
-                      discountTax
-                    }
-                    availableShippingMethods {
-                      rates {
-                        cost
-                        id
-                        instanceId
-                        label
-                        methodId
+                      shippingClasses {
+                        nodes {
+                          id
+                          name
+                        }
                       }
-                      packageDetails
                     }
-                    chosenShippingMethods
                   }
-        }
+                  quantity
+                  subtotal
+                  subtotalTax
+                  tax
+                  total
+                  key
+                }
+                productCount
+              }
+              discountTax
+              discountTotal
+              shippingTotal
+              shippingTax
+              totalTax
+              appliedCoupons {
+                code
+                description
+                discountAmount
+                discountTax
+              }
+              availableShippingMethods {
+                rates {
+                  cost
+                  id
+                  instanceId
+                  label
+                  methodId
+                }
+                packageDetails
+                supportsShippingCalculator
+              }
+              chosenShippingMethods
+            }
+          }
           `
         }),
       });

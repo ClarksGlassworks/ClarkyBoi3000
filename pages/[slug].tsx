@@ -2,39 +2,29 @@ import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
-import Container from "../components/container";
-import PostBody from "../components/post-body";
-// import MoreStories from "../../components/more-stories";
+
 import Header from "../components/header";
-import PostHeader from "../components/post-header";
-// import SectionSeparator from "../../components/section-separator";
-// import Layout from "../../components/layout";
+
 import PostTitle from "../components/post-title";
-import Tags from "../components/tags";
-import {
-	getWooCommerceProduct,
-	getWooCommerceProducts,
-	useWooCommerceProduct,
-	useWooCommerceProducts,
-} from "../lib/api";
+
 // import { CMS_NAME } from "../../lib/constants";
-import Layout from "../components/layout";
+
 import Product from "../components/product";
 import Image from "next/image";
-import Link from "next/link";
+
 import AddToCartButton from "../components/add-to-cart";
-import Casette from "../components/casette";
+
 import useWindowSize from "../hooks/useWindowSize";
 import ShoppingCartButton from "../components/shoppingCartButton";
 import { FaArrowLeft, FaBackward } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import HomepageHeader from "../components/homepage-header";
-import { init } from "next/dist/compiled/webpack/webpack";
-import { motion } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 export default function Post({ product, preview }) {
 	const router = useRouter();
 	// const morePosts = posts?.edges;
 	const { isMobile } = useWindowSize();
+	const { scrollY, scrollYProgress } = useScroll();
 	const initialCasetteState = {
 		x: -200,
 		y: -80,

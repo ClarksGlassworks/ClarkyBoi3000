@@ -1,30 +1,22 @@
 import Head from "next/head";
 import { GetStaticProps } from "next";
-import Container from "../components/container";
-import MoreStories from "../components/more-stories";
-import HeroPost from "../components/hero-post";
-import Intro from "../components/intro";
+
 import Layout from "../components/layout";
 import {
-	getWooCommerceProduct,
+
 	getWooCommerceProducts,
-	useScrollPosition,
-	useWooCommerceProducts,
+
 } from "../lib/api";
-import { CMS_NAME } from "../lib/constants";
+
 import Top8Friends from "../components/top8friends";
-import Casette from "../components/homepage-header";
 import Corner from "../components/corner";
-import Gamebody from "../components/gameboy";
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import useWindowSize from "../hooks/useWindowSize";
-import { set } from "date-fns";
 import Image from "next/image";
 import HomepageHeader from "../components/homepage-header";
 import ClarkyBoi from "../components/clarky";
 import { useRouter } from "next/router";
-import HomepageMenu from "../components/HomepageMenu";
 import { FaEnvelope, FaFacebook, FaInstagram } from "react-icons/fa";
 
 import { animateScroll as scroll } from 'react-scroll';
@@ -34,8 +26,11 @@ export default function Index({ allPosts: { edges }, preview }) {
 
 	const router = useRouter();
 	const { isMobile } = useWindowSize();
+	const  { scrollY, scrollYProgress } = useScroll();
 
 	const [scrollPosition, setScrollPosition] = useState("initial");
+	const [scrollPercentage, setScrollPercentage] = useState(0);
+	const [remainingSpace, setRemainingSpace] = useState(0);
 
 	useEffect(() => {
 		if ('scrollRestoration' in history) {
@@ -48,6 +43,19 @@ export default function Index({ allPosts: { edges }, preview }) {
 			const nearBottom =
 				document.documentElement.scrollHeight - (window.innerHeight + 100);
 
+
+			const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+			const yPercent = Math.round(( y / pageHeight) * 100);
+
+			if (yPercent >= 80 && yPercent <= 100) {
+				const remainingSpace = 100 - yPercent;
+				const screenPercentage = Math.round((remainingSpace / 20) * 100);
+				console.log('screenPercentage', screenPercentage);
+				setRemainingSpace(screenPercentage)
+			}
+
+			setScrollPercentage(yPercent)
+			// console.log({y, yPercent})
 			if (y < 200) {
 				setScrollPosition("initial");
 			} else if (y >= 200 && y < 700) {
@@ -70,6 +78,13 @@ export default function Index({ allPosts: { edges }, preview }) {
 			window.removeEventListener("scroll", handleScroll);
 		};
 	}, []);
+
+	// const yPos = document.documentElement.getBoundingClientRect().top;
+// const scrollPercentage = Math.round((Math.abs(yPos) / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+// console.log(scrollPercentage, yPos, window.scrollY);
+	const translateXValue = scrollPercentage.toFixed(2); // Adjust the decimal places as needed
+	// const transformStyle = `translateX(${scrollPercentage.toFixed(2)}px)`;
+
 
 	// component states
 	const initialClarkyBoi2State = {
@@ -170,7 +185,6 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const [clarkyBoi2State, setClarkyBoi2State] = useState(
 		initialClarkyBoi2State
 	);
-	const { scrollYProgress } = useScroll();
 
 	const gameboyRef = useRef(null);
 	const casetteRef = useRef(null);
@@ -310,17 +324,22 @@ useEffect(() => {
                         objectFit: "cover"
                     }} />
 
-				<Image
-                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-custom-w-1.png"
-                    alt=""
-                    width="200"
-                    height="300"
-                    className="opacity-100 absolute bottom-0 right-0 z-10 filter w-[250px] "
-                    style={{
-                        maxWidth: "100%",
-                        height: "auto",
-                        objectFit: "cover"
-                    }} />
+<AnimatePresence>
+	<Image
+		src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-custom-w-1.png"
+		alt=""
+		width="200"
+		height="300"
+		className="opacity-100 absolute bottom-0 right-0 z-10 filter w-[250px] transition-all duration-500 ease-in-out"
+		style={{
+			maxWidth: "100%",
+			height: "auto",
+			objectFit: "cover",
+				transform: `translateX(-${remainingSpace}px)`,
+				transition: 'transform 0.3s ease-in-out' // Adjust the duration and easing as needed
+		}}
+	/>
+</AnimatePresence>
 
 				<div className="p-8 pt-[50px] relative z-20">
 					<h1 className="text-white text-[75px] leading-[60px] font-vt323">

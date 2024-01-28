@@ -240,16 +240,27 @@ export default function Index({ allPosts: { edges }, preview }) {
 				</div>
 			</div>
 
-			<div className="min-h-[600px] bg-black relative mx-4 my-4 border-4 border-black">
+			<div className="min-h-[600px] bg-gradient-to-b from-teal-600 to-purple-900 relative mx-4 my-4 border-4 border-black  z-20 border-4 border-black ">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/triangle-bg.gif"
 					alt=""
 					layout="fill"
 					objectFit="cover"
-					className="opacity-100 absolute z-0 filter "
+					className="opacity-20 absolute z-0 filter blur-sm "
 				/>
 
-				<div className="p-8 pt-[150px] relative z-20">
+<Image
+					src="
+					https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-custom-w.png"
+					alt=""
+					width="200"
+					height="300"
+					objectFit="cover"
+					className="opacity-100 absolute bottom-0 right-0 z-10 filter w-[250px] "
+				/>
+
+
+				<div className="p-8 pt-[50px] relative z-20">
 					<h1 className="text-white text-[75px] leading-[60px] font-vt323">
 						Want a custom?
 					</h1>
@@ -261,10 +272,10 @@ export default function Index({ allPosts: { edges }, preview }) {
 				
 			</div>
 
-			<div className="min-h-[100px] bg-gradient-to-b from-transparent to-black relative">
+			<div className="min-h-[500px] bg-gradient-to-b from-transparent to-black relative z-0 -mt-[450px]">
 				
 			</div>
-			<div className="bg-black min-h-[200px]">
+			<div className="bg-black min-h-[250px]">
 			<div className="flex flex-row gap-4 mx-auto justify-between w-1/2 pt-8">
 				<FaInstagram className="text-white text-4xl" /> <FaEnvelope className="text-white text-4xl" /> <FaFacebook className="text-white text-4xl" />
 				</div>

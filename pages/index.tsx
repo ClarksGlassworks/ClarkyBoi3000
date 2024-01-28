@@ -326,7 +326,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 				</div>
 			</div>
 
-			<div className="min-h-[230px] bg-black relative z-0 overflow-hidden">
+			<div className="min-h-[270px] bg-black relative z-0 overflow-hidden">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/Zebra-pattern-wallpaper.jpg"
 					alt=""
@@ -351,7 +351,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 						/>
 					</motion.div>
 				)}
-				<div className="min-h-[230px] bg-gradient-to-b to-[rgba(0,0,0,0.7)] from-black relative z-10"></div>
+				<div className="min-h-[270px] bg-gradient-to-b to-[rgba(0,0,0,0.7)] from-black relative z-10"></div>
 			</div>
 
 			{/* @ts-ignore */}

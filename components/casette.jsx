@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import Image from 'next/image'
+import Image from "next/legacy/image"
 import useWindowSize from '../hooks/useWindowSize'
 import Link from 'next/link'
 const Casette = ({ casetteState, isScrolled = false }) => {

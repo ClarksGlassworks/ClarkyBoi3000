@@ -20,7 +20,7 @@ import {
 // import { CMS_NAME } from "../../lib/constants";
 import Layout from "../components/layout";
 import Product from "../components/product";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Link from "next/link";
 import AddToCartButton from "../components/add-to-cart";
 import Casette from "../components/casette";

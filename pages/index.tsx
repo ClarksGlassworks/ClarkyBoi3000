@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import useWindowSize from "../hooks/useWindowSize";
 import { set } from "date-fns";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import HomepageHeader from "../components/homepage-header";
 import ClarkyBoi from "../components/clarky";
 import { useRouter } from "next/router";

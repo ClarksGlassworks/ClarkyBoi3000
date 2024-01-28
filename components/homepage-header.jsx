@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, memo } from 'react';
 import { motion, useTransform, useScroll } from 'framer-motion';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import animatedBg from './bg.svg';
 import ShoppingCartButton from './shoppingCartButton';
 import Casette from './casette';

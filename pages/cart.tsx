@@ -2,7 +2,7 @@ import Link from "next/link";
 import Casette from "../components/casette";
 import Layout from "../components/layout";
 import { useGetCart } from "../lib/api";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Head from "next/head";
 import toast, { toastConfig } from 'react-simple-toasts';
 import 'react-simple-toasts/dist/theme/dark.css'; // choose your theme

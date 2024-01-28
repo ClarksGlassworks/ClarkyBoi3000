@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import ShoppingCartButton from "./shoppingCartButton";
 
 import { motion } from "framer-motion";

@@ -17,7 +17,7 @@ import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Select from "react-select";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 const countryOptions = [
 	{ value: "US", label: "United States" },

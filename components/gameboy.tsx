@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef, memo } from "react";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 const gameboyImages = [

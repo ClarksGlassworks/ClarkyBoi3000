@@ -1,5 +1,5 @@
 import { motion, useAnimation, useScroll } from "framer-motion";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { useEffect, useRef, useState } from "react";
 import useWindowSize from "../hooks/useWindowSize";
 import { start } from "repl";

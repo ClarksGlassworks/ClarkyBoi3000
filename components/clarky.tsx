@@ -13,9 +13,9 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
     const scrollYPercent = (scrollYProgress.get() * 100);
     let startState = {
         
-        x: isMobile ? `70%`: `70%`,
+        x: isMobile ? `100%`: `70%`,
         opacity: 1,
-        y: isMobile ? "20%": '20%',
+        y: isMobile ? "100%": '20%',
         scale:1
     };
     const endState = {

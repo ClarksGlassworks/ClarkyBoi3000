@@ -16,7 +16,7 @@ import Casette from "../components/homepage-header";
 import Corner from "../components/corner";
 import Gamebody from "../components/gameboy";
 import { useEffect, useRef, useState } from "react";
-import { useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import useWindowSize from "../hooks/useWindowSize";
 import { set } from "date-fns";
 import Image from "next/image";
@@ -33,7 +33,18 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const { isMobile } = useWindowSize();
 
 	// component states
-
+	const initialClarkyBoi2State = {
+		x: 0,
+		y: 0,
+		rotate: 0,
+		scale: 1,
+	};
+	const endClarkyBoi2State = {
+		x: 0,
+		y: 0,
+		rotate: 0,
+		scale: 1,
+	};
 	const initialClarkyBoiState = {
 		x: 0,
 		y: 0,
@@ -117,6 +128,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
 	const [gameboyState, setGameboyState] = useState(initialGameboyState);
 	const [clarkyBoiState, setClarkyBoiState] = useState(initialClarkyBoiState);
+	const [clarkyBoi2State, setClarkyBoi2State] = useState(initialClarkyBoi2State);
 	const { scrollYProgress } = useScroll();
 
 	const gameboyRef = useRef(null);
@@ -302,7 +314,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 				</div>
 			</div>
 
-			<div className="min-h-[200px] bg-black relative z-0">
+			<div className="min-h-[230px] bg-black relative z-0 overflow-hidden">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/Zebra-pattern-wallpaper.jpg"
 					alt=""
@@ -310,8 +322,22 @@ export default function Index({ allPosts: { edges }, preview }) {
 					objectFit="cover"
 					className="opacity-70 absolute z-0 filter "
 				/>
-				<div className="min-h-[200px] bg-gradient-to-b to-[rgba(0,0,0,0.7)] from-black relative z-10"></div>
+				<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="scale-[65%] absolute -bottom-[68px] z-20 overflow-hidden">
+				<Image
+					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-transparent-not-simps.png"
+					width="600"
+					height="300"
+					alt="ClarkyBoi"
+					className={`z-20 relative bottom-0 right-0 `}
+				/>
+			</motion.div>
+				<div className="min-h-[230px] bg-gradient-to-b to-[rgba(0,0,0,0.7)] from-black relative z-10"></div>
+				
 			</div>
+
+
+			
+
 			{/* @ts-ignore */}
 
 			<HomepageHeader

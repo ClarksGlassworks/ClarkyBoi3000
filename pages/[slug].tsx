@@ -63,11 +63,11 @@ export default function Post({ product, preview }) {
 	};
 	const [casetteState, setCasetteState] = useState(initialCasetteState);
 	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
-	const [selectedImage, setSelectedImage] = useState(product.image?.sourceUrl);
-	const allImages = [
-		product.image?.sourceUrl,
-		...product.galleryImages?.nodes?.map((image) => image?.sourceUrl),
-	];
+const [selectedImage, setSelectedImage] = useState(product ? product.image.sourceUrl : null);
+const allImages = product ? [
+    product.image.sourceUrl,
+    ...product.galleryImages.nodes.map((image) => image.sourceUrl),
+] : [];
 	const [images, setImages] = useState(allImages);
 
 	const casetteRef = useRef(null);

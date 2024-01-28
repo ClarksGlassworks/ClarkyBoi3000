@@ -34,10 +34,7 @@ const HomepageHeader = ({ casetteState, ref, isMobile, headerBarState, scrollPos
           fill
           className='absolute z-20 opacity-50 min-h-[200px] lg:min-h-[400px]'
           alt={''}
-          style={{
-            maxWidth: "100%",
-            height: "auto"
-          }} />
+         />
         <section className='w-full h-full flex justify-between items-center z-40 absolute'>
           <div></div>
           <ShoppingCartButton />

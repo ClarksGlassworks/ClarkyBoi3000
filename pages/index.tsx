@@ -191,7 +191,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 			<Corner scrollState={scrollState} />
 			<Top8Friends products={products} />
 			{/* <HomepageMenu /> */}
-			<div className="h-[500px] bg-black relative mx-4 my-4">
+			<div className="h-[600px] bg-black relative mx-4 my-4">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif"
 					alt=""
@@ -212,7 +212,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 			</div>
 
 			<div
-				className="min-h-[500px] bg-black border-4 border-black relative bg-cover bg-repeat bg-center mx-4 my-4"
+				className="min-h-[600px] bg-black border-4 border-black relative bg-cover bg-repeat bg-center mx-4 my-4"
 				style={{
 					backgroundImage:
 						"url('https://wp.clarksglassworks.com/wp-content/uploads/2024/01/MIkl.gif')",

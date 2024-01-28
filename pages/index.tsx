@@ -208,8 +208,6 @@ export default function Index({ allPosts: { edges }, preview }) {
 						One of Canada's premier boro glass artists. Looking for a new bong,
 						rig, or dab setup? You've come correct and direct to the source!
 					</p>
-
-					
 				</div>
 			</div>
 
@@ -222,20 +220,24 @@ export default function Index({ allPosts: { edges }, preview }) {
 					backgroundRepeat: "repeat",
 				}}
 			>
-		
-
 				<div className="p-8 pt-[150px] relative z-20">
 					<h1 className="text-white text-[55px] leading-[40px] font-honk">
 						Wholesale boss?
 					</h1>
 					<div className="mt-2">
-					<span className="text-xl lg:text-[40px] text-white font-vt323 mt-10 bg-black leading-[18px] p-1">
-						Lets make some cheddar together! I offer wholesale pricing on all my work to brick and mortar shops.
-					</span></div>
+						<span className="text-xl lg:text-[40px] text-white font-vt323 mt-10 bg-black leading-[18px] p-1">
+							Lets make some cheddar together! I offer wholesale pricing on all
+							my work to brick and mortar shops.
+						</span>
+					</div>
 
-<div className="flex flex-col gap-2">
-					<button className="p-4 bg-pink-500 text-white mt-4 w-[180px]">Download Catalog</button>
-					<button className="p-4 text-pink-500 text-lg mt-2 bg-[rgba(255,255,255,1)] w-[180px]">Make 'n order</button>
+					<div className="flex flex-col gap-2">
+						<button className="p-4 bg-pink-500 text-white mt-4 w-[180px]">
+							Download Catalog
+						</button>
+						<button className="p-4 text-pink-500 text-lg mt-2 bg-[rgba(255,255,255,1)] w-[180px]">
+							Make 'n order
+						</button>
 					</div>
 				</div>
 			</div>
@@ -249,16 +251,14 @@ export default function Index({ allPosts: { edges }, preview }) {
 					className="opacity-20 absolute z-0 filter blur-sm "
 				/>
 
-<Image
-					src="
-					https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-custom-w.png"
+				<Image
+					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-custom-w-1.png"
 					alt=""
 					width="200"
 					height="300"
 					objectFit="cover"
 					className="opacity-100 absolute bottom-0 right-0 z-10 filter w-[250px] "
 				/>
-
 
 				<div className="p-8 pt-[50px] relative z-20">
 					<h1 className="text-white text-[75px] leading-[60px] font-vt323">
@@ -267,33 +267,30 @@ export default function Index({ allPosts: { edges }, preview }) {
 					<p className="text-xl lg:text-[40px] text-white font-vt323 mt-4">
 						Yeah I do that! I love making custom pieces.
 					</p>
-					<button className="p-4 text-black text-lg mt-2 bg-white w-[180px]">Make 'n order</button>
+					<button className="p-4 text-black text-lg mt-2 bg-white w-[180px]">
+						Make 'n order
+					</button>
 				</div>
-				
 			</div>
 
-			<div className="min-h-[500px] bg-gradient-to-b from-transparent to-black relative z-0 -mt-[450px]">
-				
-			</div>
+			<div className="min-h-[500px] bg-gradient-to-b from-transparent to-black relative z-0 -mt-[450px]"></div>
 			<div className="bg-black min-h-[150px] flex justify-center flex-col">
-			<div className="flex flex-row gap-4 mx-auto justify-between w-1/2">
-				<FaInstagram className="text-white text-4xl" />
-				 <FaEnvelope className="text-white text-4xl" /> 
-				 <FaFacebook className="text-white text-4xl" />
+				<div className="flex flex-row gap-4 mx-auto justify-between w-1/2">
+					<FaInstagram className="text-white text-4xl" />
+					<FaEnvelope className="text-white text-4xl" />
+					<FaFacebook className="text-white text-4xl" />
 				</div>
 			</div>
 
 			<div className="min-h-[200px] bg-black relative z-0">
-			<Image
+				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/Zebra-pattern-wallpaper.jpg"
 					alt=""
 					layout="fill"
 					objectFit="cover"
 					className="opacity-50 absolute z-0 filter "
 				/>
-				<div className="min-h-[200px] bg-gradient-to-b to-transparent from-black relative z-10">
-				
-				</div>
+				<div className="min-h-[200px] bg-gradient-to-b to-transparent from-black relative z-10"></div>
 			</div>
 			{/* @ts-ignore */}
 

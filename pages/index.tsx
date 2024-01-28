@@ -122,7 +122,11 @@ export default function Index({ allPosts: { edges }, preview }) {
 
 	useEffect(() => {
 		const handleWindowScroll = () => {
-			if (window.pageYOffset > 0) {
+			if (window.pageYOffset > 0 && window.pageYOffset <= 600) {
+				setScrollState("scrolling");
+			} else if (window.pageYOffset > 600 && window.pageYOffset <= 1200) {
+				setScrollState("scrolling");
+			} else if (window.pageYOffset > 1200) {
 				setScrollState("scrolling");
 			} else {
 				setScrollState("initial");
@@ -191,7 +195,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 			<Corner scrollState={scrollState} />
 			<Top8Friends products={products} />
 			{/* <HomepageMenu /> */}
-			<div className="h-[600px] bg-black relative mx-4 my-4">
+			<div className="h-[600px] bg-black relative mx-4 my-4 border-4 border-black overflow-hidden">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif"
 					alt=""
@@ -288,9 +292,9 @@ export default function Index({ allPosts: { edges }, preview }) {
 					alt=""
 					layout="fill"
 					objectFit="cover"
-					className="opacity-50 absolute z-0 filter "
+					className="opacity-70 absolute z-0 filter "
 				/>
-				<div className="min-h-[200px] bg-gradient-to-b to-[rgba(0,0,0,0.8)] from-black relative z-10"></div>
+				<div className="min-h-[200px] bg-gradient-to-b to-[rgba(0,0,0,0.7)] from-black relative z-10"></div>
 			</div>
 			{/* @ts-ignore */}
 

@@ -14,8 +14,8 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
     let startState = {
         
         x: isMobile ? `70%`: `70%`,
-        opacity: 0,
-        y: isMobile ? "40%": '40%',
+        opacity: 1,
+        y: isMobile ? "20%": '20%',
         scale:1
     };
     const endState = {
@@ -30,7 +30,15 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
         x: isMobile ? `0%`: `70%`,
         opacity: 1,
         scale:0.8,
-        y: isMobile ? "60%": '20%',
+        y: isMobile ? "20%": '20%',
+    };
+
+    let finalState2 = {
+        
+        x: isMobile ? `0%`: `70%`,
+        opacity: 1,
+        scale:0.7,
+        y: isMobile ? "55%": '20%',
     };
     const slideInTransition = {
         type: "tween",
@@ -40,11 +48,13 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
     useEffect(()=>{
         console.log(scrollState)
         if(scrollState === "scrolling"){
-            controls.start(endState)
+            controls.start(finalState)
         } else if(scrollState === "initial"){
             controls.start(startState)
         } else if(scrollState === "end"){ 
-            controls.start(finalState)
+            controls.start(endState)
+        } else if(scrollState === "scrolling2"){ 
+            controls.start(finalState2)
         }
     },[scrollState])
     useEffect(() => {
@@ -52,12 +62,14 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
           const totalHeight = document.body.scrollHeight - window.innerHeight;
           const scrollPosition = window.scrollY;
       
-        if (scrollPosition < 500) {
+        if (scrollPosition < 800) {
             setScrollState("initial");
-        } else if (scrollPosition > 500 && scrollPosition < 1300) {
+        } else if (scrollPosition >= 800 && scrollPosition < 1400) {
             setScrollState("scrolling");
-        } else if (scrollPosition >= 1300) {
-            setScrollState("end");
+        } else if (scrollPosition >= 1400 && scrollPosition < 2000) {
+            setScrollState("scrolling2");
+        } else if (scrollPosition >= 2000) {
+            setScrollState("scrolling2");
         }
         };
       
@@ -73,7 +85,7 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
             initial={startState}
             animate={controls}
             transition={slideInTransition}
-            className="overflow-hidden fixed z-50 bottom-0 right-0"
+            className="overflow-hidden absolute z-50 bottom-0 right-0"
         >
             <div className="relative">
                 <Image

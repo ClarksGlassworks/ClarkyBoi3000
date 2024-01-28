@@ -46,7 +46,15 @@ export default function Index({ allPosts: { edges }, preview }) {
 		rotate: 0,
 		scale: 1,
 	};
-
+	const hiddenCasetteState = {
+		x: 0,
+		y: -80,
+		mobileX: -170,
+		mobileY: -300,
+		rotate: -20,
+		scale: isMobile ? 0.5 : 0.6,
+		opacity: 0,
+	};
 	const initialCasetteState = {
 		x: 0,
 		y: -80,
@@ -125,9 +133,9 @@ export default function Index({ allPosts: { edges }, preview }) {
 			if (window.pageYOffset > 0 && window.pageYOffset <= 600) {
 				setScrollState("scrolling");
 			} else if (window.pageYOffset > 600 && window.pageYOffset <= 1200) {
-				setScrollState("scrolling");
+				setScrollState("scrolling2");
 			} else if (window.pageYOffset > 1200) {
-				setScrollState("scrolling");
+				setScrollState("scrolling3");
 			} else {
 				setScrollState("initial");
 			}
@@ -167,12 +175,20 @@ export default function Index({ allPosts: { edges }, preview }) {
 			setHeaderBarState(scrollingHeaderBarState);
 			setClarkyBoiState(scrollingClarkyBoiState);
 			setHasScrolled(true);
+		} else if (scrollState === "scrolling2") {
+			setHeaderBarState(scrollingHeaderBarState);
+			setCasetteState(hiddenCasetteState);
+		} else if (scrollState === "scrolling3") {
+			setCasetteState(hiddenCasetteState);
+
+			setHeaderBarState(initialHeaderBarState);
 		} else if (scrollState === "end") {
 			setGameboyState(
 				menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
 			);
-			setCasetteState(scrollingCasetteState);
-			setHeaderBarState(scrollingHeaderBarState);
+
+			setCasetteState(hiddenCasetteState);
+			setHeaderBarState(initialHeaderBarState);
 			setClarkyBoiState(scrollingClarkyBoiState);
 			setHasScrolled(true);
 		}
@@ -203,12 +219,12 @@ export default function Index({ allPosts: { edges }, preview }) {
 					objectFit="cover"
 					className="opacity-50 absolute z-0 blur-sm hue-rotate-90"
 				/>
-
-				<div className="p-8 pt-[150px] relative z-10">
+				<ClarkyBoi clarkyBoiState={clarkyBoiState} />
+				<div className="p-8 pt-[50px] relative z-10">
 					<h1 className="text-white text-[55px] leading-[40px] font-vt323">
 						Welcome to Clark's Glassworks
 					</h1>
-					<p className="text-xl lg:text-[40px] text-white font-vt323 mt-10">
+					<p className="text-xl lg:text-[40px] text-white font-vt323 mt-10 pr-[40px]">
 						One of Canada's premier boro glass artists. Looking for a new bong,
 						rig, or dab setup? You've come correct and direct to the source!
 					</p>
@@ -314,7 +330,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 
 			/> */}
 
-			<ClarkyBoi clarkyBoiState={clarkyBoiState} />
+		
 
 			{isMobile && scrollState == "initial" && !hasScrolled && (
 				<div className="text-white p-4 rounded-full text-2xl items-center fixed bottom-4 left-1/2 transform translate-x-[-50%] z-[999] opacity-100 w-full">

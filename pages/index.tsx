@@ -128,7 +128,9 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
 	const [gameboyState, setGameboyState] = useState(initialGameboyState);
 	const [clarkyBoiState, setClarkyBoiState] = useState(initialClarkyBoiState);
-	const [clarkyBoi2State, setClarkyBoi2State] = useState(initialClarkyBoi2State);
+	const [clarkyBoi2State, setClarkyBoi2State] = useState(
+		initialClarkyBoi2State
+	);
 	const { scrollYProgress } = useScroll();
 
 	const gameboyRef = useRef(null);
@@ -141,15 +143,26 @@ export default function Index({ allPosts: { edges }, preview }) {
 	}, []);
 
 	useEffect(() => {
+		const fromBottom = document.documentElement.scrollHeight - window.innerHeight - 100;
 		const handleWindowScroll = () => {
-			if (window.pageYOffset > 0 && window.pageYOffset <= 600) {
+			if (window.pageYOffset === 0) {
+				setScrollState("initial");
+			} else if (window.pageYOffset > 0 && window.pageYOffset <= 600) {
 				setScrollState("scrolling");
 			} else if (window.pageYOffset > 600 && window.pageYOffset <= 1200) {
 				setScrollState("scrolling2");
-			} else if (window.pageYOffset > 1200) {
+			} else if (
+				(window.pageYOffset > 1200 && window.pageYOffset <= 1600) ||
+				(window.pageYOffset > 1600 && window.pageYOffset < fromBottom)
+			) {
 				setScrollState("scrolling3");
+			} else if (window.pageYOffset >= fromBottom) {
+				setScrollState("end");
 			} else {
-				setScrollState("initial");
+				console.log('scrolly', window.pageYOffset);
+				if (window.pageYOffset > 1600) {
+					setScrollState("initial");
+				}
 			}
 		};
 
@@ -173,16 +186,16 @@ export default function Index({ allPosts: { edges }, preview }) {
 	useEffect(() => {
 		console.log({ scrollState });
 		if (scrollState === "initial") {
-			setGameboyState(
-				menuActive ? zoomInToGameboyStep1State : initialGameboyState
-			);
+			// setGameboyState(
+			// 	menuActive ? zoomInToGameboyStep1State : initialGameboyState
+			// );
 			setCasetteState(initialCasetteState);
 			setHeaderBarState(initialHeaderBarState);
 			setClarkyBoiState(initialClarkyBoiState);
 		} else if (scrollState === "scrolling") {
-			setGameboyState(
-				menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
-			);
+			// setGameboyState(
+			// 	menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
+			// );
 			setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
 			setClarkyBoiState(scrollingClarkyBoiState);
@@ -192,16 +205,15 @@ export default function Index({ allPosts: { edges }, preview }) {
 			setCasetteState(hiddenCasetteState);
 		} else if (scrollState === "scrolling3") {
 			setCasetteState(hiddenCasetteState);
-
 			setHeaderBarState(initialHeaderBarState);
 		} else if (scrollState === "end") {
-			setGameboyState(
-				menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
-			);
+			// setGameboyState(
+			// 	menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
+			// );
 
 			setCasetteState(hiddenCasetteState);
 			setHeaderBarState(initialHeaderBarState);
-			setClarkyBoiState(scrollingClarkyBoiState);
+			// setClarkyBoiState(scrollingClarkyBoiState);
 			setHasScrolled(true);
 		}
 	}, [scrollState]);
@@ -322,21 +334,25 @@ export default function Index({ allPosts: { edges }, preview }) {
 					objectFit="cover"
 					className="opacity-70 absolute z-0 filter "
 				/>
-				<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="scale-[65%] absolute -bottom-[68px] z-20 overflow-hidden">
-				<Image
-					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-transparent-not-simps.png"
-					width="600"
-					height="300"
-					alt="ClarkyBoi"
-					className={`z-20 relative bottom-0 right-0 `}
-				/>
-			</motion.div>
+				{scrollState === "end" && (
+					<motion.div
+						initial={{ opacity: 0, y: "100%", scale:0.7 }}
+						animate={{ opacity: 1, y: "0%", scale:0.7 }}
+						exit={{ opacity: 0, y: "100%" }}
+						className="scale-[65%] absolute -bottom-[68px] z-20 overflow-hidden"
+						transition={{ duration: 0.5 }}
+					>
+						<Image
+							src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-transparent-not-simps.png"
+							width="600"
+							height="300"
+							alt="ClarkyBoi"
+							className={`z-20 relative bottom-0 right-0 `}
+						/>
+					</motion.div>
+				)}
 				<div className="min-h-[230px] bg-gradient-to-b to-[rgba(0,0,0,0.7)] from-black relative z-10"></div>
-				
 			</div>
-
-
-			
 
 			{/* @ts-ignore */}
 
@@ -355,8 +371,6 @@ export default function Index({ allPosts: { edges }, preview }) {
 				setMenuActive={setMenuActive}
 
 			/> */}
-
-		
 
 			{isMobile && scrollState == "initial" && !hasScrolled && (
 				<div className="text-white p-4 rounded-full text-2xl items-center fixed bottom-4 left-1/2 transform translate-x-[-50%] z-[999] opacity-100 w-full">

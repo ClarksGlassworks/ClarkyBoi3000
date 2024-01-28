@@ -9,7 +9,7 @@ const HomepageHeader = ({ casetteState, ref, isMobile, scrollState, headerBarSta
   const { x, y, rotate, scale, mobileX, mobileY } = casetteState
   const { height } = headerBarState
 
-  const isScrolled = scrollState === 'scrolling' || scrollState === 'end'
+  const isScrolled = scrollState === 'scrolling'
   const imageRef = useRef(null);
   const [imageWidth, setImageWidth] = useState(0);
 

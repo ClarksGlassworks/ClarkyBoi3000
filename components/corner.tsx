@@ -1,4 +1,4 @@
-import Image from "next/legacy/image";
+import Image from "next/image";
 import ShoppingCartButton from "./shoppingCartButton";
 
 import { motion } from "framer-motion";
@@ -23,7 +23,10 @@ import { motion } from "framer-motion";
             width={500}
             height={300}
             className="z-20"
-          />
+            style={{
+              maxWidth: "100%",
+              height: "auto"
+            }} />
           <ShoppingCartButton />
         </motion.div>
       );

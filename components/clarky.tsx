@@ -1,5 +1,5 @@
 import { motion, useAnimation, useScroll } from "framer-motion";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import useWindowSize from "../hooks/useWindowSize";
 import { start } from "repl";
@@ -75,15 +75,22 @@ const ClarkyBoi = ({ clarkyBoiState, key, scrollPosition }) => {
                     width="600"
                     height="300"
                     alt="ClarkyBoi"
-                    className={`absolute top-5 right-20 z-0 blur-sm opacity-80 `} // Updated class with lower z-index
-                />
+                    // Updated class with lower z-index
+                    className={`absolute top-5 right-20 z-0 blur-sm opacity-80 `}
+                    style={{
+                        maxWidth: "100%",
+                        height: "auto"
+                    }} />
                 <Image
                     src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-transparent-not-simps.png"
                     width="600"
                     height="300"
                     alt="ClarkyBoi"
                     className={`z-10 relative`}
-                />
+                    style={{
+                        maxWidth: "100%",
+                        height: "auto"
+                    }} />
              
             </div>
         </motion.div>

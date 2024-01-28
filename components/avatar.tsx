@@ -1,4 +1,4 @@
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 export default function Avatar({ author }) {
   const isAuthorHaveFullName =
@@ -12,10 +12,10 @@ export default function Avatar({ author }) {
       <div className="w-12 h-12 relative mr-4">
         <Image
           src={author.node.avatar.url}
-          layout="fill"
           className="rounded-full"
           alt={name}
-        />
+          fill
+          sizes="100vw" />
       </div>
       <div className="text-xl font-bold">{name}</div>
     </div>

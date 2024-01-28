@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import useWindowSize from "../hooks/useWindowSize";
 import { set } from "date-fns";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import HomepageHeader from "../components/homepage-header";
 import ClarkyBoi from "../components/clarky";
 import { useRouter } from "next/router";
@@ -234,7 +234,7 @@ useEffect(() => {
 
 	// console.log({products})
 	return (
-		<Layout preview={preview}>
+        <Layout preview={preview}>
 			<Head>
 				<title>{`Clark's Glassworks | Canadian Made Bongs, Rigs, Dab Rigs & More`}</title>
 			</Head>
@@ -246,12 +246,14 @@ useEffect(() => {
 			<div className="flex flex-col lg:flex-row gap-4 lg:mb-[150px]">
 			<div className="h-[600px] bg-black relative mx-4 my-4 border-4 border-black overflow-hidden  mt-16  w-auto lg:w-1/3">
 				<Image
-					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif"
-					alt=""
-					layout="fill"
-					objectFit="cover"
-					className="opacity-50 absolute z-0 blur-sm hue-rotate-90"
-				/>
+                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif"
+                    alt=""
+                    className="opacity-50 absolute z-0 blur-sm hue-rotate-90"
+                    fill
+                    sizes="100vw"
+                    style={{
+                        objectFit: "cover"
+                    }} />
 				<ClarkyBoi clarkyBoiState={clarkyBoiState} key={key} scrollPosition={scrollPosition} />
 				<div className="p-8 pt-[50px] relative z-10">
 					<h1 className="text-white text-[55px] leading-[40px] font-vt323">
@@ -299,21 +301,26 @@ useEffect(() => {
 			{/* END OF WHOLESALE */}
 			<div className="min-h-[600px] bg-gradient-to-b from-teal-600 to-purple-900 relative mx-4 my-4 border-4 border-black  z-20 border-4 border-black  mt-16 lg:w-1/3 ">
 				<Image
-					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/triangle-bg.gif"
-					alt=""
-					layout="fill"
-					objectFit="cover"
-					className="opacity-20 absolute z-0 filter blur-sm "
-				/>
+                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/triangle-bg.gif"
+                    alt=""
+                    className="opacity-20 absolute z-0 filter blur-sm "
+                    fill
+                    sizes="100vw"
+                    style={{
+                        objectFit: "cover"
+                    }} />
 
 				<Image
-					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-custom-w-1.png"
-					alt=""
-					width="200"
-					height="300"
-					objectFit="cover"
-					className="opacity-100 absolute bottom-0 right-0 z-10 filter w-[250px] "
-				/>
+                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-custom-w-1.png"
+                    alt=""
+                    width="200"
+                    height="300"
+                    className="opacity-100 absolute bottom-0 right-0 z-10 filter w-[250px] "
+                    style={{
+                        maxWidth: "100%",
+                        height: "auto",
+                        objectFit: "cover"
+                    }} />
 
 				<div className="p-8 pt-[50px] relative z-20">
 					<h1 className="text-white text-[75px] leading-[60px] font-vt323">
@@ -342,12 +349,14 @@ useEffect(() => {
 
 			<div className="min-h-[270px] bg-black relative z-0 overflow-hidden">
 				<Image
-					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/Zebra-pattern-wallpaper.jpg"
-					alt=""
-					layout="fill"
-					objectFit="cover"
-					className="opacity-70 absolute z-0 filter "
-				/>
+                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/Zebra-pattern-wallpaper.jpg"
+                    alt=""
+                    className="opacity-70 absolute z-0 filter "
+                    fill
+                    sizes="100vw"
+                    style={{
+                        objectFit: "cover"
+                    }} />
 				
 					<motion.div
 						initial={{ opacity: 0, y: scrollPosition === "end" ? "100%" : "0%", scale: 0.7 }}
@@ -362,12 +371,16 @@ useEffect(() => {
 						transition={{ duration: 0.5 }}
 					>
 						<Image
-							src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-transparent-not-simps.png"
-							width="600"
-							height="300"
-							alt="ClarkyBoi"
-							className={`z-20 relative bottom-0 right-0 `}
-						/>
+                            src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/clark-transparent-not-simps.png"
+                            width="600"
+                            height="300"
+                            alt="ClarkyBoi"
+                            className={`z-20 relative bottom-0 right-0 `}
+                            style={{
+                                maxWidth: "100%",
+                                height: "auto",
+                                objectFit: "cover"
+                            }} />
 					</motion.div>
 				
 				<div className="min-h-[270px] bg-gradient-to-b to-[rgba(0,0,0,0.7)] from-black relative z-10"></div>
@@ -388,19 +401,23 @@ useEffect(() => {
 					<div className="flex flex-row items-center bg-black rounded-full justify-center mx-10 p-2">
 						<div className="flex-shrink-0">
 							<Image
-								src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/giphy-1.gif"
-								alt=""
-								width={50}
-								height={50}
-								className=""
-							/>
+                                src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/giphy-1.gif"
+                                alt=""
+                                width={50}
+                                height={50}
+                                className=""
+                                style={{
+                                    maxWidth: "100%",
+                                    height: "auto",
+                                    objectFit: "cover"
+                                }} />
 						</div>
 						<div className="whitespace-nowrap">Swipe up to scroll</div>
 					</div>
 				</div>
 			)}
 		</Layout>
-	);
+    );
 }
 
 export const getStaticProps: GetStaticProps = async ({ preview = false }) => {

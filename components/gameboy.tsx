@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef, memo } from "react";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 const gameboyImages = [
@@ -125,11 +125,22 @@ useEffect(() => {
           width={gameboyWidth}
           height={gameboyHeight}
           className="w-[300px] z-30 relative select-none"
-        />
+          style={{
+            maxWidth: "100%",
+            height: "auto"
+          }} />
         <div className="absolute top-[66px] left-[69px] z-[999] flex items-center justify-center h-[133px] w-[142px] overflow-hidden bg-green-800 shadow-inner shadow-black">
           <div className={`disable-click-bubling`} onClick={handleInnerDivClick}>
 
-            <Image src={'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/fxk4.gif'} alt="" width="600" height={400} />
+            <Image
+              src={'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/fxk4.gif'}
+              alt=""
+              width="600"
+              height={400}
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
             <AnimatePresence>
               <motion.div className={`z-[999] flex items-center justify-center text-center mx-auto top-[2%] left-[18%] absolute flex-col text-white font-vt323`}
                 key={'gameboyTitle'}
@@ -176,7 +187,14 @@ useEffect(() => {
 
               ></motion.div>
             </AnimatePresence>
-            <Image src={'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/fxk4.gif'} alt="" fill />
+            <Image
+              src={'https://wp.clarksglassworks.com/wp-content/uploads/2024/01/fxk4.gif'}
+              alt=""
+              fill
+              style={{
+                maxWidth: "100%",
+                height: "auto"
+              }} />
 
           </div>
         </div>

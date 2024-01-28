@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import Image from "next/legacy/image"
+import Image from "next/image"
 import useWindowSize from '../hooks/useWindowSize'
 import Link from 'next/link'
 const Casette = ({ casetteState, isScrolled = false }) => {
@@ -33,10 +33,12 @@ const Casette = ({ casetteState, isScrolled = false }) => {
         width={500}
         height={300}
         className={`z-50 cursor-pointer relative animate-float`}
-      />
+        style={{
+          maxWidth: "100%",
+          height: "auto"
+        }} />
   </Link>
     </motion.div>
-
   );
 }
 

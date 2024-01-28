@@ -17,7 +17,7 @@ import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Select from "react-select";
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 const countryOptions = [
 	{ value: "US", label: "United States" },
@@ -342,7 +342,7 @@ const CheckoutPage = ({ preview }) => {
 	}
 	if (cart) {
 		return (
-			<Layout preview={preview}>
+            <Layout preview={preview}>
 				<Head>
 					<title>Check Out | Clark's Glassworks</title>
 				</Head>
@@ -582,12 +582,15 @@ const CheckoutPage = ({ preview }) => {
 						<div className="bg-white max-w-[500px] mx-auto p-4 pt-0 mt-[150px] pt-8 font-vt323 text-[30px] text-orange-500 flex flex-row">
 							<div className="w-1/2">
 								<Image
-									src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/tcrews.gif"
-									alt="Thank you"
-									width="200"
-									height="300"
-									className="object-cover w-full h-full"
-								/>
+                                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/tcrews.gif"
+                                    alt="Thank you"
+                                    width="200"
+                                    height="300"
+                                    className="object-cover w-full h-full"
+                                    style={{
+                                        maxWidth: "100%",
+                                        height: "auto"
+                                    }} />
 							</div>
 							<div className="w-1/2">
 								<div className="text-green-500">Order Succesful!</div> My d00d,
@@ -606,7 +609,7 @@ const CheckoutPage = ({ preview }) => {
 					)}
 				</div>
 			</Layout>
-		);
+        );
 	}
 };
 

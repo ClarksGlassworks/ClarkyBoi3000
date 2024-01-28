@@ -20,7 +20,7 @@ import {
 // import { CMS_NAME } from "../../lib/constants";
 import Layout from "../components/layout";
 import Product from "../components/product";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "../components/add-to-cart";
 import Casette from "../components/casette";
@@ -92,7 +92,7 @@ export default function Post({ product, preview }) {
 	}
 
 	return (
-		<Product preview={preview}>
+        <Product preview={preview}>
 			<Header />
 			{router.isFallback ? (
 				<PostTitle>Loading…</PostTitle>
@@ -135,12 +135,16 @@ export default function Post({ product, preview }) {
 									transition={{ duration: 0.5 }} // Duration of the transition
 								>
 									<Image
-										src={images[0]} // Use the first image in the array as the main image
-										alt={product.name}
-										width="500"
-										height="300"
-										className="object-cover w-full h-full"
-									/>
+                                        // Use the first image in the array as the main image
+                                        src={images[0]}
+                                        alt={product.name}
+                                        width="500"
+                                        height="300"
+                                        className="object-cover w-full h-full"
+                                        style={{
+                                            maxWidth: "100%",
+                                            height: "auto"
+                                        }} />
 								</motion.div>
 							</div>
 							<div className="absolute z-20 text-[40px] font-semibold text-white p-4  leading-none bottom-[10px]">
@@ -170,7 +174,7 @@ export default function Post({ product, preview }) {
 						<div className="relative w-full flex flex-row gap-2 mt-2">
 							{images?.slice(1).map((imageUrl, index) => {
 								return (
-									<motion.div
+                                    <motion.div
 										className="aspect-square overflow-hidden w-1/3 border-4 border-white"
 										onClick={() => {
 											// Move the clicked image to the start of the array when it's clicked
@@ -183,15 +187,18 @@ export default function Post({ product, preview }) {
 										whileTap={{ scale: 0.95 }} // Add the whileTap prop
 									>
 										<Image
-											src={imageUrl}
-											alt={product.name}
-											width="300"
-											height="300"
-											className="object-cover w-full h-full"
-											key={index}
-										/>
+                                            src={imageUrl}
+                                            alt={product.name}
+                                            width="300"
+                                            height="300"
+                                            className="object-cover w-full h-full"
+                                            key={index}
+                                            style={{
+                                                maxWidth: "100%",
+                                                height: "auto"
+                                            }} />
 									</motion.div>
-								);
+                                );
 							})}
 						</div>
 					</article>
@@ -205,7 +212,7 @@ export default function Post({ product, preview }) {
 				</>
 			)}
 		</Product>
-	);
+    );
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {

@@ -273,7 +273,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 				</div>
 			</div>
 
-			<div className="min-h-[500px] bg-gradient-to-b from-transparent to-black relative z-0 -mt-[450px]"></div>
+			<div className="min-h-[500px] bg-gradient-to-b from-transparent to-black relative z-0 -mt-[500px]"></div>
 			<div className="bg-black min-h-[150px] flex justify-center flex-col">
 				<div className="flex flex-row gap-4 mx-auto justify-between w-1/2">
 					<FaInstagram className="text-white text-4xl" />
@@ -290,7 +290,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 					objectFit="cover"
 					className="opacity-50 absolute z-0 filter "
 				/>
-				<div className="min-h-[200px] bg-gradient-to-b to-transparent from-black relative z-10"></div>
+				<div className="min-h-[200px] bg-gradient-to-b to-[rgba(0,0,0,0.8)] from-black relative z-10"></div>
 			</div>
 			{/* @ts-ignore */}
 

@@ -3,7 +3,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import useWindowSize from "../hooks/useWindowSize";
 import { start } from "repl";
-const ClarkyBoi = ({ clarkyBoiState }) => {
+import { useScrollPosition } from "../lib/api";
+const ClarkyBoi = ({ clarkyBoiState, key, scrollPosition }) => {
     const controls = useAnimation();
     const { scrollY, scrollYProgress } = useScroll();
     const { isMobile } = useWindowSize();
@@ -11,6 +12,7 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
     const [scrollState, setScrollState] = useState("initial"); // 'initial' | 'scrolling' | 'end'
     const ref = useRef(null); // Define the ref variable
     const scrollYPercent = (scrollYProgress.get() * 100);
+    // const scrollPosition = useScrollPosition();
     let startState = {
         
         x: isMobile ? `100%`: `70%`,
@@ -46,42 +48,22 @@ const ClarkyBoi = ({ clarkyBoiState }) => {
     };
 
     useEffect(()=>{
-        console.log(scrollState)
-        if(scrollState === "scrolling"){
+        console.log('Clarky', scrollPosition)
+        if(scrollPosition === "scrolling2"){
             controls.start(finalState)
-        } else if(scrollState === "initial"){
+        } else if(scrollPosition === "initial"){
             controls.start(startState)
-        } else if(scrollState === "end"){ 
+        } else if(scrollPosition === "end"){ 
             controls.start(endState)
-        } else if(scrollState === "scrolling2"){ 
+        } else if(scrollPosition === "scrolling3"){ 
             controls.start(finalState2)
         }
-    },[scrollState])
-    useEffect(() => {
-        const handleScroll = () => {
-          const totalHeight = document.body.scrollHeight - window.innerHeight;
-          const scrollPosition = window.scrollY;
-      
-        if (scrollPosition < 800) {
-            setScrollState("initial");
-        } else if (scrollPosition >= 800 && scrollPosition < 1400) {
-            setScrollState("scrolling");
-        } else if (scrollPosition >= 1400 && scrollPosition < 2000) {
-            setScrollState("scrolling2");
-        } else if (scrollPosition >= 2000) {
-            setScrollState("scrolling2");
-        }
-        };
-      
-        window.addEventListener("scroll", handleScroll);
-      
-        return () => {
-          window.removeEventListener("scroll", handleScroll);
-        };
-      }, []);
+    },[scrollPosition])
+    
     return (
         <motion.div
             ref={ref}
+            key={key}
             initial={startState}
             animate={controls}
             transition={slideInTransition}

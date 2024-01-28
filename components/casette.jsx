@@ -4,7 +4,7 @@ import useWindowSize from '../hooks/useWindowSize'
 import Link from 'next/link'
 const Casette = ({ casetteState, isScrolled = false }) => {
 
-  const { x, y, rotate, scale, mobileX, mobileY, position, translateX, zIndex } = casetteState
+  const { x, y, rotate, scale, mobileX, mobileY, position, translateX, zIndex, scrollPosition } = casetteState
   const { isMobile } = useWindowSize();
   // const isMobile = true
 

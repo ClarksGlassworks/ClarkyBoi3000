@@ -30,6 +30,7 @@ import { FaArrowLeft, FaBackward } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import HomepageHeader from "../components/homepage-header";
 import { init } from "next/dist/compiled/webpack/webpack";
+import { motion } from "framer-motion";
 export default function Post({ product, preview }) {
 	const router = useRouter();
 	// const morePosts = posts?.edges;
@@ -62,13 +63,18 @@ export default function Post({ product, preview }) {
 	};
 	const [casetteState, setCasetteState] = useState(initialCasetteState);
 	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
+	const [selectedImage, setSelectedImage] = useState(product.image?.sourceUrl);
+	const allImages = [
+		product.image?.sourceUrl,
+		...product.galleryImages?.nodes?.map((image) => image?.sourceUrl),
+	];
+	const [images, setImages] = useState(allImages);
 
 	const casetteRef = useRef(null);
 
 	useEffect(() => {
 		window.scrollY = 0;
 		window.scrollTo(0, 0);
-		
 	}, [router.asPath]);
 
 	useEffect(() => {
@@ -102,12 +108,12 @@ export default function Post({ product, preview }) {
 					<div className="  backdrop-blur-sm w-full h-screen -z-10 fixed "></div>
 					<article className=" m-4 mt-0 lg:m-0 max-w-screen-xl pt-[180px] mb-[150px] mx-4 lg:mx-auto">
 						<HomepageHeader
-						//@ts-ignore
+							//@ts-ignore
 							casetteState={casetteState}
-							scrollState={"scrolling"}
 							ref={casetteRef}
 							isMobile={isMobile}
 							headerBarState={headerBarState}
+							scrollPosition={"scrolling"}
 						/>
 						{/* <Casette casetteState={{
 							x: "0%",
@@ -121,14 +127,21 @@ export default function Post({ product, preview }) {
 						}} /> */}
 						<ShoppingCartButton />
 						<div className="relative mx-auto border-4 border-white">
-							<div className=" z-10 h-[50vh] bg-green-400 w-full border-b-8 border-white shadow-2xl shadow-black">
-								<Image
-									src={product.image?.sourceUrl}
-									alt={product.name}
-									width="500"
-									height="300"
-									className="object-cover w-full h-full"
-								/>
+							<div className=" z-10 h-[50vh] bg-black w-full border-b-8 border-white shadow-2xl shadow-black overflow-hidden flex justify-center">
+								<motion.div
+									key={images[0]} // Add the key prop
+									initial={{ opacity: 0 }} // Start from transparent
+									animate={{ opacity: 1 }} // Animate to fully visible
+									transition={{ duration: 0.5 }} // Duration of the transition
+								>
+									<Image
+										src={images[0]} // Use the first image in the array as the main image
+										alt={product.name}
+										width="500"
+										height="300"
+										className="object-cover w-full h-full"
+									/>
+								</motion.div>
 							</div>
 							<div className="absolute z-20 text-[40px] font-semibold text-white p-4  leading-none bottom-[10px]">
 								<h1 className="">{product.name}</h1>{" "}
@@ -155,18 +168,29 @@ export default function Post({ product, preview }) {
 						</div>
 
 						<div className="relative w-full flex flex-row gap-2 mt-2">
-							{product.galleryImages?.nodes?.map((image, index) => {
+							{images?.slice(1).map((imageUrl, index) => {
 								return (
-									<div className="aspect-square overflow-hidden w-1/3 border-4 border-white">
+									<motion.div
+										className="aspect-square overflow-hidden w-1/3 border-4 border-white"
+										onClick={() => {
+											// Move the clicked image to the start of the array when it's clicked
+											const newImages = [
+												imageUrl,
+												...images.filter((_, i) => i !== index + 1),
+											];
+											setImages(newImages);
+										}}
+										whileTap={{ scale: 0.95 }} // Add the whileTap prop
+									>
 										<Image
-											src={image?.sourceUrl}
+											src={imageUrl}
 											alt={product.name}
 											width="300"
 											height="300"
 											className="object-cover w-full h-full"
 											key={index}
 										/>
-									</div>
+									</motion.div>
 								);
 							})}
 						</div>

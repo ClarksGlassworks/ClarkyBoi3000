@@ -1,4 +1,5 @@
 const API_URL = "https://wp.clarksglassworks.com/graphql";
+import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
 
 async function fetcher(query = "", { variables }: Record<string, any> = {}) {
@@ -62,6 +63,42 @@ export function useGetCustomer() {
 		mutate,
 	};
 }
+
+export function useScrollPosition() {
+	const [scrollPosition, setScrollPosition] = useState("initial");
+
+	useEffect(() => {
+		const handleScroll = () => {
+			const y = window.scrollY;
+			const nearBottom =
+				document.documentElement.scrollHeight - (window.innerHeight + 100);
+
+			if (y < 500) {
+				setScrollPosition("initial");
+			} else if (y >= 500 && y < 1000) {
+				setScrollPosition("scrolling");
+			} else if (y >= 1000 && y <= 1400) {
+				setScrollPosition("scrolling2");
+			} else if ((y > 1400 && y <= 1600) || (y > 1600 && y < nearBottom)) {
+				setScrollPosition("scrolling3");
+			} else if (y >= nearBottom) {
+				setScrollPosition("end");
+			} else {
+				// we seem to have a chunk at the bottom that gets detected
+				setScrollPosition("scrolling3");
+			}
+		};
+
+		window.addEventListener("scroll", handleScroll);
+
+		// return () => {
+		// 	window.removeEventListener("scroll", handleScroll);
+		// };
+	}, []);
+
+	return scrollPosition;
+}
+
 export async function addToCart(productId, quantity) {
 	console.log("----->", productId, quantity);
 	const response = await fetch("/api/addToCart", {
@@ -207,17 +244,19 @@ export async function getWooCommerceProducts({ featured = null }) {
 }
 
 export async function getWooCommerceProduct(slug) {
-
-  const serverURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://clarksglassworks.com'
+	const serverURL =
+		process.env.NODE_ENV === "development"
+			? "http://localhost:3000"
+			: "https://clarksglassworks.com";
 	const response = await fetch(`${serverURL}/api/product?id=${slug}`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
 		},
-		});
+	});
 	const data = await response.json();
 
-  console.log('data', data)
-  console.log('response', response)
+	console.log("data", data);
+	console.log("response", response);
 	return data;
 }

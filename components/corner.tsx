@@ -4,7 +4,7 @@ import ShoppingCartButton from "./shoppingCartButton";
 import { motion } from "framer-motion";
 
 
-    const Corner = ({ scrollState }) => {
+    const Corner = ({ scrollState, scrollPosition }) => {
       const variants = {
         hidden: { opacity: 1 },
         visible: { opacity: 0 },
@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
         <motion.div
           className="fixed top-0 right-0"
           initial="hidden"
-          animate={(scrollState === "scrolling" || scrollState === "scrolling2" || scrollState === "scrolling3" || scrollState === "end") ? "visible" : "hidden"}
+          animate={(scrollPosition === "scrolling" || scrollPosition === "scrolling2" || scrollPosition === "scrolling3" || scrollPosition === "end") ? "visible" : "hidden"}
           variants={variants}
         >
           <Image

@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-const Top8Friends = ({ products }) => {
+const Top8Friends = ({ products, scrollPosition }) => {
 	return (
-		<div className="z-30     w-auto left-4 right-4  lg:w-[600px]  mx-4 -mt-[50px] lg:top-[160px] lg:left-[250px]">
+		<div className="z-30     w-auto   lg:max-w-[800px] bg-gray-200 -mt-[50px] lg:mt-[160px] mx-4 lg:mx-auto lg:ml-[50%] lg:-translate-x-1/2">
 			<div className=" bg-white border-2 border-[#ca6707] w-full relative mt-[270px] lg:mt-auto">
 			<div className="w-full  bg-[#fdd5a8] text-[#ca6707] p-2">
 				Clark's Top 8 Friends
@@ -16,13 +16,13 @@ const Top8Friends = ({ products }) => {
 						height={150}
 						className="max-h-[150px] max-w-[120px]  border-2 object-fill border-[#ca6707] overflow-hidden"
 					/>
-					<div className="text-blue-500 text-sm underline mt-2">Tom<br />Online</div>
+					<div className="text-blue-500 text-sm  mt-2 text-center"><span className="underline">Tom</span><br /><span className="text-gray-200 no-underline">Offline</span></div>
 				</div>
 
 				{products.map((product, index) => {
                     const { name, image: {sourceUrl: src}, description, price, regularPrice, salePrice, slug } = product
 					return (
-                        <Link href={`/${product.slug}`} key={index}>
+                        <a href={`/${product.slug}`} key={index}>
 						<div className="bg-white col-span-1  flex flex-col items-center justify-center ">
 							<Image
 								alt="tom from mypsace"
@@ -39,11 +39,11 @@ const Top8Friends = ({ products }) => {
 							{salePrice && <div className="text-sm semibold text-green-500">{salePrice}</div>}
 							</div>
 						</div>
-                        </Link>
+                        </a>
 					);
 				})}
 			</div>
-			<div className="border-t border-[#ca6707] p-2 mt-2 text-right text-blue-500 underline cursor-pointer"><Link href="/shop">View All of Clarks Friends</Link></div>
+			<div className="border-t border-[#ca6707] p-2 mt-2 text-right text-blue-500 underline cursor-pointer"><a href="/shop">View All of Clarks Friends</a></div>
 		</div>
 		</div>
 	);

@@ -8,6 +8,7 @@ import Layout from "../components/layout";
 import {
 	getWooCommerceProduct,
 	getWooCommerceProducts,
+	useScrollPosition,
 	useWooCommerceProducts,
 } from "../lib/api";
 import { CMS_NAME } from "../lib/constants";
@@ -26,11 +27,49 @@ import { useRouter } from "next/router";
 import HomepageMenu from "../components/HomepageMenu";
 import { FaEnvelope, FaFacebook, FaInstagram } from "react-icons/fa";
 
+import { animateScroll as scroll } from 'react-scroll';
 export default function Index({ allPosts: { edges }, preview }) {
 	const heroPost = edges[0]?.node;
 	const morePosts = edges.slice(1);
 
+	const router = useRouter();
 	const { isMobile } = useWindowSize();
+
+	const [scrollPosition, setScrollPosition] = useState("initial");
+
+	useEffect(() => {
+		if ('scrollRestoration' in history) {
+			// Enable scroll restoration
+			history.scrollRestoration = 'auto';
+		}
+
+		const handleScroll = () => {
+			const y = window.scrollY;
+			const nearBottom =
+				document.documentElement.scrollHeight - (window.innerHeight + 100);
+
+			if (y < 200) {
+				setScrollPosition("initial");
+			} else if (y >= 200 && y < 700) {
+				setScrollPosition("scrolling");
+			} else if (y >= 700 && y < 1200) {
+				setScrollPosition("scrolling2");
+			} else if ((y >= 1200 && y < 1600) || (y > 1600 && y < nearBottom)) {
+				setScrollPosition("scrolling3");
+			} else if (y >= nearBottom) {
+				setScrollPosition("end");
+			} else {
+				// we seem to have a chunk at the bottom that gets detected
+				setScrollPosition("scrolling3");
+			}
+		};
+
+		window.addEventListener("scroll", handleScroll);
+
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
+	}, []);
 
 	// component states
 	const initialClarkyBoi2State = {
@@ -136,47 +175,26 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const gameboyRef = useRef(null);
 	const casetteRef = useRef(null);
 
-	const router = useRouter();
+
+
 	useEffect(() => {
 		window.scrollTo(0, 0);
-		// setScrollState("initial");
-	}, []);
-
-	useEffect(() => {
-		const fromBottom = document.documentElement.scrollHeight - window.innerHeight - 100;
-		const handleWindowScroll = () => {
-			if (window.pageYOffset === 0) {
-				setScrollState("initial");
-			} else if (window.pageYOffset > 0 && window.pageYOffset <= 600) {
-				setScrollState("scrolling");
-			} else if (window.pageYOffset > 600 && window.pageYOffset <= 1200) {
-				setScrollState("scrolling2");
-			} else if (
-				(window.pageYOffset > 1200 && window.pageYOffset <= 1600) ||
-				(window.pageYOffset > 1600 && window.pageYOffset < fromBottom)
-			) {
-				setScrollState("scrolling3");
-			} else if (window.pageYOffset >= fromBottom) {
-				setScrollState("end");
-			} else {
-				console.log('scrolly', window.pageYOffset);
-				if (window.pageYOffset > 1600) {
-					setScrollState("initial");
-				}
-			}
-		};
-
-		window.addEventListener("scroll", handleWindowScroll);
-
 		return () => {
-			window.removeEventListener("scroll", handleWindowScroll);
-		};
+			scroll.scrollToTop(); // Scroll to the top of the page when the component is unmounted
+		  };
 	}, []);
+
+	const [key, setKey] = useState(Date.now());
+
+useEffect(() => {
+  setKey(Date.now());
+}, [router.asPath]);
 
 	useEffect(() => {
 		if (router.asPath === "/") {
 			setCasetteState(initialCasetteState);
 			setHeaderBarState(initialHeaderBarState);
+			setClarkyBoiState(initialClarkyBoiState);
 		} else {
 			setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
@@ -184,39 +202,27 @@ export default function Index({ allPosts: { edges }, preview }) {
 	}, [router.asPath]);
 
 	useEffect(() => {
-		console.log({ scrollState });
-		if (scrollState === "initial") {
-			// setGameboyState(
-			// 	menuActive ? zoomInToGameboyStep1State : initialGameboyState
-			// );
+		if (scrollPosition === "initial") {
 			setCasetteState(initialCasetteState);
 			setHeaderBarState(initialHeaderBarState);
 			setClarkyBoiState(initialClarkyBoiState);
-		} else if (scrollState === "scrolling") {
-			// setGameboyState(
-			// 	menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
-			// );
+		} else if (scrollPosition === "scrolling") {
 			setCasetteState(scrollingCasetteState);
 			setHeaderBarState(scrollingHeaderBarState);
 			setClarkyBoiState(scrollingClarkyBoiState);
 			setHasScrolled(true);
-		} else if (scrollState === "scrolling2") {
+		} else if (scrollPosition === "scrolling2") {
 			setHeaderBarState(scrollingHeaderBarState);
 			setCasetteState(hiddenCasetteState);
-		} else if (scrollState === "scrolling3") {
+		} else if (scrollPosition === "scrolling3") {
 			setCasetteState(hiddenCasetteState);
 			setHeaderBarState(initialHeaderBarState);
-		} else if (scrollState === "end") {
-			// setGameboyState(
-			// 	menuActive ? zoomInToGameboyStep1State : scrollingGameboyState
-			// );
-
+		} else if (scrollPosition === "end") {
 			setCasetteState(hiddenCasetteState);
 			setHeaderBarState(initialHeaderBarState);
-			// setClarkyBoiState(scrollingClarkyBoiState);
 			setHasScrolled(true);
 		}
-	}, [scrollState]);
+	}, [scrollPosition]);
 
 	useEffect(() => {
 		if (menuActive) {
@@ -232,10 +238,13 @@ export default function Index({ allPosts: { edges }, preview }) {
 			<Head>
 				<title>{`Clark's Glassworks | Canadian Made Bongs, Rigs, Dab Rigs & More`}</title>
 			</Head>
-			<Corner scrollState={scrollState} />
-			<Top8Friends products={products} />
+			{(scrollPosition === 'scrolling2' || scrollPosition === 'scrolling3' || scrollPosition === 'end') && (<div className="  backdrop-blur-sm w-full h-screen -z-10 fixed top-0 bottom-0 left-0 right-0"></div>)}
+			<Corner scrollState={scrollState} scrollPosition={scrollPosition} />
+			<Top8Friends products={products} scrollPosition={scrollPosition} />
 			{/* <HomepageMenu /> */}
-			<div className="h-[600px] bg-black relative mx-4 my-4 border-4 border-black overflow-hidden  mt-16">
+
+			<div className="flex flex-col lg:flex-row gap-4 lg:mb-[150px]">
+			<div className="h-[600px] bg-black relative mx-4 my-4 border-4 border-black overflow-hidden  mt-16  w-auto lg:w-1/3">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif"
 					alt=""
@@ -243,7 +252,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 					objectFit="cover"
 					className="opacity-50 absolute z-0 blur-sm hue-rotate-90"
 				/>
-				<ClarkyBoi clarkyBoiState={clarkyBoiState} />
+				<ClarkyBoi clarkyBoiState={clarkyBoiState} key={key} scrollPosition={scrollPosition} />
 				<div className="p-8 pt-[50px] relative z-10">
 					<h1 className="text-white text-[55px] leading-[40px] font-vt323">
 						Welcome to Clark's Glassworks
@@ -255,8 +264,9 @@ export default function Index({ allPosts: { edges }, preview }) {
 				</div>
 			</div>
 
+			{/* END OF WELCOME */}
 			<div
-				className="min-h-[600px] bg-black border-4 border-black relative bg-cover bg-repeat bg-center mx-4 my-4 mt-16"
+				className="min-h-[600px] bg-black border-4 border-black relative bg-cover bg-repeat bg-center mx-4 my-4 mt-16 lg:w-1/3"
 				style={{
 					backgroundImage:
 						"url('https://wp.clarksglassworks.com/wp-content/uploads/2024/01/MIkl.gif')",
@@ -286,7 +296,8 @@ export default function Index({ allPosts: { edges }, preview }) {
 				</div>
 			</div>
 
-			<div className="min-h-[600px] bg-gradient-to-b from-teal-600 to-purple-900 relative mx-4 my-4 border-4 border-black  z-20 border-4 border-black  mt-16 ">
+			{/* END OF WHOLESALE */}
+			<div className="min-h-[600px] bg-gradient-to-b from-teal-600 to-purple-900 relative mx-4 my-4 border-4 border-black  z-20 border-4 border-black  mt-16 lg:w-1/3 ">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/triangle-bg.gif"
 					alt=""
@@ -317,6 +328,9 @@ export default function Index({ allPosts: { edges }, preview }) {
 				</div>
 			</div>
 
+			{/* END OF CUSTOM */}
+			</div>
+			
 			<div className="min-h-[500px] bg-gradient-to-b from-transparent to-black relative z-0 -mt-[500px]"></div>
 			<div className="bg-black min-h-[150px] flex justify-center flex-col">
 				<div className="flex flex-row gap-4 mx-auto justify-between w-1/2">
@@ -334,10 +348,15 @@ export default function Index({ allPosts: { edges }, preview }) {
 					objectFit="cover"
 					className="opacity-70 absolute z-0 filter "
 				/>
-				{scrollState === "end" && (
+				
 					<motion.div
-						initial={{ opacity: 0, y: "100%", scale:0.7 }}
-						animate={{ opacity: 1, y: "0%", scale:0.7 }}
+						initial={{ opacity: 0, y: scrollPosition === "end" ? "100%" : "0%", scale: 0.7 }}
+						animate={{
+							opacity: 1,
+							y: scrollPosition === "end" ? "0%" : "80%",
+							scale: 0.7,
+							transition: { duration: 0.5, type: "spring", damping: 14, stiffness: 100 }
+						}}
 						exit={{ opacity: 0, y: "100%" }}
 						className="scale-[65%] absolute -bottom-[68px] z-20 overflow-hidden"
 						transition={{ duration: 0.5 }}
@@ -350,7 +369,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 							className={`z-20 relative bottom-0 right-0 `}
 						/>
 					</motion.div>
-				)}
+				
 				<div className="min-h-[270px] bg-gradient-to-b to-[rgba(0,0,0,0.7)] from-black relative z-10"></div>
 			</div>
 
@@ -358,21 +377,13 @@ export default function Index({ allPosts: { edges }, preview }) {
 
 			<HomepageHeader
 				casetteState={casetteState}
-				scrollState={scrollState}
 				ref={casetteRef}
 				isMobile={isMobile}
 				headerBarState={headerBarState}
+				scrollPosition={scrollPosition}
 			/>
-			{/* @ts-ignore */}
-			{/* <Gamebody gameboyState={gameboyState}
-				scrollState={scrollState}
-				ref={gameboyRef}
-				isMobile={isMobile}
-				setMenuActive={setMenuActive}
 
-			/> */}
-
-			{isMobile && scrollState == "initial" && !hasScrolled && (
+			{isMobile && scrollPosition == "initial" && !hasScrolled && (
 				<div className="text-white p-4 rounded-full text-2xl items-center fixed bottom-4 left-1/2 transform translate-x-[-50%] z-[999] opacity-100 w-full">
 					<div className="flex flex-row items-center bg-black rounded-full justify-center mx-10 p-2">
 						<div className="flex-shrink-0">

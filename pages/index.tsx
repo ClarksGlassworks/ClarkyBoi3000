@@ -335,8 +335,8 @@ useEffect(() => {
 			maxWidth: "100%",
 			height: "auto",
 			objectFit: "cover",
-				transform: `translateX(-${remainingSpace}px)`,
-				transition: 'transform 0.3s ease-in-out' // Adjust the duration and easing as needed
+				// transform: `translateX(-${remainingSpace}px)`,
+				// transition: 'transform 0.3s ease-in-out' // Adjust the duration and easing as needed
 		}}
 	/>
 </AnimatePresence>

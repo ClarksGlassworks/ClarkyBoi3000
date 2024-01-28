@@ -24,6 +24,7 @@ import HomepageHeader from "../components/homepage-header";
 import ClarkyBoi from "../components/clarky";
 import { useRouter } from "next/router";
 import HomepageMenu from "../components/HomepageMenu";
+import { FaEnvelope, FaFacebook, FaInstagram } from "react-icons/fa";
 
 export default function Index({ allPosts: { edges }, preview }) {
 	const heroPost = edges[0]?.node;
@@ -260,7 +261,14 @@ export default function Index({ allPosts: { edges }, preview }) {
 				
 			</div>
 
-			<div className="h-[50px]"></div>
+			<div className="min-h-[100px] bg-gradient-to-b from-transparent to-black relative">
+				
+			</div>
+			<div className="bg-black min-h-[200px]">
+			<div className="flex flex-row gap-4 mx-auto justify-between w-1/2 pt-8">
+				<FaInstagram className="text-white text-4xl" /> <FaEnvelope className="text-white text-4xl" /> <FaFacebook className="text-white text-4xl" />
+				</div>
+			</div>
 			{/* @ts-ignore */}
 
 			<HomepageHeader

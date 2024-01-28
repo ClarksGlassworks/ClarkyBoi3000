@@ -18,6 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Select from "react-select";
 import Image from "next/image";
+import { FaCreditCard } from "react-icons/fa";
 
 const countryOptions = [
 	{ value: "US", label: "United States" },
@@ -127,7 +128,6 @@ const CheckoutPage = ({ preview }) => {
 
 	const formData = watch();
 
-
 	const onSubmit = (data, actions) => {
 		if (!isValid) {
 			return false;
@@ -157,15 +157,15 @@ const CheckoutPage = ({ preview }) => {
 		// we need to update the form values
 		const { shipping, billing } = custy || {};
 		for (const key in custy) {
-            //@ts-ignore
+			//@ts-ignore
 			setValue(`${key}`, shipping[key]);
 		}
 		for (const key in shipping) {
-            //@ts-ignore
+			//@ts-ignore
 			setValue(`shipping.${key}`, shipping[key]);
 		}
 		for (const key in billing) {
-            //@ts-ignore
+			//@ts-ignore
 			setValue(`billing.${key}`, billing[key]);
 			if (key === "email") {
 				setValue("email", billing[key]);
@@ -237,8 +237,7 @@ const CheckoutPage = ({ preview }) => {
 			}),
 		})
 			.then((response) => response.json())
-			.then((orderData) => {
-			});
+			.then((orderData) => {});
 	}
 
 	async function completeWooOrder(orderID) {
@@ -298,7 +297,7 @@ const CheckoutPage = ({ preview }) => {
 		})
 			.then((response) => response.json())
 			.then(async (order) => {
-                //@ts-ignore
+				//@ts-ignore
 				const response = await createWooOrder(cart);
 				if (response) {
 					updateWooOrderId(response?.id);
@@ -342,7 +341,7 @@ const CheckoutPage = ({ preview }) => {
 	}
 	if (cart) {
 		return (
-            <Layout preview={preview}>
+			<Layout preview={preview}>
 				<Head>
 					<title>Check Out | Clark's Glassworks</title>
 				</Head>
@@ -522,23 +521,23 @@ const CheckoutPage = ({ preview }) => {
 									</div>
 								</form>
 
-								{/* <form onSubmit={discountHandleSubmit(onSubmit)}>
-							<div className="mt-4">
-								<div>
-									<input
-										className="border m-2 border-orange-500 p-2"
-										{...discountRegister("discount", { required: false })}
-										placeholder="Discount Code"
-									/>
-									<button
-										className="border m-2 border-orange-500 p-2"
-										type="submit"
-									>
-										Apply
-									</button>
-								</div>
-							</div>
-						</form> */}
+								<form onSubmit={discountHandleSubmit(onSubmit)}>
+									<div className="mt-0 mb-4">
+										<div>
+											<input
+												className="border m-2 border-orange-500 p-2"
+												{...discountRegister("discount", { required: false })}
+												placeholder="Discount Code"
+											/>
+											<button
+												className="border m-2 border-orange-500 p-2"
+												type="submit"
+											>
+												Apply
+											</button>
+										</div>
+									</div>
+								</form>
 								<div className="w-full text-gray-400 text-sm mx-2">
 									International shipping is $50. Canadian orders over $150 ship
 									for FREE! Please enter your shipping information above for
@@ -569,10 +568,12 @@ const CheckoutPage = ({ preview }) => {
 										style={{ layout: "vertical", label: "pay" }}
 										onApprove={onApprove}
 										createOrder={createOrder}
-                                        //@ts-ignore
+										//@ts-ignore
 										// onClick={onClick}
 										onCancel={cancelOrder}
 									/>
+
+                                    <button className="bg-pink-500 text-white p-3 w-full flex items-center gap-2 justify-center cursor-pointer"><FaCreditCard /> Pay with Interact eTransfer</button>
 								</div>
 							)}
 						</>
@@ -582,15 +583,16 @@ const CheckoutPage = ({ preview }) => {
 						<div className="bg-white max-w-[500px] mx-auto p-4 pt-0 mt-[150px] pt-8 font-vt323 text-[30px] text-orange-500 flex flex-row">
 							<div className="w-1/2">
 								<Image
-                                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/tcrews.gif"
-                                    alt="Thank you"
-                                    width="200"
-                                    height="300"
-                                    className="object-cover w-full h-full"
-                                    style={{
-                                        maxWidth: "100%",
-                                        height: "auto"
-                                    }} />
+									src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/tcrews.gif"
+									alt="Thank you"
+									width="200"
+									height="300"
+									className="object-cover w-full h-full"
+									style={{
+										maxWidth: "100%",
+										height: "auto",
+									}}
+								/>
 							</div>
 							<div className="w-1/2">
 								<div className="text-green-500">Order Succesful!</div> My d00d,
@@ -609,7 +611,7 @@ const CheckoutPage = ({ preview }) => {
 					)}
 				</div>
 			</Layout>
-        );
+		);
 	}
 };
 

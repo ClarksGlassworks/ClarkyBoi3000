@@ -117,8 +117,9 @@ const allImages = product ? [
 						}} /> */}
 						<ShoppingCartButton />
 						<div className="relative mx-auto border-4 border-white">
-							<div className=" z-10 h-[50vh] bg-black w-full border-b-8 border-white shadow-2xl shadow-black overflow-hidden flex justify-center">
+							<div className=" z-10 aspect-square bg-black w-full border-b-8 border-white shadow-2xl shadow-black overflow-hidden flex justify-center">
 								<motion.div
+									className="aspect-square overflow-hidden w-full"
 									key={images[0]} // Add the key prop
 									initial={{ opacity: 0 }} // Start from transparent
 									animate={{ opacity: 1 }} // Animate to fully visible
@@ -129,8 +130,8 @@ const allImages = product ? [
                                         src={images[0]}
                                         alt={product.name}
                                         width="500"
-                                        height="300"
-                                        className="object-cover w-full h-full"
+                                        height="500"
+                                        className="object-cover w-full h-full aspect-square"
                                         style={{
                                             maxWidth: "100%",
                                             height: "auto"
@@ -161,10 +162,10 @@ const allImages = product ? [
 							)}
 						</div>
 
-						<div className="relative w-full flex flex-row gap-2 mt-2">
+						<div className="relative w-full flex flex-row gap-2 mt-2 "> {/* Add items-center */}
 							{images?.slice(1).map((imageUrl, index) => {
 								return (
-                                    <motion.div
+									<motion.div
 										className="aspect-square overflow-hidden w-1/3 border-4 border-white"
 										onClick={() => {
 											// Move the clicked image to the start of the array when it's clicked
@@ -177,18 +178,18 @@ const allImages = product ? [
 										whileTap={{ scale: 0.95 }} // Add the whileTap prop
 									>
 										<Image
-                                            src={imageUrl}
-                                            alt={product.name}
-                                            width="300"
-                                            height="300"
-                                            className="object-cover w-full h-full"
-                                            key={index}
-                                            style={{
-                                                maxWidth: "100%",
-                                                height: "auto"
-                                            }} />
+											src={imageUrl}
+											alt={product.name}
+											width="300"
+											height="300"
+											className="object-cover w-full h-full aspect-square"
+											key={index}
+											style={{
+												maxWidth: "100%",
+												height: "auto"
+											}} />
 									</motion.div>
-                                );
+								);
 							})}
 						</div>
 					</article>

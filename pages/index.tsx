@@ -275,11 +275,24 @@ export default function Index({ allPosts: { edges }, preview }) {
 			<div className="min-h-[500px] bg-gradient-to-b from-transparent to-black relative z-0 -mt-[450px]">
 				
 			</div>
-			<div className="bg-black min-h-[250px]">
-			<div className="flex flex-row gap-4 mx-auto justify-between w-1/2 pt-8">
+			<div className="bg-black min-h-[150px] flex justify-center flex-col">
+			<div className="flex flex-row gap-4 mx-auto justify-between w-1/2">
 				<FaInstagram className="text-white text-4xl" />
 				 <FaEnvelope className="text-white text-4xl" /> 
 				 <FaFacebook className="text-white text-4xl" />
+				</div>
+			</div>
+
+			<div className="min-h-[200px] bg-black relative z-0">
+			<Image
+					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/Zebra-pattern-wallpaper.jpg"
+					alt=""
+					layout="fill"
+					objectFit="cover"
+					className="opacity-50 absolute z-0 filter "
+				/>
+				<div className="min-h-[200px] bg-gradient-to-b to-transparent from-black relative z-10">
+				
 				</div>
 			</div>
 			{/* @ts-ignore */}

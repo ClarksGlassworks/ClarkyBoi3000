@@ -232,30 +232,35 @@ export default function Index({ allPosts: { edges }, preview }) {
 						Lets make some cheddar together! I offer wholesale pricing on all my work to brick and mortar shops.
 					</span></div>
 
-					<button className="p-4 bg-pink-500 text-white mt-4">Download Catalog</button>
-					<button className="p-4 text-pink-500 border border-pink-500 text-lg mt-2 bg-[rgba(255,255,255,1)]">Make 'n order</button>
+<div className="flex flex-col gap-2">
+					<button className="p-4 bg-pink-500 text-white mt-4 w-[180px]">Download Catalog</button>
+					<button className="p-4 text-pink-500 text-lg mt-2 bg-[rgba(255,255,255,1)] w-[180px]">Make 'n order</button>
+					</div>
 				</div>
 			</div>
 
-			<div className="h-screen bg-black relative">
-				{/* <Image
-					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/MIkl.gif"
+			<div className="min-h-[600px] bg-black relative mx-4 my-4 border-4 border-black">
+				<Image
+					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/triangle-bg.gif"
 					alt=""
 					layout="fill"
 					objectFit="cover"
-					className="opacity-50 absolute z-0"
-				/> */}
+					className="opacity-100 absolute z-0 filter "
+				/>
 
 				<div className="p-8 pt-[150px] relative z-20">
-					<h1 className="text-white text-[55px] leading-[40px] font-honk">
+					<h1 className="text-white text-[75px] leading-[60px] font-vt323">
 						Want a custom?
 					</h1>
-					<p className="text-xl lg:text-[40px] text-white font-vt323 mt-10">
-						One of Canadae's premier boro glass artists. Looking for a new bong,
-						rig, or dab setup? You've come correct and direct to the source!
+					<p className="text-xl lg:text-[40px] text-white font-vt323 mt-4">
+						Yeah I do that! I love making custom pieces.
 					</p>
+					<button className="p-4 text-black text-lg mt-2 bg-white w-[180px]">Make 'n order</button>
 				</div>
+				
 			</div>
+
+			<div className="h-[50px]"></div>
 			{/* @ts-ignore */}
 
 			<HomepageHeader

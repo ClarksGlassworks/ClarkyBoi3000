@@ -223,7 +223,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 			<Corner scrollState={scrollState} />
 			<Top8Friends products={products} />
 			{/* <HomepageMenu /> */}
-			<div className="h-[600px] bg-black relative mx-4 my-4 border-4 border-black overflow-hidden">
+			<div className="h-[600px] bg-black relative mx-4 my-4 border-4 border-black overflow-hidden  mt-16">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/dotsbg.gif"
 					alt=""
@@ -244,7 +244,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 			</div>
 
 			<div
-				className="min-h-[600px] bg-black border-4 border-black relative bg-cover bg-repeat bg-center mx-4 my-4"
+				className="min-h-[600px] bg-black border-4 border-black relative bg-cover bg-repeat bg-center mx-4 my-4 mt-16"
 				style={{
 					backgroundImage:
 						"url('https://wp.clarksglassworks.com/wp-content/uploads/2024/01/MIkl.gif')",
@@ -274,7 +274,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 				</div>
 			</div>
 
-			<div className="min-h-[600px] bg-gradient-to-b from-teal-600 to-purple-900 relative mx-4 my-4 border-4 border-black  z-20 border-4 border-black ">
+			<div className="min-h-[600px] bg-gradient-to-b from-teal-600 to-purple-900 relative mx-4 my-4 border-4 border-black  z-20 border-4 border-black  mt-16 ">
 				<Image
 					src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/triangle-bg.gif"
 					alt=""

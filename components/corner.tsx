@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
         <motion.div
           className="fixed top-0 right-0"
           initial="hidden"
-          animate={scrollState === "scrolling" ? "visible" : "hidden"}
+          animate={(scrollState === "scrolling" || scrollState === "scrolling2" || scrollState === "scrolling3" || scrollState === "end") ? "visible" : "hidden"}
           variants={variants}
         >
           <Image

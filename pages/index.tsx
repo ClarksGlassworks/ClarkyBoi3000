@@ -197,10 +197,10 @@ export default function Index({ allPosts: { edges }, preview }) {
 					alt=""
 					layout="fill"
 					objectFit="cover"
-					className="opacity-50 absolute z-0"
+					className="opacity-50 absolute z-0 blur-sm hue-rotate-90"
 				/>
 
-				<div className="p-8 pt-[150px]">
+				<div className="p-8 pt-[150px] relative z-10">
 					<h1 className="text-white text-[55px] leading-[40px] font-vt323">
 						Welcome to Clark's Glassworks
 					</h1>
@@ -277,7 +277,9 @@ export default function Index({ allPosts: { edges }, preview }) {
 			</div>
 			<div className="bg-black min-h-[250px]">
 			<div className="flex flex-row gap-4 mx-auto justify-between w-1/2 pt-8">
-				<FaInstagram className="text-white text-4xl" /> <FaEnvelope className="text-white text-4xl" /> <FaFacebook className="text-white text-4xl" />
+				<FaInstagram className="text-white text-4xl" />
+				 <FaEnvelope className="text-white text-4xl" /> 
+				 <FaFacebook className="text-white text-4xl" />
 				</div>
 			</div>
 			{/* @ts-ignore */}

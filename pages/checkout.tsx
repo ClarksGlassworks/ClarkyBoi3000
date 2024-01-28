@@ -570,7 +570,7 @@ const CheckoutPage = ({ preview }) => {
 										onApprove={onApprove}
 										createOrder={createOrder}
                                         //@ts-ignore
-										onClick={onClick}
+										// onClick={onClick}
 										onCancel={cancelOrder}
 									/>
 								</div>

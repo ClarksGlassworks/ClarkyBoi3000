@@ -17,8 +17,8 @@ import Image from "next/image";
 import HomepageHeader from "../components/homepage-header";
 import ClarkyBoi from "../components/clarky";
 import { useRouter } from "next/router";
-import { FaEnvelope, FaFacebook, FaInstagram } from "react-icons/fa";
-
+import { FaDashcube, FaEnvelope, FaFacebook, FaInstagram, FaMinusSquare, FaXingSquare } from "react-icons/fa";
+import { PiXSquareDuotone, PiMinusSquareDuotone } from "react-icons/pi";
 import { animateScroll as scroll } from 'react-scroll';
 export default function Index({ allPosts: { edges }, preview }) {
 	const heroPost = edges[0]?.node;
@@ -182,6 +182,7 @@ export default function Index({ allPosts: { edges }, preview }) {
 	const [headerBarState, setHeaderBarState] = useState(initialHeaderBarState);
 	const [gameboyState, setGameboyState] = useState(initialGameboyState);
 	const [clarkyBoiState, setClarkyBoiState] = useState(initialClarkyBoiState);
+	const [showContactForm, setShowContactForm] = useState(false);
 	const [clarkyBoi2State, setClarkyBoi2State] = useState(
 		initialClarkyBoi2State
 	);
@@ -305,7 +306,7 @@ useEffect(() => {
 						<button className="p-4 bg-pink-500 text-white mt-4 w-[180px]">
 							Download Catalog
 						</button>
-						<button className="p-4 text-pink-500 text-lg mt-2 bg-[rgba(255,255,255,1)] w-[180px]">
+						<button className="p-4 text-pink-500 text-lg mt-2 bg-[rgba(255,255,255,1)] w-[180px]" onClick={()=>setShowContactForm(true)}>
 							Make 'n order
 						</button>
 					</div>
@@ -348,7 +349,7 @@ useEffect(() => {
 					<p className="text-xl lg:text-[40px] text-white font-vt323 mt-4">
 						Yeah I do that! I love making custom pieces.
 					</p>
-					<button className="p-4 text-black text-lg mt-2 bg-white w-[180px]">
+					<button className="p-4 text-black text-lg mt-2 bg-white w-[180px]" onClick={()=>setShowContactForm(true)}>
 						Make 'n order
 					</button>
 				</div>
@@ -441,6 +442,55 @@ useEffect(() => {
 					</div>
 				</div>
 			)}
+
+
+{showContactForm && (
+<motion.div initial={{ opacity: 0 }}
+											animate={{ opacity: showContactForm ? 1 : 0 }}
+											transition={{ duration: 0.5 }} className="fixed z-[9999] backdrop-blur-sm w-full h-full bg-[rgba(0,0,0,0.5)] left-0 right-0 bottom-0 top-0">
+										<motion.div
+											
+											className="flex flex-col items-center justify-center h-full px-8"
+										>
+											<motion.div
+												initial={{ scale: 0.7 }}
+												animate={{ scale: showContactForm ? 1 : 0.7 }}
+												transition={{ type: "spring", damping: 14, stiffness: 100 }}
+												className="bg-gray-200 min-h-[500px] relative border-4 border-gray-400 shadow-md w-full mx-8"
+												style={{ borderStyle: showContactForm ? "outset" : "none" }}
+											>
+												<div className="flex flex-row"><div className="bg-gray-400 flex items-center justify-center px-1"><PiMinusSquareDuotone /></div><div className="bg-blue-900 text-white text-center flex-1">Program Manager</div><div className="bg-gray-400 flex items-center justify-center px-1 cursor-pointer" onClick={()=>setShowContactForm(false)}><PiXSquareDuotone /></div></div>
+									
+									<div className="p-2"><h2 className="text-xl font-bold mb-2">Form Container</h2>
+									<p>Please fill out the following details.</p>
+									<div className="flex justify-end mt-4 absolute bottom-4 left-1/2 -translate-x-1/2">
+										<button className="bg-blue-500 text-white px-4 py-2 mr-2 border-4" style={{borderStyle: "outset"}}>Submit</button>
+										<button className="bg-gray-500 text-white px-4 py-2 border-4" style={{borderStyle: "outset"}} onClick={()=>setShowContactForm(false)}>Cancel</button>
+									</div></div>
+											</motion.div>
+										</motion.div>
+									</motion.div>)}
+
+
+
+						{/* <div className="fixed z-[9999] backdrop-blur-sm w-full h-full bg-[rgba(0,0,0,0.5)] left-0 right-0 bottom-0 top-0">
+							<div className="flex flex-col items-center justify-center h-full px-8">
+								
+								
+								<div className="bg-gray-200 min-h-[500px] relative   border-4 border-gray-400 shadow-md w-full mx-8" style={{borderStyle: "outset"}}>
+									<div className="flex flex-row"><div className="bg-gray-400 flex items-center justify-center px-1"><PiMinusSquareDuotone /></div><div className="bg-blue-900 text-white text-center flex-1">Program Manager</div><div className="bg-gray-400 flex items-center justify-center px-1"><PiXSquareDuotone /></div></div>
+									
+									<div className="p-2"><h2 className="text-xl font-bold mb-2">Form Container</h2>
+									<p>Please fill out the following details.</p>
+									<div className="flex justify-end mt-4 absolute bottom-4 left-1/2 -translate-x-1/2">
+										<button className="bg-blue-500 text-white px-4 py-2 mr-2 border-4" style={{borderStyle: "outset"}}>Submit</button>
+										<button className="bg-gray-500 text-white px-4 py-2 border-4" style={{borderStyle: "outset"}}>Cancel</button>
+									</div></div>
+								</div>
+							</div>
+							
+						</div> */}
+
 		</Layout>
     );
 }

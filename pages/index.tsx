@@ -252,6 +252,10 @@ useEffect(() => {
         <Layout preview={preview}>
 			<Head>
 				<title>{`Clark's Glassworks | Canadian Made Bongs, Rigs, Dab Rigs & More`}</title>
+				<meta
+							property="og:image"
+							content={'https://wp.clarksglassworks.com/wp-content/uploads/2023/12/clark-tape.png'}
+						/>
 			</Head>
 			{(scrollPosition === 'scrolling2' || scrollPosition === 'scrolling3' || scrollPosition === 'end') && (<div className="  backdrop-blur-sm w-full h-screen -z-10 fixed top-0 bottom-0 left-0 right-0"></div>)}
 			<Corner scrollState={scrollState} scrollPosition={scrollPosition} />

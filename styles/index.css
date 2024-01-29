@@ -112,3 +112,8 @@
   background-image: url('https://wp.clarksglassworks.com/wp-content/uploads/2023/12/layer1-e1702235087419.png');
   background-repeat: repeat;
 }
+
+.dangerousHTML p {
+  /* margin-top:1.5rem; */
+  margin-bottom:1.5rem;
+}

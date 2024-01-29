@@ -140,12 +140,7 @@ const allImages = product ? [
 							</div>
 							<div className="absolute z-20 text-[40px] font-semibold text-white p-4  leading-none bottom-[10px]">
 								<h1 className="">{product.name}</h1>{" "}
-								{product.description && (
-									<div
-										className="text-[25px] font-thin "
-										dangerouslySetInnerHTML={{ __html: product.description }}
-									></div>
-								)}
+								
 							</div>
 							<div
 								className="absolute top-4 left-4 bg-white rounded-full p-2"
@@ -160,6 +155,8 @@ const allImages = product ? [
 									{product.price}
 								</div>
 							)}
+
+
 						</div>
 
 						<div className="relative w-full flex flex-row gap-2 mt-2 "> {/* Add items-center */}
@@ -192,6 +189,12 @@ const allImages = product ? [
 								);
 							})}
 						</div>
+						{product.description && (
+									<div
+										className="text-md font-thin bg-white text-black p-4 mt-4 dangerousHTML"
+										dangerouslySetInnerHTML={{ __html: product.description }}
+									></div>
+								)}
 					</article>
 
 					<div className="w-full px-4 fixed bottom-[20px] mx-auto left-0 right-0 max-w-screen-xl">

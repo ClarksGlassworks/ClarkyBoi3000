@@ -1,9 +1,10 @@
 // pages/api/product/[id].ts
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 async function handler(req, res) {
-	const { orderID } = req.body;
+	const { orderID, payment_method } = req.body;
 	const data = {
 		status: "processing",
+        payment_method: payment_method,
 	};
 
 	const WooCommerce = new WooCommerceRestApi({

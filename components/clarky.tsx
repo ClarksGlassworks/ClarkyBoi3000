@@ -14,52 +14,59 @@ const ClarkyBoi = ({ clarkyBoiState, key, scrollPosition }) => {
     const scrollYPercent = (scrollYProgress.get() * 100);
     // const scrollPosition = useScrollPosition();
     let startState = {
-        
-        x: isMobile ? `100%`: `70%`,
+
+        x: isMobile ? `100%` : `70%`,
         opacity: 1,
-        y: isMobile ? "100%": '20%',
-        scale:1
+        y: isMobile ? "100%" : '20%',
+        scale: 1
     };
     const endState = {
         x: `35%`,
         y: "5%",
-        opacity:1,
-        scale:1
+        opacity: 1,
+        scale: 1
     };
 
     let finalState = {
-        
-        x: isMobile ? `0%`: `70%`,
+
+        x: isMobile ? `0%` : `70%`,
         opacity: 1,
-        scale:0.8,
-        y: isMobile ? "20%": '20%',
+        scale: 0.8,
+        y: isMobile ? "20%" : '20%',
     };
 
     let finalState2 = {
-        
-        x: isMobile ? `0%`: `70%`,
+
+        x: isMobile ? `0%` : `70%`,
         opacity: 1,
-        scale:0.7,
-        y: isMobile ? "55%": '20%',
+        scale: 0.7,
+        y: isMobile ? "55%" : '20%',
     };
     const slideInTransition = {
         type: "tween",
         duration: 0.5,
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log('Clarky', scrollPosition)
-        if(scrollPosition === "scrolling2"){
-            controls.start(finalState)
-        } else if(scrollPosition === "initial"){
+
+
+        if (scrollPosition === "initial") {
             controls.start(startState)
-        } else if(scrollPosition === "end"){ 
-            controls.start(endState)
-        } else if(scrollPosition === "scrolling3"){ 
+        } else if (scrollPosition === "scrolling") {
+            controls.start(startState)
+        } else if (scrollPosition === "scrolling2") {
+            controls.start(finalState)
+        } else if (scrollPosition === "scrolling3") {
             controls.start(finalState2)
+        } else if (scrollPosition === "end") {
+            controls.start(endState)
         }
-    },[scrollPosition])
-    
+
+
+       
+    }, [scrollPosition])
+
     return (
         <motion.div
             ref={ref}
@@ -91,7 +98,7 @@ const ClarkyBoi = ({ clarkyBoiState, key, scrollPosition }) => {
                         maxWidth: "100%",
                         height: "auto"
                     }} />
-             
+
             </div>
         </motion.div>
     );

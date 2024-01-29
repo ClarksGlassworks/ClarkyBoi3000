@@ -49,6 +49,29 @@ async function handler(req, res) {
             lastName
             firstName
             email
+            availablePaymentMethods {
+              id
+              isDefault
+              tokenId
+              type
+            }
+            availablePaymentMethodsEC {
+              type
+              tokenId
+              last4
+              isDefault
+              id
+            }
+            availablePaymentMethodsCC {
+              cardType
+              expiryMonth
+              expiryYear
+              id
+              isDefault
+              last4
+              tokenId
+              type
+            }
           }
         }
         `

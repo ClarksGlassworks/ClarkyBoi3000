@@ -51,10 +51,7 @@ const ShoppingCartPage = ({ preview }) => {
                             alt=""
                             fill
                             className=""
-                            style={{
-                                maxWidth: "100%",
-                                height: "auto"
-                            }} /></div>
+                           /></div>
                             <div className="text-white z-20 font-vt323 text-[30px] absolute shadow-xl p-4 rounded-xl">You're coming up bananas bud,<br/> go grab some glass</div></div>)}
                         {cart?.contents.nodes.map((item, index) => {
 

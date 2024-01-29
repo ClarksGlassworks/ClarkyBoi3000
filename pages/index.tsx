@@ -58,11 +58,11 @@ export default function Index({ allPosts: { edges }, preview }) {
 			// console.log({y, yPercent})
 			if (y < 200) {
 				setScrollPosition("initial");
-			} else if (y >= 200 && y < 700) {
+			} else if (y >= 200 && y < 900) {
 				setScrollPosition("scrolling");
-			} else if (y >= 700 && y < 1200) {
+			} else if (y >= 900 && y < 1400) {
 				setScrollPosition("scrolling2");
-			} else if ((y >= 1200 && y < 1600) || (y > 1600 && y < nearBottom)) {
+			} else if ((y >= 1400 && y < 1900) || (y > 1900 && y < nearBottom)) {
 				setScrollPosition("scrolling3");
 			} else if (y >= nearBottom) {
 				setScrollPosition("end");
@@ -360,9 +360,15 @@ useEffect(() => {
 			<div className="min-h-[500px] bg-gradient-to-b from-transparent to-black relative z-0 -mt-[500px]"></div>
 			<div className="bg-black min-h-[150px] flex justify-center flex-col">
 				<div className="flex flex-row gap-4 mx-auto justify-between w-1/2">
-					<FaInstagram className="text-white text-4xl" />
-					<FaEnvelope className="text-white text-4xl" />
-					<FaFacebook className="text-white text-4xl" />
+					<a href="https://www.instagram.com/clarksglassworks" target="_blank" rel="noopener noreferrer">
+						<FaInstagram className="text-white text-4xl" />
+					</a>
+					<a href="mailto:sales@clarksglassworks.com">
+						<FaEnvelope className="text-white text-4xl" />
+					</a>
+					<a href="https://www.facebook.com/clark.matthews" target="_blank" rel="noopener noreferrer">
+						<FaFacebook className="text-white text-4xl" />
+					</a>
 				</div>
 			</div>
 

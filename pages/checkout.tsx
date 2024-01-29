@@ -1,8 +1,8 @@
 import {
-	PayPalButtons,
-	PayPalScriptProvider,
-	usePayPalScriptReducer,
-	PayPalHostedField,
+    PayPalButtons,
+    PayPalScriptProvider,
+    usePayPalScriptReducer,
+    PayPalHostedField,
 } from "@paypal/react-paypal-js";
 import Layout from "../components/layout";
 
@@ -21,598 +21,742 @@ import Image from "next/image";
 import { FaCreditCard } from "react-icons/fa";
 
 const countryOptions = [
-	{ value: "US", label: "United States" },
-	{ value: "CA", label: "Canada" },
-	// Add more countries as needed
+    { value: "US", label: "United States" },
+    { value: "CA", label: "Canada" },
+    // Add more countries as needed
 ];
 
 const schema = yup.object().shape({
-	firstName: yup.string().required("First name is required."),
-	lastName: yup.string().required("Last name is required."),
-	email: yup
-		.string()
-		.email("Invalid email address.")
-		.matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email address.")
-		.required("Email is required."),
-	shipping: yup.object().shape({
-		address1: yup
-			.string()
-			.required("Address is required.")
-			.matches(/^[a-zA-Z0-9\s]+$/, "Invalid address format."),
-		address2: yup.string().nullable(), // Allow address2 to be nullable
-		city: yup
-			.string()
-			.required("City is required.")
-			.matches(/^[a-zA-Z\s]+$/, "Invalid city format."),
-		state: yup
-			.string()
-			.required("Province/State is required.")
-			.matches(/^[a-zA-Z\s]+$/, "Invalid province/state format."),
-		postcode: yup
-			.string()
-			.required("Postal code is required.")
-			.matches(
-				/^(?:[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d|\d{5}(?:[-\s]\d{4})?)$/,
-				"Invalid postal code format."
-			),
-		country: yup.string().required("Country is required."),
-	}),
+    firstName: yup.string().required("First name is required."),
+    lastName: yup.string().required("Last name is required."),
+    email: yup
+        .string()
+        .email("Invalid email address.")
+        .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email address.")
+        .required("Email is required."),
+    shipping: yup.object().shape({
+        address1: yup
+            .string()
+            .required("Address is required.")
+            .matches(/^[a-zA-Z0-9\s]+$/, "Invalid address format."),
+        address2: yup.string().nullable(), // Allow address2 to be nullable
+        city: yup
+            .string()
+            .required("City is required.")
+            .matches(/^[a-zA-Z\s]+$/, "Invalid city format."),
+        state: yup
+            .string()
+            .required("Province/State is required.")
+            .matches(/^[a-zA-Z\s]+$/, "Invalid province/state format."),
+        postcode: yup
+            .string()
+            .required("Postal code is required.")
+            .matches(
+                /^(?:[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d|\d{5}(?:[-\s]\d{4})?)$/,
+                "Invalid postal code format."
+            ),
+        country: yup.string().required("Country is required."),
+    }),
 });
 
 async function getBearerToken() {
-	const clientId = process.env.PAYPAL_CLIENT_ID;
-	const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+    const clientId = process.env.PAYPAL_CLIENT_ID;
+    const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
 
-	const auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+    const auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
 
-	const data = new URLSearchParams();
-	data.append("grant_type", "client_credentials");
+    const data = new URLSearchParams();
+    data.append("grant_type", "client_credentials");
 
-	const response = await fetch(
-		"https://api-m.sandbox.paypal.com/v1/oauth2/token",
-		{
-			method: "POST",
-			headers: {
-				Authorization: `Basic ${auth}`,
-				Accept: "application/json",
-				"Accept-Language": "en_US",
-				"Content-Type": "application/x-www-form-urlencoded",
-			},
-			body: data,
-		}
-	);
+    const response = await fetch(
+        "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+        {
+            method: "POST",
+            headers: {
+                Authorization: `Basic ${auth}`,
+                Accept: "application/json",
+                "Accept-Language": "en_US",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: data,
+        }
+    );
 
-	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}`);
-	}
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-	const json = await response.json();
-	return json.access_token;
+    const json = await response.json();
+    return json.access_token;
 }
 
 const CheckoutPage = ({ preview }) => {
-	// const [wooOrderId, setWooOrderId] = useState(null);
+    // const [wooOrderId, setWooOrderId] = useState(null);
 
-	const wooOrderId = useRef(null);
+    const wooOrderId = useRef(null);
 
-	const [paypalOrderId, setPaypalOrderId] = useState(null);
-	const [orderData, setOrderData] = useState(null);
-	const [payment, setPayment] = useState(null);
-	const [{ isPending }] = usePayPalScriptReducer();
-	const [showThankYou, setShowThankYou] = useState(false);
-	const [shippingRates, setShippingRates] = useState(null);
-	const { cart, mutate } = useGetCart();
-	const { customer, mutate: mutateCustomer } = useGetCustomer();
-	const { isMobile } = useWindowSize();
+    const [paypalOrderId, setPaypalOrderId] = useState(null);
+    const [orderData, setOrderData] = useState(null);
+    const [payment, setPayment] = useState(null);
+    const [{ isPending }] = usePayPalScriptReducer();
+    const [showThankYou, setShowThankYou] = useState(false);
+    const [showInteract, setShowInteract] = useState(false)
+    const [wooOrder, setWooOrder] = useState(null)
+    const [shippingRates, setShippingRates] = useState(null);
+    const { cart, mutate } = useGetCart();
+    const [validShipping, setValidShipping] = useState(false)
+    const { customer, mutate: mutateCustomer } = useGetCustomer();
+    const { isMobile } = useWindowSize();
 
-	const updateWooOrderId = (id) => {
-		wooOrderId.current = id;
-	};
+    const updateWooOrderId = (id) => {
+        wooOrderId.current = id;
+    };
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors, isValid, dirtyFields },
-		watch,
-		control,
-		setValue,
-	} = useForm({
-		// mode: "onBlur",
-		resolver: yupResolver(schema),
-	});
-	const {
-		register: discountRegister,
-		handleSubmit: discountHandleSubmit,
-		formState: { errors: discountErrors },
-	} = useForm();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isValid, dirtyFields },
+        watch,
+        control,
+        setValue,
+        getValues,
+        trigger, // Add trigger function
+    } = useForm({
+        // mode: "onBlur",
+        resolver: yupResolver(schema),
+    });
+    const {
+        register: discountRegister,
+        handleSubmit: discountHandleSubmit,
+        formState: { errors: discountErrors },
+    } = useForm();
 
-	const formData = watch();
+    const formData = watch();
 
-	const onSubmit = (data, actions) => {
-		if (!isValid) {
-			return false;
-		} else {
-			updateShippingInfo(formData);
-			window.scrollTo(0, document.body.scrollHeight);
-			return true;
-		}
-	};
+    const onSubmit = (data, actions) => {
+        console.log({ isValid });
+        if (!isValid) {
+            return false;
+        } else {
+            updateShippingInfo(formData);
+            window.scrollTo(0, document.body.scrollHeight);
+            return true;
+        }
+    };
 
-	useEffect(() => {
-		if (cart) {
-			// lets get the rates and set them
-			const rates = cart?.availableShippingMethods?.map((method) => {
-				method?.rates?.map((rate) => {
-					return {
-						...rate,
-					};
-				});
-			});
-			setShippingRates(rates);
-		}
-	}, [cart]);
+    const applyShippingRate = async (rate) => {
+        console.log("apply shipping rate", rate);
+        const response = await fetch("/api/applyShippingRate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: rate }),
+        });
 
-	useEffect(() => {
-		const custy = customer?.customer;
-		// we need to update the form values
-		const { shipping, billing } = custy || {};
-		for (const key in custy) {
-			//@ts-ignore
-			setValue(`${key}`, shipping[key]);
-		}
-		for (const key in shipping) {
-			//@ts-ignore
-			setValue(`shipping.${key}`, shipping[key]);
-		}
-		for (const key in billing) {
-			//@ts-ignore
-			setValue(`billing.${key}`, billing[key]);
-			if (key === "email") {
-				setValue("email", billing[key]);
-			}
-		}
-	}, [customer]);
+        const applyResponse = await response.json();
+        setValidShipping(true)
+        mutate();
 
-	async function updateShippingInfo(data) {
-		console.log("update shipping info", data);
+        console.log(applyResponse);
+    };
 
-		return await fetch("/api/updateWooSession", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				...data,
-			}),
-		})
-			.then((response) => response.json())
-			.then((orderData) => {
-				mutate();
-				mutateCustomer();
-				return orderData;
-			});
-	}
+    useEffect(() => {
+        if (customer && cart) {
+            console.log("update cart");
+            // trigger(); // Trigger form validation
+        }
 
-	async function emptyCart() {
-		return await fetch("/api/emptyWooCart", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				orderID: wooOrderId.current,
-			}),
-		})
-			.then((response) => response.json())
-			.then((orderData) => {
-				mutate();
-				return "empty";
-			});
-	}
+        if (cart) {
+            // we need to handle when we see a lower shipping rate, for some reason they aren't auto applying anymore
+            const availableRates = cart?.availableShippingMethods?.map((method) => {
+                return method?.rates?.map((rate) => {
+                    console.log({ rate });
+                    return {
+                        ...rate,
+                    };
+                });
+            });
 
-	async function addWooNotes(notes) {
-		return await fetch("/api/addWooNotes", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				orderID: wooOrderId.current,
-				notes: notes,
-			}),
-		})
-			.then((response) => response.json())
-			.then((noteData) => {
-				return noteData;
-			});
-	}
-	async function cancelWooOrder(orderID) {
-		return await fetch("/api/cancelWooOrder", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				orderID: wooOrderId.current,
-			}),
-		})
-			.then((response) => response.json())
-			.then((orderData) => {});
-	}
+            console.log({ availableRates });
+            // now we need to find the lowest rate
+            const lowestRate = availableRates[0].reduce((prev, curr) => {
+                return prev?.cost < curr?.cost ? prev : curr;
+            });
 
-	async function completeWooOrder(orderID) {
-		return await fetch("/api/completeWooOrder", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				orderID: wooOrderId.current,
-			}),
-		})
-			.then((response) => response.json())
-			.then((orderData) => {
-				return orderData;
-			});
-	}
+            applyShippingRate(lowestRate.id);
+        }
+    }, [customer, cart]);
 
-	async function createWooOrder() {
-		const request = await fetch("/api/createWooOrder", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				cart: cart,
-				customer: customer,
-			}),
-		});
+    const onInteractSubmit = (data, actions) => { };
 
-		const data = await request.json();
-		if (data) {
-			return data;
-		}
-	}
+    const spinUpListener = async (order) => {
 
-	const cancelOrder = useCallback(
-		async (data) => {
-			if (wooOrderId) {
-				cancelWooOrder(wooOrderId);
-			}
-		},
-		[wooOrderId]
-	);
+        const data = await fetch("/api/spinUpETransferChecker", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                order:order
+            }),
+        })
 
-	async function createOrder() {
-		const token = await getBearerToken();
-		return fetch("/api/create-order", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-			body: JSON.stringify({
-				order_price: parseFloat(cart?.total.replace("$", "")),
-			}),
-		})
-			.then((response) => response.json())
-			.then(async (order) => {
-				//@ts-ignore
-				const response = await createWooOrder(cart);
-				if (response) {
-					updateWooOrderId(response?.id);
-				}
-				return order.data.id;
-			});
-	}
+        const response = await data.json()
+        console.log({ response })
+    
+    }
 
-	async function onApprove(data) {
-		const token = await getBearerToken();
-		return fetch("/api/capture-order", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-			body: JSON.stringify({
-				orderID: data.orderID,
-			}),
-		})
-			.then((response) => response.json())
-			.then(async (orderData) => {
-				console.log("Payment Completed", orderData);
 
-				const [notes, response, doAnEmpty] = await Promise.all([
-					addWooNotes(orderData),
-					completeWooOrder(wooOrderId.current),
-					emptyCart(),
-				]);
-				if (response && notes && doAnEmpty) {
-					setShowThankYou(true);
-					window.scrollTo(0, 0);
-				}
-				setPaypalOrderId(orderData.id);
-				return orderData.id;
-			});
-	}
+    const onDiscountSubmit = async (data, actions) => {
+        const response = await fetch("/api/applyCoupon", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-	if (!cart) {
-		<>Loading...</>;
-	}
-	if (cart) {
-		return (
-			<Layout preview={preview}>
-				<Head>
-					<title>Check Out | Clark's Glassworks</title>
-				</Head>
-				<Casette
-					casetteState={{
-						x: "-10%",
-						y: -40,
-						mobileX: -190,
-						mobileY: -90,
-						rotate: -20,
-						scale: isMobile ? 0.4 : 0.4,
-						position: "top",
-						zIndex: 9999,
-					}}
-				/>
-				<div className="bg-white max-w-[500px] mx-4 lg:mx-auto p-4 pt-0 mt-[120px] lg:mt-[150px] mb-[150px] ">
-					{isPending ? <div className="spinner" /> : null}
-					{!showThankYou && (
-						<>
-							<div className="w-full">
-								<h1 className=" font-vt323 text-[50px]">Checkout</h1>
-								<form onSubmit={handleSubmit(onSubmit)}>
-									<div className="font-vt323 text-[30px] pl-2">
-										Shipping Info
-									</div>
-									<div>
-										<span className="text-red-500 ml-2">*</span> all fields are
-										required.
-									</div>
-									<div className="flex flex-col">
-										<input
-											className="border m-2 border-orange-500 p-2"
-											{...register("firstName", { required: true })}
-											placeholder="First Name"
-											onBlur={handleSubmit(onSubmit)}
-										/>
+        const applyResponse = await response.json();
+        mutate();
 
-										{errors.firstName && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors.firstName.message}
-											</span>
-										)}
+        console.log(applyResponse);
+    };
 
-										<input
-											className="border m-2 border-orange-500 p-2"
-											{...register("lastName", { required: true })}
-											placeholder="Last Name"
-											onBlur={handleSubmit(onSubmit)}
-										/>
+    useEffect(() => {
+        if (cart) {
+            // lets get the rates and set them
+            const rates = cart?.availableShippingMethods?.map((method) => {
+                method?.rates?.map((rate) => {
+                    return {
+                        ...rate,
+                    };
+                });
+            });
+            setShippingRates(rates);
+        }
+    }, [cart]);
 
-										{errors.lastName && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors.lastName.message}
-											</span>
-										)}
+    useEffect(() => {
+        const custy = customer?.customer;
+        // we need to update the form values
+        const { shipping, billing } = custy || {};
+        for (const key in custy) {
+            //@ts-ignore
+            setValue(`${key}`, shipping[key]);
+        }
+        for (const key in shipping) {
+            //@ts-ignore
+            setValue(`shipping.${key}`, shipping[key]);
+        }
+        for (const key in billing) {
+            //@ts-ignore
+            setValue(`billing.${key}`, billing[key]);
+            if (key === "email") {
+                setValue("email", billing[key]);
+            }
+        }
 
-										<input
-											className="border m-2 border-orange-500 p-2"
-											{...register("email", { required: true })}
-											placeholder="Email"
-											onBlur={handleSubmit(onSubmit)}
-										/>
+        trigger();
+    }, [customer]);
 
-										{errors.email && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors.email.message}
-											</span>
-										)}
+    async function updateShippingInfo(data) {
+        console.log("update shipping info", data);
 
-										<div className="border-t border-orange-500 pt-4 mt-4 mx-2"></div>
+        return await fetch("/api/updateWooSession", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                ...data,
+            }),
+        })
+            .then((response) => response.json())
+            .then((orderData) => {
+                setValidShipping(true)
+                mutate();
+                mutateCustomer();
+                return orderData;
+            });
+    }
 
-										<input
-											className="border m-2 border-orange-500 p-2"
-											{...register("shipping.address1", { required: true })}
-											placeholder="Address"
-											onBlur={handleSubmit(onSubmit)}
-										/>
+    async function emptyCart() {
+        return await fetch("/api/emptyWooCart", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                orderID: wooOrderId.current,
+            }),
+        })
+            .then((response) => response.json())
+            .then((orderData) => {
+                mutate();
+                return "empty";
+            });
+    }
 
-										{errors?.shipping?.address1 && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors?.shipping?.address1.message}
-											</span>
-										)}
+    async function addWooNotes(notes) {
+        return await fetch("/api/addWooNotes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                orderID: wooOrderId.current,
+                notes: notes,
+            }),
+        })
+            .then((response) => response.json())
+            .then((noteData) => {
+                return noteData;
+            });
+    }
+    async function cancelWooOrder(orderID) {
+        return await fetch("/api/cancelWooOrder", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                orderID: wooOrderId.current,
+            }),
+        })
+            .then((response) => response.json())
+            .then((orderData) => { });
+    }
 
-										<input
-											className="border m-2 border-orange-500 p-2"
-											{...register("shipping.address2", { required: true })}
-											placeholder="Addres 2"
-											onBlur={handleSubmit(onSubmit)}
-										/>
+    async function completeWooOrder(orderID) {
+        return await fetch("/api/completeWooOrder", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                orderID: wooOrderId.current,
+            }),
+        })
+            .then((response) => response.json())
+            .then((orderData) => {
+                return orderData;
+            });
+    }
 
-										{errors?.shipping?.address2 && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors?.shipping?.address2.message}
-											</span>
-										)}
+    async function createWooOrder(cart, method) {
+        const request = await fetch("/api/createWooOrder", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cart: cart,
+                customer: customer,
+                payment_method: method,
+            }),
+        });
 
-										<input
-											className="border m-2 border-orange-500 p-2"
-											{...register("shipping.city", { required: true })}
-											placeholder="City"
-											onBlur={handleSubmit(onSubmit)}
-										/>
+        const data = await request.json();
+        if (data) {
+            setWooOrder(data)
+            return data;
+        }
+    }
 
-										{errors?.shipping?.city && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors?.shipping?.city.message}
-											</span>
-										)}
+    const cancelOrder = useCallback(
+        async (data) => {
+            if (wooOrderId) {
+                cancelWooOrder(wooOrderId);
+            }
+        },
+        [wooOrderId]
+    );
 
-										<input
-											className="border m-2 border-orange-500 p-2"
-											{...register("shipping.state", { required: true })}
-											placeholder="State/Province"
-											onBlur={handleSubmit(onSubmit)}
-										/>
+    async function createOrder(data) {
+        const { method } = data;
 
-										{errors?.shipping?.state && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors?.shipping?.state.message}
-											</span>
-										)}
+        const token = await getBearerToken();
+        return fetch("/api/create-order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                order_price: parseFloat(cart?.total.replace("$", "")),
+            }),
+        })
+            .then((response) => response.json())
+            .then(async (order) => {
+                //@ts-ignore
+                const response = await createWooOrder(cart, method);
+                if (response) {
+                    updateWooOrderId(response?.id);
+                }
+                return order.data.id;
+            });
+    }
 
-										<input
-											className="border m-2 border-orange-500 p-2"
-											{...register("shipping.postcode", { required: true })}
-											placeholder="Postal/Zip"
-											onBlur={handleSubmit(onSubmit)}
-										/>
+    async function handleETransfer() {
+        console.log("lets do something about that pesky e-Transfer");
+        createWooOrder(cart, 'betpg').then((order) => {
+        spinUpListener(order)
+        setShowInteract(true);
+        });
+    }
 
-										{errors?.shipping?.postcode && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors?.shipping?.postcode.message}
-											</span>
-										)}
-										<Controller
-											name="shipping.country"
-											control={control}
-											defaultValue=""
-											rules={{ required: true }}
-											render={({ field }) => (
-												<Select
-													{...field}
-													options={countryOptions}
-													isClearable
-													placeholder="Country"
-													onChange={(value) => field.onChange(value?.value)}
-													className=" m-2"
-													value={countryOptions.find(
-														(option) => option.value === field.value
-													)}
-													styles={{
-														control: (provided) => ({
-															...provided,
-															border: "1px solid orange",
-														}),
-													}}
-												/>
-											)}
-										/>
-										{errors?.shipping?.country && (
-											<span className="text-sm text-red-500 ml-2">
-												{errors?.shipping?.country.message}
-											</span>
-										)}
+    async function onApprove(data) {
+        const token = await getBearerToken();
+        return fetch("/api/capture-order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                orderID: data.orderID,
+            }),
+        })
+            .then((response) => response.json())
+            .then(async (orderData) => {
+                console.log("Payment Completed", orderData);
 
-										{!isValid && (
-											<button
-												type="submit"
-												className="mt-4 rounded-full bg-orange-500 text-white p-2 m-2"
-												onClick={handleSubmit(onSubmit)}
-											>
-												Update Shipping Info
-											</button>
-										)}
-										<div className="border-t border-orange-500 pt-4 mt-4 mx-2"></div>
-									</div>
-								</form>
+                const [notes, response, doAnEmpty] = await Promise.all([
+                    addWooNotes(orderData),
+                    completeWooOrder(wooOrderId.current),
+                    emptyCart(),
+                ]);
+                if (response && notes && doAnEmpty) {
+                    setShowThankYou(true);
+                    window.scrollTo(0, 0);
+                }
+                setPaypalOrderId(orderData.id);
+                return orderData.id;
+            });
+    }
 
-								<form onSubmit={discountHandleSubmit(onSubmit)}>
-									<div className="mt-0 mb-4">
-										<div>
-											<input
-												className="border m-2 border-orange-500 p-2"
-												{...discountRegister("discount", { required: false })}
-												placeholder="Discount Code"
-											/>
-											<button
-												className="border m-2 border-orange-500 p-2"
-												type="submit"
-											>
-												Apply
-											</button>
-										</div>
-									</div>
-								</form>
-								<div className="w-full text-gray-400 text-sm mx-2">
-									International shipping is $50. Canadian orders over $150 ship
-									for FREE! Please enter your shipping information above for
-									accurate shipping rates.
-								</div>
-								<div className=" font-vt323 text-[20px] flex flex-row gap-4  justify-between m-2 w-full">
-									<div>
-										<div>Shipping</div>
-										<div className="font-thin text-gray-400">
-											{cart?.shippingTotal}
-										</div>
-										<div>Tax</div>
-										<div className="font-thin text-gray-400">
-											{cart?.subtotalTax}
-										</div>
-									</div>
-									<div className="w-1/2">
-										<div className="text-[30px]">Total</div>
-										<div className="font-thin text-gray-400 text-[30px]">
-											{cart?.total}
-										</div>
-									</div>
-								</div>
-							</div>
-							{isValid && cart && customer && (
-								<div className="mt-4 w-full mx-auto">
-									<PayPalButtons
-										style={{ layout: "vertical", label: "pay" }}
-										onApprove={onApprove}
-										createOrder={createOrder}
-										//@ts-ignore
-										// onClick={onClick}
-										onCancel={cancelOrder}
-									/>
+    if (!cart) {
+        <>Loading...</>;
+    }
+    if (cart) {
+        return (
+            <Layout preview={preview}>
+                <Head>
+                    <title>Check Out | Clark's Glassworks</title>
+                </Head>
+                <Casette
+                    casetteState={{
+                        x: "-10%",
+                        y: -40,
+                        mobileX: -190,
+                        mobileY: -90,
+                        rotate: -20,
+                        scale: isMobile ? 0.4 : 0.4,
+                        position: "top",
+                        zIndex: 9999,
+                    }}
+                />
+                <div className="bg-white max-w-[500px] mx-4 lg:mx-auto p-4 pt-0 mt-[120px] lg:mt-[150px] mb-[150px] ">
+                    {isPending ? <div className="spinner" /> : null}
+                    {(!showThankYou && !showInteract) && (
+                        <>
+                            <div className="w-full">
+                                <h1 className=" font-vt323 text-[50px]">Checkout</h1>
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    <div className="font-vt323 text-[30px] pl-2">
+                                        Shipping Info
+                                    </div>
+                                    <div>
+                                        <span className="text-red-500 ml-2">*</span> all fields are
+                                        required.
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <input
+                                            className="border m-2 border-orange-500 p-2"
+                                            {...register("firstName", { required: true })}
+                                            placeholder="First Name"
+                                            onBlur={handleSubmit(onSubmit)}
+                                        />
 
-                                    <button className="bg-pink-500 text-white p-3 w-full flex items-center gap-2 justify-center cursor-pointer"><FaCreditCard /> Pay with Interact eTransfer</button>
-								</div>
-							)}
-						</>
-					)}
+                                        {errors.firstName && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors.firstName.message}
+                                            </span>
+                                        )}
 
-					{showThankYou && (
-						<div className="bg-white max-w-[500px] mx-auto p-4 pt-0 mt-[150px] pt-8 font-vt323 text-[30px] text-orange-500 flex flex-row">
-							<div className="w-1/2">
-								<Image
-									src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/tcrews.gif"
-									alt="Thank you"
-									width="200"
-									height="300"
-									className="object-cover w-full h-full"
-									style={{
-										maxWidth: "100%",
-										height: "auto",
-									}}
-								/>
-							</div>
-							<div className="w-1/2">
-								<div className="text-green-500">Order Succesful!</div> My d00d,
-								thank you for your support! I will contact you soon with
-								shipping information!
-								<div className="">
-									<Link
-										href="../"
-										className="mt-4 underline text-sm text-blue-500"
-									>
-										Go back to homepage
-									</Link>
-								</div>
-							</div>
-						</div>
-					)}
-				</div>
-			</Layout>
-		);
-	}
+                                        <input
+                                            className="border m-2 border-orange-500 p-2"
+                                            {...register("lastName", { required: true })}
+                                            placeholder="Last Name"
+                                            onBlur={handleSubmit(onSubmit)}
+                                        />
+
+                                        {errors.lastName && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors.lastName.message}
+                                            </span>
+                                        )}
+
+                                        <input
+                                            className="border m-2 border-orange-500 p-2"
+                                            {...register("email", { required: true })}
+                                            placeholder="Email"
+                                            onBlur={handleSubmit(onSubmit)}
+                                        />
+
+                                        {errors.email && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors.email.message}
+                                            </span>
+                                        )}
+
+                                        <div className="border-t border-orange-500 pt-4 mt-4 mx-2"></div>
+
+                                        <input
+                                            className="border m-2 border-orange-500 p-2"
+                                            {...register("shipping.address1", { required: true })}
+                                            placeholder="Address"
+                                            onBlur={handleSubmit(onSubmit)}
+                                        />
+
+                                        {errors?.shipping?.address1 && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors?.shipping?.address1.message}
+                                            </span>
+                                        )}
+
+                                        <input
+                                            className="border m-2 border-orange-500 p-2"
+                                            {...register("shipping.address2", { required: true })}
+                                            placeholder="Addres 2"
+                                            onBlur={handleSubmit(onSubmit)}
+                                        />
+
+                                        {errors?.shipping?.address2 && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors?.shipping?.address2.message}
+                                            </span>
+                                        )}
+
+                                        <input
+                                            className="border m-2 border-orange-500 p-2"
+                                            {...register("shipping.city", { required: true })}
+                                            placeholder="City"
+                                            onBlur={handleSubmit(onSubmit)}
+                                        />
+
+                                        {errors?.shipping?.city && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors?.shipping?.city.message}
+                                            </span>
+                                        )}
+
+                                        <input
+                                            className="border m-2 border-orange-500 p-2"
+                                            {...register("shipping.state", { required: true })}
+                                            placeholder="State/Province"
+                                            onBlur={handleSubmit(onSubmit)}
+                                        />
+
+                                        {errors?.shipping?.state && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors?.shipping?.state.message}
+                                            </span>
+                                        )}
+
+                                        <input
+                                            className="border m-2 border-orange-500 p-2"
+                                            {...register("shipping.postcode", { required: true })}
+                                            placeholder="Postal/Zip"
+                                            onBlur={handleSubmit(onSubmit)}
+                                        />
+
+                                        {errors?.shipping?.postcode && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors?.shipping?.postcode.message}
+                                            </span>
+                                        )}
+                                        <Controller
+                                            name="shipping.country"
+                                            control={control}
+                                            defaultValue=""
+                                            rules={{ required: true }}
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    options={countryOptions}
+                                                    isClearable
+                                                    placeholder="Country"
+                                                    onChange={(value) => field.onChange(value?.value)}
+                                                    className=" m-2"
+                                                    value={countryOptions.find(
+                                                        (option) => option.value === field.value
+                                                    )}
+                                                    styles={{
+                                                        control: (provided) => ({
+                                                            ...provided,
+                                                            border: "1px solid orange",
+                                                        }),
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                        {errors?.shipping?.country && (
+                                            <span className="text-sm text-red-500 ml-2">
+                                                {errors?.shipping?.country.message}
+                                            </span>
+                                        )}
+
+                                        {!isValid && (
+                                            <button
+                                                type="submit"
+                                                className="mt-4 rounded-full bg-orange-500 text-white p-2 m-2"
+                                                onClick={handleSubmit(onSubmit)}
+                                            >
+                                                Update Shipping Info
+                                            </button>
+                                        )}
+                                        <div className="border-t border-orange-500 pt-4 mt-4 mx-2"></div>
+                                    </div>
+                                </form>
+
+                                <form onSubmit={discountHandleSubmit(onDiscountSubmit)}>
+                                    <div className="mt-0 mb-4">
+                                        <div>
+                                            <input
+                                                className="border m-2 border-orange-500 p-2"
+                                                {...discountRegister("discount", { required: false })}
+                                                placeholder="Discount Code"
+                                            />
+                                            <button
+                                                className="border m-2 border-orange-500 p-2"
+                                                type="submit"
+                                            >
+                                                Apply
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div className="w-full text-gray-400 text-sm mx-2">
+                                    International shipping is $50. Canadian orders over $150 ship
+                                    for FREE! Please enter your shipping information above for
+                                    accurate shipping rates.
+                                </div>
+                                <div className=" font-vt323 text-[20px] flex flex-row gap-4  justify-between m-2 w-full">
+                                    <div>
+                                        <div>Shipping</div>
+                                        <div className="font-thin text-gray-400">
+                                            {cart?.shippingTotal}
+                                        </div>
+                                        <div>Tax</div>
+                                        <div className="font-thin text-gray-400">
+                                            {cart?.subtotalTax}
+                                        </div>
+                                    </div>
+                                    <div className="w-1/2">
+                                        {cart.discountTotal && (
+                                            <>
+                                                <div className="text-[30px]">Discount</div>
+                                                <div className="font-thin text-gray-400 text-[30px]">
+                                                    {cart?.discountTotal}
+                                                </div>
+                                            </>
+                                        )}
+
+                                        <div className="text-[30px]">Total</div>
+                                        <div className="font-thin text-gray-400 text-[30px]">
+                                            {cart?.total}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {(isValid && cart && customer && validShipping) && (
+                                <div className="mt-4 w-full mx-auto">
+                                    <PayPalButtons
+                                        style={{ layout: "vertical", label: "pay" }}
+                                        onApprove={onApprove}
+                                        createOrder={()=>createOrder({method: 'bacs'})}
+                                        //@ts-ignore
+                                        // onClick={onClick}
+                                        onCancel={cancelOrder}
+                                    />
+
+                                    <button
+                                        onClick={handleETransfer}
+                                        className="bg-pink-500 hover:bg-purple-500 transition-all duration-200 text-white p-3 w-full flex items-center gap-2 justify-center cursor-pointer"
+                                    >
+                                        <FaCreditCard /> Pay with Interact eTransfer
+                                    </button>
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {showInteract && (
+                        <div className="bg-white max-w-[500px] mx-auto p-4 pt-0 mt-[150px] pt-8 font-vt323 text-[30px] leading-[20px] text-orange-500 flex flex-col lg:flex-row">
+                            <div className="w-full lg:w-1/2">
+                                <Image
+                                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/money.gif"
+                                    alt="Thank you"
+                                    width="100"
+                                    height="100"
+                                    className="object-cover w-1/2 mx-auto h-full"
+                                    style={{
+                                        maxWidth: "100%",
+                                        height: "auto",
+                                    }}
+                                />
+                            </div>
+                            <div className="w-full lg:w-1/2">
+                                <div className="text-green-500 leading-[20px] pb-4">Money time!</div> Please send your eTransfer to <span className="text-blue-500">sales@clarksglassworks.com</span>, with your order number 
+                                     <span className="text-blue-600"> {wooOrder.id}</span> in the notes.<br /><br />Your payment will be automatically deposited and your order will begin processing.<br /> <br /> You will receive an email when the order begins processing.
+
+                                <div className="">
+                                    <a
+                                        href="../"
+                                        className="mt-4 underline text-sm text-blue-500"
+                                    >
+                                        Go back to homepage
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showThankYou && (
+                        <div className="bg-white max-w-[500px] mx-auto p-4 pt-0 mt-[150px] pt-8 font-vt323 text-[30px] text-orange-500 flex flex-col lg:flex-row">
+                            <div className="w-full lg:w-1/2">
+                                <Image
+                                    src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/tcrews.gif"
+                                    alt="Thank you"
+                                    width="200"
+                                    height="300"
+                                    className="object-cover w-full h-full"
+                                    style={{
+                                        maxWidth: "100%",
+                                        height: "auto",
+                                    }}
+                                />
+                            </div>
+                            <div className="w-full lg:w-1/2">
+                                <div className="text-green-500">Order Succesful!</div> My d00d,
+                                thank you for your support! I will contact you soon with
+                                shipping information!
+                                <div className="">
+                                    <a
+                                        href="../"
+                                        className="mt-4 underline text-sm text-blue-500"
+                                    >
+                                        Go back to homepage
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </Layout>
+        );
+    }
 };
 
 export default CheckoutPage;

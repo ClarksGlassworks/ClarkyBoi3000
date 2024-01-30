@@ -52,6 +52,20 @@ export function useGetCart() {
 	};
 }
 
+export function useOrder(order_id) {
+
+	console.log('fetch wooOrder >', order_id)
+	const fetcher = (url) => fetch(url).then((res) => res.json());
+	const { data, mutate, error } = useSWR(order_id ? "/api/order?id=" + order_id : null, fetcher, { refreshInterval: 1000 });
+
+	return {
+		order: data,
+		isLoading: !data && !error,
+		isError: error,
+		mutate,
+	};
+}
+
 export function useGetCustomer() {
 	const fetcher = (url) => fetch(url).then((res) => res.json());
 	const { data, mutate, error } = useSWR("/api/getCustomer", fetcher);
@@ -91,9 +105,9 @@ export function useScrollPosition() {
 
 		window.addEventListener("scroll", handleScroll);
 
-		// return () => {
-		// 	window.removeEventListener("scroll", handleScroll);
-		// };
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+		};
 	}, []);
 
 	return scrollPosition;

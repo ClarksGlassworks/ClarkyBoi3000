@@ -4,7 +4,7 @@
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 
 async function handler(req, res) {
-    const { cart, customer:customerData, payment_method } =
+    const { cart, customer:customerData, payment_method, status } =
         req.body;
 
     console.log('----> createWooOrder', cart)
@@ -18,6 +18,7 @@ async function handler(req, res) {
         first_name: customer?.firstName?.toString(),
         last_name: customer?.lastName?.toString(),
         email: customer?.billing?.email?.toString(),
+        status: status?.toString(),
         billing: {
             first_name: customer?.shipping?.firstName?.toString(),
             last_name: customer?.shipping?.lastName?.toString(),

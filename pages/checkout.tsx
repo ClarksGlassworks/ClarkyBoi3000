@@ -7,7 +7,7 @@ import {
 import Layout from "../components/layout";
 
 import { useForm, Controller } from "react-hook-form";
-import { useGetCart, useGetCustomer } from "../lib/api";
+import { useGetCart, useGetCustomer, useOrder } from "../lib/api";
 import Head from "next/head";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Casette from "../components/casette";
@@ -106,6 +106,7 @@ const CheckoutPage = ({ preview }) => {
     const { cart, mutate } = useGetCart();
     const [validShipping, setValidShipping] = useState(false)
     const { customer, mutate: mutateCustomer } = useGetCustomer();
+    const { order, mutate: mutateOrder } = useOrder(wooOrderId.current);
     const { isMobile } = useWindowSize();
 
     const updateWooOrderId = (id) => {
@@ -132,6 +133,23 @@ const CheckoutPage = ({ preview }) => {
     } = useForm();
 
     const formData = watch();
+
+
+    useEffect(()=>{
+
+        if(order && order.status === 'processing'){
+            console.log('payment was completed')
+            
+            setShowInteract(false)
+            setShowThankYou(true)
+            emptyCart()
+            setTimeout(()=>{
+                document.location = '/'
+            },1000)
+            // completeWooOrder(wooOrderId.current)
+        }
+
+    },[order])
 
     const onSubmit = (data, actions) => {
         console.log({ isValid });
@@ -180,11 +198,13 @@ const CheckoutPage = ({ preview }) => {
 
             console.log({ availableRates });
             // now we need to find the lowest rate
-            const lowestRate = availableRates[0].reduce((prev, curr) => {
+            const lowestRate = availableRates?.[0]?.reduce((prev, curr) => {
                 return prev?.cost < curr?.cost ? prev : curr;
             });
 
-            applyShippingRate(lowestRate.id);
+            if(lowestRate?.id){
+            applyShippingRate(lowestRate?.id);
+            }
         }
     }, [customer, cart]);
 
@@ -202,8 +222,18 @@ const CheckoutPage = ({ preview }) => {
             }),
         })
 
+        // updateWooOrderId(order.id)
+        // mutateOrder()
+
+        
         const response = await data.json()
         console.log({ response })
+        if(response){
+
+
+            console.log({order})
+            // we need an SWR call listening to the order status
+        }
     
     }
 
@@ -343,7 +373,7 @@ const CheckoutPage = ({ preview }) => {
             });
     }
 
-    async function createWooOrder(cart, method) {
+    async function createWooOrder(cart, method, status) {
         const request = await fetch("/api/createWooOrder", {
             method: "POST",
             headers: {
@@ -353,6 +383,7 @@ const CheckoutPage = ({ preview }) => {
                 cart: cart,
                 customer: customer,
                 payment_method: method,
+                status: status,
             }),
         });
 
@@ -399,7 +430,16 @@ const CheckoutPage = ({ preview }) => {
 
     async function handleETransfer() {
         console.log("lets do something about that pesky e-Transfer");
-        createWooOrder(cart, 'betpg').then((order) => {
+        
+        // we need to aslo set the order status
+    
+        createWooOrder(cart, 'bacs','on-hold').then((order) => {
+        
+        // lets move the order to pending
+        // updateWooOrderStatus(order.id, 'pending');
+        
+        updateWooOrderId(order.id)
+        mutateOrder()
         spinUpListener(order)
         setShowInteract(true);
         });
@@ -421,12 +461,13 @@ const CheckoutPage = ({ preview }) => {
             .then(async (orderData) => {
                 console.log("Payment Completed", orderData);
 
-                const [notes, response, doAnEmpty] = await Promise.all([
+                const [quickNote, notes, response, doAnEmpty] = await Promise.all([
+                    addWooNotes('Paypal payment successful! Order ID: ' + orderData.id),
                     addWooNotes(orderData),
                     completeWooOrder(wooOrderId.current),
                     emptyCart(),
                 ]);
-                if (response && notes && doAnEmpty) {
+                if (quickNote && response && notes && doAnEmpty) {
                     setShowThankYou(true);
                     window.scrollTo(0, 0);
                 }

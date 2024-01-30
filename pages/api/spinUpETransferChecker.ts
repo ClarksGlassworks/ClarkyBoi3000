@@ -4,6 +4,7 @@ import { simpleParser } from "mailparser";
 import Imap from "node-imap";
 import fs from "fs";
 import { inspect } from "util";
+import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 
 let cronJob;
 
@@ -16,9 +17,18 @@ async function handler(req, res) {
 		status,
 		billing: { email },
 	} = order;
+	
+	const WooCommerce = new WooCommerceRestApi({
+		url: "https://wp.clarksglassworks.com/",
+		consumerKey: process.env.WOOCOMMERCE_KEY,
+		consumerSecret: process.env.WOOCOMMERCE_SECRET,
+		version: "wc/v3",
+	});
 
 	try {
 		const checkEmail = async () => {
+
+			console.log("Checking email for Order:" + id + " with total of " + total + " dollars");
 			const config = {
 				user: "clark@clarksglassworks.com",
 				password: "Clark@2024!",
@@ -30,18 +40,20 @@ async function handler(req, res) {
 
 			const connection = new Imap(config);
 
-			console.log("Connecting to email server...");
+			// console.log("Connecting to email server...");
 			// console.log("Connection:", connection)
 
 			connection.once("ready", () => {
-				console.log("Connection ready");
+				// console.log("Connection ready");
 				connection.openBox("INBOX", (err, box) => {
 					if (err) {
 						console.error(err);
 						return;
 					}
 
-					var searchCriteria = [["SUBJECT", "INTERAC"]];
+					var today = new Date();
+					today.setHours(0, 0, 0, 0);
+					var searchCriteria = [["SENTON", today], ["SUBJECT", "INTERAC"]];
 
 					const fetchOptions = {
 						bodies: ["HEADER", "TEXT", ""],
@@ -52,8 +64,6 @@ async function handler(req, res) {
 							console.error(err);
 							return;
 						}
-
-						console.log("Results", results.length);
 						const fetchOptions = {
 							bodies: ["HEADER", "TEXT", ""],
 						};
@@ -63,28 +73,65 @@ async function handler(req, res) {
 						f.on("message", (msg) => {
 							msg.on("body", (stream) => {
 								simpleParser(stream, async (err, parsed) => {
-									//   console.log(parsed);
-
-									// we now need to search the parsed text
-									// for the order number
-									// and the amount
+									if (err) {
+										console.error(err);
+										return;
+									}
 
 									const { text } = parsed;
+									if (text) {
+										const regex = /Message:\n(\d+)/;
+										const match = text.match(regex);
+										let referenceNumber = '';
+										if (match) {
+											const messageNumber = match[1];
+											console.log("Order Number", messageNumber);
+											// Do something with the message number
+										}
+										const regexAmount = /amount of \$(\d+\.\d{2}) \(CAD\)/;
+										const matchAmount = text.match(regexAmount);
+										if (matchAmount) {
+											const dollarAmount = parseFloat(matchAmount[1]);
+											// Do something with the dollar amount
+										}
+										// lets pull out the reference number for the notes
+										const regexReference = /Reference Number: ([\w\d]+)/;
+										const matchReference = text.match(regexReference);
+										if (matchReference) {
+											referenceNumber = matchReference[1];
+										}
+										const matches = text.includes(id) && text.includes(total);
+										// const matches = true
+										if(matches) {
+											console.log("Found a match!");
+											// check to make sure the order is not already cancelled
+											const {status } = await WooCommerce.get(`orders/${id}`)
+											if(status == "cancelled") {
+												console.log("Order is already cancelled - stopping cron job");
+												// cronJob.stop();
+												return;
+											}
 
-									console.log("Text", text);
-									// const orderNumber = text.match(/(.*)/)[1];
-									// const amount = text.match(/(.*)/)[1];
+											// lets update the order status
+											const data = {
+												status: "processing",
+											};
+											try {
+												await Promise.all([
+													WooCommerce.put(`orders/${id}`, data),
+													WooCommerce.post(`orders/${id}/notes`, {
+														note: "E-Transfer payment received - Reference Number: " + referenceNumber,
+													}),
+												]);
+												cronJob.stop();
+											} catch (error) {
+												console.error(error.response.data);
+											}
+										} else {
+											console.log("No match found for Order " + id + " with " + total + " dollars");
+										}
 
-									// console.log("Order Number", orderNumber);
-									// console.log("Amount", amount);
-
-									// if(orderNumber || amount) {
-									// 	// this is likely a match
-									// 	// lets go back and update the order in woo to set to paid
-
-									// }
-
-
+									}
 								});
 							});
 						});
@@ -105,13 +152,12 @@ async function handler(req, res) {
 		};
 
 		// Schedule the cron job to run every 60 seconds
-		// cronJob = cron.schedule("*/60 * * * * *", checkEmail);
-
-		checkEmail();
-
+		const cronJob = cron.schedule("* * * * *", checkEmail);
+		setTimeout(() => {
+			WooCommerce.put(`orders/${id}`, {status:"cancelled"});
+			cronJob.stop();
+		}, 60 * 60 * 1000);
 		res.status(200).json({ status: "success", message: "Cron job started" });
-
-		// ...
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ status: "error", error: "Error fetching product" });

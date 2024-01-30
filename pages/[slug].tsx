@@ -21,6 +21,8 @@ import { useEffect, useRef, useState } from "react";
 import HomepageHeader from "../components/homepage-header";
 import { motion, useScroll } from "framer-motion";
 export default function Post({ product, preview }) {
+
+	console.log({ product });
 	const router = useRouter();
 	// const morePosts = posts?.edges;
 	const { isMobile } = useWindowSize();

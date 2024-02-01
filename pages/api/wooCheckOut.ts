@@ -24,6 +24,7 @@ async function handler(req, res) {
                 mutation Checkout {
                     checkout(input: { paymentMethod: "bacs" }) {
                         clientMutationId,
+
                     }
                 }
                 `,

@@ -108,7 +108,7 @@ async function handler(req, res) {
 											const {status } = await WooCommerce.get(`orders/${id}`)
 											if(status == "cancelled") {
 												console.log("Order is already cancelled - stopping cron job");
-												// cronJob.stop();
+												cronJob.stop();
 												return;
 											}
 
@@ -140,8 +140,24 @@ async function handler(req, res) {
 							console.log("Fetch error: " + err);
 						});
 
-						f.once("end", function () {
+						f.once("end", async function () {
 							console.log("Done fetching all messages!");
+							console.log("Cancelling unpaid order...");
+
+							const {status } = await WooCommerce.get(`orders/${id}`)
+
+							const data = {
+								status: "cancelled",
+							};
+							try {
+								if(status == "on-hold") {
+								await Promise.all([
+									WooCommerce.put(`orders/${id}`, data),
+								]);
+								}
+							} catch (error) {
+								console.error(error.response.data);
+							}
 							connection.end();
 						});
 					});

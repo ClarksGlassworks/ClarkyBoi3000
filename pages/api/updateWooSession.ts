@@ -107,7 +107,6 @@ async function handler(req, res) {
 
 		const { data } = responseBody;
 
-		console.log({ data });
 
 		if (!req.sessionToken) {
 			res.setHeader(

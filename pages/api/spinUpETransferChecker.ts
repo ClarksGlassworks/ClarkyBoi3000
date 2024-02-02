@@ -72,7 +72,7 @@ async function handler(req, res) {
 							return;
 						}
 
-						
+
 						const fetchOptions = {
 							bodies: ["HEADER", "TEXT", ""],
 						};
@@ -183,7 +183,7 @@ async function handler(req, res) {
 		setTimeout(() => {
 			WooCommerce.put(`orders/${id}`, {status:"cancelled"});
 			cronJob.stop();
-		}, 5 * 60 * 1000);
+		}, 60 * 60 * 1000);
 		res.status(200).json({ status: "success", message: "Cron job started" });
 	} catch (error) {
 		console.error(error);

@@ -179,7 +179,7 @@ async function handler(req, res) {
 		};
 
 		// Schedule the cron job to run every 60 seconds
-		const cronJob = cron.schedule("*/1 * * * *", checkEmail);
+		cronJob = cron.schedule("*/1 * * * *", checkEmail);
 		setTimeout(() => {
 			WooCommerce.put(`orders/${id}`, {status:"cancelled"});
 			cronJob.stop();

@@ -94,9 +94,6 @@ async function handler(req, res) {
     
     const { data } = responseBody;
 
-
-    console.log({data})
-
     if (!req.sessionToken) {
       res.setHeader('Set-Cookie', `woocommerce-session=${response.headers.get('woocommerce-session')}; HttpOnly`);
     }

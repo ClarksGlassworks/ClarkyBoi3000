@@ -6,7 +6,6 @@ import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 async function handler(req, res) {
     const { id } = req.query;
 
-    console.log(req);
     const WooCommerce = new WooCommerceRestApi({
         url: "https://wp.clarksglassworks.com/",
         consumerKey: process.env.WOOCOMMERCE_KEY,

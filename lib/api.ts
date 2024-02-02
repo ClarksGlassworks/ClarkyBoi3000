@@ -54,7 +54,6 @@ export function useGetCart() {
 
 export function useOrder(order_id) {
 
-	console.log('fetch wooOrder >', order_id)
 	const fetcher = (url) => fetch(url).then((res) => res.json());
 	const { data, mutate, error } = useSWR(order_id ? "/api/order?id=" + order_id : null, fetcher, { refreshInterval: 1000 });
 
@@ -114,7 +113,6 @@ export function useScrollPosition() {
 }
 
 export async function addToCart(productId, quantity) {
-	console.log("----->", productId, quantity);
 	const response = await fetch("/api/addToCart", {
 		method: "POST",
 		headers: {
@@ -270,7 +268,6 @@ export async function getWooCommerceProduct(slug) {
 	});
 	const data = await response.json();
 
-	console.log("data", data);
-	console.log("response", response);
+	
 	return data;
 }

@@ -4,8 +4,6 @@ import withSession from "../../lib/withSession";
 async function handler(req, res) {
   const { id, quantity } = JSON.parse(req.body);
 
-  console.log('---->', req.body)
-  console.log(id, quantity)
   const variables = { id: parseInt(id, 10), quantity: parseInt(quantity) };
 
   try {
@@ -49,8 +47,6 @@ async function handler(req, res) {
     
     const { data } = responseBody;
 
-
-    console.log({data})
 
     if (!req.sessionToken) {
       res.setHeader('Set-Cookie', `woocommerce-session=${response.headers.get('woocommerce-session')}; HttpOnly`);

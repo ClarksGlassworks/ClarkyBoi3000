@@ -22,7 +22,6 @@ import HomepageHeader from "../components/homepage-header";
 import { motion, useScroll } from "framer-motion";
 export default function Post({ product, preview }) {
 
-	console.log({ product });
 	const router = useRouter();
 	// const morePosts = posts?.edges;
 	const { isMobile } = useWindowSize();
@@ -212,7 +211,7 @@ const allImages = product ? [
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-	console.log("-------- GET STATIC PROPS -----------");
+
 
 	const response = await fetch("https://wp.clarksglassworks.com/graphql", {
 		method: "POST",
@@ -269,11 +268,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	// const allPosts = await getWooCommerceProducts({ featured: null });
-	// console.log({ allPosts });
-	// const paths = allPosts?.edges?.map(({ node }) => `/${node.slug}`) || [];
-	// console.log('Paths-', { paths });
-
+	
 	const response = await fetch("https://wp.clarksglassworks.com/graphql", {
 		method: "POST",
 		headers: {

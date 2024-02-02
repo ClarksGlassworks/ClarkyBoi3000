@@ -5,13 +5,11 @@ async function handler(req, res) {
     try {
         const { cart } = req.body;
 
-        console.log(cart);
         const lineItems = cart.contents.nodes.map((item) => ({
             productId: item.product.node.id,
             quantity: item.quantity,
         }));
 
-        console.log({ lineItems })
 
         const response = await fetch('https://wp.clarksglassworks.com/graphql', {
             method: 'POST',
@@ -34,7 +32,6 @@ async function handler(req, res) {
             }),
         });
 
-        console.log('---->', response);
         if (!response.ok) {
             console.error('HTTP status:', response.status);
             console.error('Status text:', response.statusText);
@@ -49,8 +46,6 @@ async function handler(req, res) {
         }
 
         const { data } = responseBody;
-
-        console.log({ data });
 
         if (!req.sessionToken) {
             res.setHeader('Set-Cookie', `woocommerce-session=${response.headers.get('woocommerce-session')}; HttpOnly`);

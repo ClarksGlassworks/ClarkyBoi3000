@@ -3,7 +3,6 @@ import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 async function handler(req, res) {
 	const { orderID } = req.body;
 	// const variables = { orderID: orderID };
-    console.log('cancelWooOrder.ts >', {orderID}, orderID)
 	const data = {
 		status: "cancelled",
 	};

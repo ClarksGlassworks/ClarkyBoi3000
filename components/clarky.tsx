@@ -48,9 +48,6 @@ const ClarkyBoi = ({ clarkyBoiState, key, scrollPosition }) => {
     };
 
     useEffect(() => {
-        console.log('Clarky', scrollPosition)
-
-
         if (scrollPosition === "initial") {
             controls.start(startState)
         } else if (scrollPosition === "scrolling") {
@@ -63,8 +60,6 @@ const ClarkyBoi = ({ clarkyBoiState, key, scrollPosition }) => {
             controls.start(endState)
         }
 
-
-       
     }, [scrollPosition])
 
     return (

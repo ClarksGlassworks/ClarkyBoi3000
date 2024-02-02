@@ -17,7 +17,6 @@ async function handler(req, res) {
 		country: reqBody.shipping.country,
 	};
 
-	console.log("updateWooSession.ts >", { variables });
 
     // 
 

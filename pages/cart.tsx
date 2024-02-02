@@ -15,7 +15,6 @@ const ShoppingCartPage = ({ preview }) => {
     const { isMobile } = useWindowSize()
 
     const handleRemoveFromCart = async (key) => {
-        console.log('remove from cart')
         const req = await fetch ('/api/removeFromCart?key=' + key)
         const res = await req.json()
         toast('Removed item from your cart')
@@ -23,7 +22,6 @@ const ShoppingCartPage = ({ preview }) => {
 
     }
 
-    console.log({ cart })
     if (!cart) return null
     return (
         <Layout preview={preview}>

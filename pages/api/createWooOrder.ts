@@ -7,10 +7,8 @@ async function handler(req, res) {
     const { cart, customer:customerData, payment_method, status } =
         req.body;
 
-    console.log('----> createWooOrder', cart)
     const customer = customerData.customer
     const shipping = cart?.chosenShippingMethods[0]
-    console.log('-customer-', customer)
     const data = {
         payment_method: payment_method,
         payment_method_title: "Direct Bank Transfer",
@@ -44,8 +42,6 @@ async function handler(req, res) {
             phone: customer?.shipping?.phone?.toString(),
         },
         line_items: cart?.contents?.nodes?.map((item) => { 
-            
-            console.log('->', item)
             const decodedId= Number(atob(item.product.node.id).split(':')[1])
             return ({
             product_id: decodedId,
@@ -59,7 +55,6 @@ async function handler(req, res) {
         ],
     };
 
-    console.log('----> createWooOrder', data)
     const WooCommerce = new WooCommerceRestApi({
         url: "https://wp.clarksglassworks.com/",
         consumerKey: process.env.WOOCOMMERCE_KEY,

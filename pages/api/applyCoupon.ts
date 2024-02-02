@@ -30,13 +30,11 @@ async function handler(req, res) {
         res.newSessionToken = response.headers.get('woocommerce-session');
       }
       
-      console.log("response", response)
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
   
       const { data } = await response.json();
-      console.log("data", data)
       res.status(200).json(data);
     } catch (error) {
       console.error(error);

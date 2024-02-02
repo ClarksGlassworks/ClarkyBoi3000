@@ -50,7 +50,6 @@ export default function Index({ allPosts: { edges }, preview }) {
 			if (yPercent >= 80 && yPercent <= 100) {
 				const remainingSpace = 100 - yPercent;
 				const screenPercentage = Math.round((remainingSpace / 20) * 100);
-				console.log('screenPercentage', screenPercentage);
 				setRemainingSpace(screenPercentage)
 			}
 

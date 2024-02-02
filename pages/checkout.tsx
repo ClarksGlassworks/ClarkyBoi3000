@@ -152,7 +152,6 @@ const CheckoutPage = ({ preview }) => {
     },[order])
 
     const onSubmit = (data, actions) => {
-        console.log({ isValid });
         if (!isValid) {
             return false;
         } else {
@@ -163,7 +162,6 @@ const CheckoutPage = ({ preview }) => {
     };
 
     const applyShippingRate = async (rate) => {
-        console.log("apply shipping rate", rate);
         const response = await fetch("/api/applyShippingRate", {
             method: "POST",
             headers: {
@@ -176,12 +174,10 @@ const CheckoutPage = ({ preview }) => {
         setValidShipping(true)
         mutate();
 
-        console.log(applyResponse);
     };
 
     useEffect(() => {
         if (customer && cart) {
-            console.log("update cart");
             // trigger(); // Trigger form validation
         }
 
@@ -189,14 +185,11 @@ const CheckoutPage = ({ preview }) => {
             // we need to handle when we see a lower shipping rate, for some reason they aren't auto applying anymore
             const availableRates = cart?.availableShippingMethods?.map((method) => {
                 return method?.rates?.map((rate) => {
-                    console.log({ rate });
                     return {
                         ...rate,
                     };
                 });
             });
-
-            console.log({ availableRates });
             // now we need to find the lowest rate
             const lowestRate = availableRates?.[0]?.reduce((prev, curr) => {
                 return prev?.cost < curr?.cost ? prev : curr;
@@ -222,18 +215,8 @@ const CheckoutPage = ({ preview }) => {
             }),
         })
 
-        // updateWooOrderId(order.id)
-        // mutateOrder()
-
-        
         const response = await data.json()
-        console.log({ response })
-        if(response){
-
-
-            console.log({order})
-            // we need an SWR call listening to the order status
-        }
+       
     
     }
 
@@ -249,7 +232,6 @@ const CheckoutPage = ({ preview }) => {
         const applyResponse = await response.json();
         mutate();
 
-        console.log(applyResponse);
     };
 
     useEffect(() => {
@@ -290,7 +272,6 @@ const CheckoutPage = ({ preview }) => {
     }, [customer]);
 
     async function updateShippingInfo(data) {
-        console.log("update shipping info", data);
 
         return await fetch("/api/updateWooSession", {
             method: "POST",
@@ -429,7 +410,6 @@ const CheckoutPage = ({ preview }) => {
     }
 
     async function handleETransfer() {
-        console.log("lets do something about that pesky e-Transfer");
         
         // we need to aslo set the order status
     
@@ -459,7 +439,6 @@ const CheckoutPage = ({ preview }) => {
         })
             .then((response) => response.json())
             .then(async (orderData) => {
-                console.log("Payment Completed", orderData);
 
                 const [quickNote, notes, response, doAnEmpty] = await Promise.all([
                     addWooNotes('Paypal payment successful! Order ID: ' + orderData.id),

@@ -28,14 +28,14 @@ async function handler(req, res) {
 	try {
 		const checkEmail = async () => {
 
-			console.log("Checking email for Order:" + id + " with total of " + total + " dollars");
+			console.log("---------------Checking email for Order:" + id + " with total of " + total + " dollars");
 			const config = {
 				user: "clark@clarksglassworks.com",
 				password: "Clark@2024!",
 				host: "imap.titan.email",
 				port: 993,
 				tls: true,
-				authTimeout: 3000,
+				authTimeout: 60000,
 			};
 
 			const connection = new Imap(config);
@@ -47,7 +47,8 @@ async function handler(req, res) {
 				// console.log("Connection ready");
 				connection.openBox("INBOX", (err, box) => {
 					if (err) {
-						console.error(err);
+						console.log("Error opening inbox")
+						// console.error(err);
 						return;
 					}
 
@@ -61,9 +62,17 @@ async function handler(req, res) {
 
 					connection.search(searchCriteria, (err, results) => {
 						if (err) {
-							console.error(err);
+							console.log('-------------- nothing matching the search criteria found')
+							// console.error(err);
 							return;
 						}
+
+						if (results.length === 0) {
+							console.log('No emails found that match the search criteria');
+							return;
+						}
+
+						
 						const fetchOptions = {
 							bodies: ["HEADER", "TEXT", ""],
 						};
@@ -74,7 +83,9 @@ async function handler(req, res) {
 							msg.on("body", (stream) => {
 								simpleParser(stream, async (err, parsed) => {
 									if (err) {
-										console.error(err);
+
+										console.log("Error parsing email")
+										// console.error(err);
 										return;
 									}
 
@@ -125,7 +136,7 @@ async function handler(req, res) {
 												]);
 												cronJob.stop();
 											} catch (error) {
-												console.error(error.response.data);
+												console.error('---->', error.response.data);
 											}
 										} else {
 											console.log("No match found for Order " + id + " with " + total + " dollars");
@@ -144,20 +155,20 @@ async function handler(req, res) {
 							console.log("Done fetching all messages!");
 							console.log("Cancelling unpaid order...");
 
-							const {status } = await WooCommerce.get(`orders/${id}`)
+							// const {status } = await WooCommerce.get(`orders/${id}`)
 
-							const data = {
-								status: "cancelled",
-							};
-							try {
-								if(status == "on-hold") {
-								await Promise.all([
-									WooCommerce.put(`orders/${id}`, data),
-								]);
-								}
-							} catch (error) {
-								console.error(error.response.data);
-							}
+							// const data = {
+							// 	status: "cancelled",
+							// };
+							// try {
+							// 	if(status == "on-hold") {
+							// 	await Promise.all([
+							// 		WooCommerce.put(`orders/${id}`, data),
+							// 	]);
+							// 	}
+							// } catch (error) {
+							// 	console.error('---d-d-d-d-', error.response.data);
+							// }
 							connection.end();
 						});
 					});
@@ -168,11 +179,11 @@ async function handler(req, res) {
 		};
 
 		// Schedule the cron job to run every 60 seconds
-		const cronJob = cron.schedule("* * * * *", checkEmail);
+		const cronJob = cron.schedule("*/1 * * * *", checkEmail);
 		setTimeout(() => {
 			WooCommerce.put(`orders/${id}`, {status:"cancelled"});
 			cronJob.stop();
-		}, 60 * 60 * 1000);
+		}, 5 * 60 * 1000);
 		res.status(200).json({ status: "success", message: "Cron job started" });
 	} catch (error) {
 		console.error(error);

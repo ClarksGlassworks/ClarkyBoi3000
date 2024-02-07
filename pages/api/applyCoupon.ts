@@ -6,41 +6,44 @@ import withSession from "../../lib/withSession";
 
 
 async function handler(req, res) {
-    const { orderID } = req.query;
-    const variables = { orderID: orderID };
-    try {
-      const response = await fetch('https://wp.clarksglassworks.com/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'woocommerce-session': `Session ${req.sessionToken ? req.sessionToken : ''}`,
-        },
-        body: JSON.stringify({
-          query: `
-          mutation MyMutation2 {
-            applyCoupon(input: {code: "testcoupon"}) {
+  // console.log({ req });
+  const { code } = req.body
+
+  const variables = { code: code };
+  try {
+    const response = await fetch('https://wp.clarksglassworks.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'woocommerce-session': `Session ${req.sessionToken ? req.sessionToken : ''}`,
+      },
+      body: JSON.stringify({
+        query: `
+          mutation MyMutation2($code: String!) {
+            applyCoupon(input: { code: $code }) {
               clientMutationId
             }
           }
-          `
-        }),
-      });
-  
-      if (!req.sessionToken) {
-        res.newSessionToken = response.headers.get('woocommerce-session');
-      }
-      
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      const { data } = await response.json();
-      res.status(200).json(data);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error fetching product' });
+        `,
+        variables,
+      }),
+    });
+
+    if (!req.sessionToken) {
+      res.newSessionToken = response.headers.get('woocommerce-session');
     }
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const { data } = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error fetching product' });
   }
+}
   
 
   export default withSession(handler);

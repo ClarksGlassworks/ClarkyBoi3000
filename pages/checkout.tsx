@@ -224,6 +224,7 @@ const CheckoutPage = ({ preview }) => {
     const onDiscountSubmit = async (data, actions) => {
         const response = await fetch("/api/applyCoupon", {
             method: "POST",
+            body: JSON.stringify({code:data.discount}),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -651,6 +652,7 @@ const CheckoutPage = ({ preview }) => {
                                             <button
                                                 className="border m-2 border-orange-500 p-2"
                                                 type="submit"
+                                                onClick={discountHandleSubmit(onDiscountSubmit)}
                                             >
                                                 Apply
                                             </button>

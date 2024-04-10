@@ -117,7 +117,12 @@ const allImages = product ? [
 							zIndex: 9999,
 						}} /> */}
 						<ShoppingCartButton />
+						<div className=" z-20 text-[50px] lg:text-[80px] font-bold text-white mb-8 leading-none bottom-[10px] ">
+								<h1 className="" style={{textShadow:'2px 2px 2px rgba(0,0,0,0.8)'}}>{product.name}</h1>{" "}
+								
+							</div>
 						<div className="relative mx-auto border-4 border-white">
+						
 							<div className=" z-10 aspect-square bg-black w-full border-b-8 border-white shadow-2xl shadow-black overflow-hidden flex justify-center">
 								<motion.div
 									className="aspect-square overflow-hidden w-full"
@@ -139,10 +144,7 @@ const allImages = product ? [
                                         }} />
 								</motion.div>
 							</div>
-							<div className="absolute z-20 text-[40px] font-semibold text-white p-4  leading-none bottom-[10px]">
-								<h1 className="">{product.name}</h1>{" "}
-								
-							</div>
+							
 							<div
 								className="absolute top-4 left-4 bg-white rounded-full p-2"
 								onClick={() => {
@@ -159,7 +161,7 @@ const allImages = product ? [
 
 
 						</div>
-
+					
 						<div className="relative w-full flex flex-row gap-2 mt-2 "> {/* Add items-center */}
 							{images?.slice(1).map((imageUrl, index) => {
 								return (

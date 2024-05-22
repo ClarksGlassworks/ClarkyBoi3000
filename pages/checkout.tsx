@@ -488,112 +488,112 @@ const CheckoutPage = ({ preview }) => {
                                         Shipping Info
                                     </div>
                                     <div>
-                                        <span className="text-red-500 ml-2">*</span> all fields are
+                                        <span className="ml-2 text-red-500">*</span> all fields are
                                         required.
                                     </div>
                                     <div className="flex flex-col">
                                         <input
-                                            className="border m-2 border-orange-500 p-2"
+                                            className="p-2 m-2 border border-orange-500"
                                             {...register("firstName", { required: true })}
                                             placeholder="First Name"
                                             onBlur={handleSubmit(onSubmit)}
                                         />
 
                                         {errors.firstName && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors.firstName.message}
                                             </span>
                                         )}
 
                                         <input
-                                            className="border m-2 border-orange-500 p-2"
+                                            className="p-2 m-2 border border-orange-500"
                                             {...register("lastName", { required: true })}
                                             placeholder="Last Name"
                                             onBlur={handleSubmit(onSubmit)}
                                         />
 
                                         {errors.lastName && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors.lastName.message}
                                             </span>
                                         )}
 
                                         <input
-                                            className="border m-2 border-orange-500 p-2"
+                                            className="p-2 m-2 border border-orange-500"
                                             {...register("email", { required: true })}
                                             placeholder="Email"
                                             onBlur={handleSubmit(onSubmit)}
                                         />
 
                                         {errors.email && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors.email.message}
                                             </span>
                                         )}
 
-                                        <div className="border-t border-orange-500 pt-4 mt-4 mx-2"></div>
+                                        <div className="pt-4 mx-2 mt-4 border-t border-orange-500"></div>
 
                                         <input
-                                            className="border m-2 border-orange-500 p-2"
+                                            className="p-2 m-2 border border-orange-500"
                                             {...register("shipping.address1", { required: true })}
                                             placeholder="Address"
                                             onBlur={handleSubmit(onSubmit)}
                                         />
 
                                         {errors?.shipping?.address1 && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors?.shipping?.address1.message}
                                             </span>
                                         )}
 
                                         <input
-                                            className="border m-2 border-orange-500 p-2"
+                                            className="p-2 m-2 border border-orange-500"
                                             {...register("shipping.address2", { required: true })}
                                             placeholder="Addres 2"
                                             onBlur={handleSubmit(onSubmit)}
                                         />
 
                                         {errors?.shipping?.address2 && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors?.shipping?.address2.message}
                                             </span>
                                         )}
 
                                         <input
-                                            className="border m-2 border-orange-500 p-2"
+                                            className="p-2 m-2 border border-orange-500"
                                             {...register("shipping.city", { required: true })}
                                             placeholder="City"
                                             onBlur={handleSubmit(onSubmit)}
                                         />
 
                                         {errors?.shipping?.city && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors?.shipping?.city.message}
                                             </span>
                                         )}
 
                                         <input
-                                            className="border m-2 border-orange-500 p-2"
+                                            className="p-2 m-2 border border-orange-500"
                                             {...register("shipping.state", { required: true })}
                                             placeholder="State/Province"
                                             onBlur={handleSubmit(onSubmit)}
                                         />
 
                                         {errors?.shipping?.state && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors?.shipping?.state.message}
                                             </span>
                                         )}
 
                                         <input
-                                            className="border m-2 border-orange-500 p-2"
+                                            className="p-2 m-2 border border-orange-500"
                                             {...register("shipping.postcode", { required: true })}
                                             placeholder="Postal/Zip"
                                             onBlur={handleSubmit(onSubmit)}
                                         />
 
                                         {errors?.shipping?.postcode && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors?.shipping?.postcode.message}
                                             </span>
                                         )}
@@ -609,7 +609,7 @@ const CheckoutPage = ({ preview }) => {
                                                     isClearable
                                                     placeholder="Country"
                                                     onChange={(value) => field.onChange(value?.value)}
-                                                    className=" m-2"
+                                                    className="m-2 "
                                                     value={countryOptions.find(
                                                         (option) => option.value === field.value
                                                     )}
@@ -623,7 +623,7 @@ const CheckoutPage = ({ preview }) => {
                                             )}
                                         />
                                         {errors?.shipping?.country && (
-                                            <span className="text-sm text-red-500 ml-2">
+                                            <span className="ml-2 text-sm text-red-500">
                                                 {errors?.shipping?.country.message}
                                             </span>
                                         )}
@@ -631,13 +631,13 @@ const CheckoutPage = ({ preview }) => {
                                         {!isValid && (
                                             <button
                                                 type="submit"
-                                                className="mt-4 rounded-full bg-orange-500 text-white p-2 m-2"
+                                                className="p-2 m-2 mt-4 text-white bg-orange-500 rounded-full"
                                                 onClick={handleSubmit(onSubmit)}
                                             >
                                                 Update Shipping Info
                                             </button>
                                         )}
-                                        <div className="border-t border-orange-500 pt-4 mt-4 mx-2"></div>
+                                        <div className="pt-4 mx-2 mt-4 border-t border-orange-500"></div>
                                     </div>
                                 </form>
 
@@ -645,12 +645,12 @@ const CheckoutPage = ({ preview }) => {
                                     <div className="mt-0 mb-4">
                                         <div>
                                             <input
-                                                className="border m-2 border-orange-500 p-2"
+                                                className="p-2 m-2 border border-orange-500"
                                                 {...discountRegister("discount", { required: false })}
                                                 placeholder="Discount Code"
                                             />
                                             <button
-                                                className="border m-2 border-orange-500 p-2"
+                                                className="p-2 m-2 border border-orange-500"
                                                 type="submit"
                                                 onClick={discountHandleSubmit(onDiscountSubmit)}
                                             >
@@ -659,8 +659,8 @@ const CheckoutPage = ({ preview }) => {
                                         </div>
                                     </div>
                                 </form>
-                                <div className="w-full text-gray-400 text-sm mx-2">
-                                    International shipping is $50. Canadian orders over $150 ship
+                                <div className="w-full mx-2 text-sm text-gray-400">
+                                    International shipping is $50. Canadian orders over $300 ship
                                     for FREE! Please enter your shipping information above for
                                     accurate shipping rates.
                                 </div>
@@ -693,7 +693,7 @@ const CheckoutPage = ({ preview }) => {
                                 </div>
                             </div>
                             {(isValid && cart && customer && validShipping) && (
-                                <div className="mt-4 w-full mx-auto">
+                                <div className="w-full mx-auto mt-4">
                                     <PayPalButtons
                                         style={{ layout: "vertical", label: "pay" }}
                                         onApprove={onApprove}
@@ -705,7 +705,7 @@ const CheckoutPage = ({ preview }) => {
 
                                     <button
                                         onClick={handleETransfer}
-                                        className="bg-pink-500 hover:bg-purple-500 transition-all duration-200 text-white p-3 w-full flex items-center gap-2 justify-center cursor-pointer"
+                                        className="flex items-center justify-center w-full gap-2 p-3 text-white transition-all duration-200 bg-pink-500 cursor-pointer hover:bg-purple-500"
                                     >
                                         <FaCreditCard /> Pay with Interact eTransfer
                                     </button>
@@ -722,7 +722,7 @@ const CheckoutPage = ({ preview }) => {
                                     alt="Thank you"
                                     width="100"
                                     height="100"
-                                    className="object-cover w-1/2 mx-auto h-full"
+                                    className="object-cover w-1/2 h-full mx-auto"
                                     style={{
                                         maxWidth: "100%",
                                         height: "auto",
@@ -736,7 +736,7 @@ const CheckoutPage = ({ preview }) => {
                                 <div className="">
                                     <a
                                         href="../"
-                                        className="mt-4 underline text-sm text-blue-500"
+                                        className="mt-4 text-sm text-blue-500 underline"
                                     >
                                         Go back to homepage
                                     </a>
@@ -767,7 +767,7 @@ const CheckoutPage = ({ preview }) => {
                                 <div className="">
                                     <a
                                         href="../"
-                                        className="mt-4 underline text-sm text-blue-500"
+                                        className="mt-4 text-sm text-blue-500 underline"
                                     >
                                         Go back to homepage
                                     </a>

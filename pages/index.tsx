@@ -299,7 +299,7 @@ useEffect(() => {
 						Wholesale boss?
 					</h1>
 					<div className="mt-2">
-						<span className="text-xl lg:text-[40px] text-white font-vt323 mt-10 bg-black leading-[18px] p-1">
+						<span className="text-xl lg:text-[40px] text-white font-vt323 mt-10 bg-black leading-[20px] lg:leading-[40px] p-1">
 							Lets make some cheddar together! I offer wholesale pricing on all
 							my work to brick and mortar shops.
 						</span>

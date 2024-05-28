@@ -1,13 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
 const Top8Friends = ({ products, scrollPosition }) => {
 	return (
-        <div className="z-30     w-auto   lg:max-w-[800px] bg-gray-200 -mt-[50px] lg:mt-[160px] mx-4 lg:mx-auto lg:ml-[50%] lg:-translate-x-1/2">
+		<div className="flex flex-col  w-full max-w-screen-lg items-center justify-center lg:mt-[250px] mx-auto">
+        <div className="z-30     w-full lg:w-full    mt-0 lg:-mt-[50px]  px-4   ">
 			<div className=" bg-white border-2 border-[#ca6707] w-full relative mt-[270px] lg:mt-auto">
 			<div className="w-full  bg-[#fdd5a8] text-[#ca6707] p-2">
-				Clark's Top 8 Friends
+				Clark's Top Friends
 			</div>
-			<div className="mt-2 grid grid-cols-2 lg:grid-cols-4 gap-2">
+			<div className="mt-2 grid grid-cols-2 lg:grid-cols-4 gap-2 p-4">
 				<div className="bg-white col-span-1  flex flex-col items-center justify-center ">
 					<Image
                         alt="tom from mypsace"
@@ -49,7 +52,13 @@ const Top8Friends = ({ products, scrollPosition }) => {
                     );
 				})}
 			</div>
-			<div className="border-t border-[#ca6707] p-2 mt-2 text-right text-blue-500 underline cursor-pointer"><a href="/shop">View All of Clarks Friends</a></div>
+			<div className="border-t border-[#ca6707] p-2 mt-2 text-center text-blue-500  cursor-pointer p-8"><a href="/shop" className="p-4 bg-[url('/tiger.jpg')] bg-cover bg-bottom  border-4 animate-pulse " style={{borderStyle: "outset"}}><span className="text-white text-2xl drop-shadow-xl font-bold p-2">View All the Glass!</span></a></div>
+		</div>
+		</div>
+		<div className="w-1/2 bg-black h-full text-white -mt-12">
+		
+
+
 		</div>
 		</div>
     );

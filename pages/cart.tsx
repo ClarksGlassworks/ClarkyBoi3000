@@ -14,6 +14,8 @@ const ShoppingCartPage = ({ preview }) => {
     const { cart, mutate } = useGetCart()
     const { isMobile } = useWindowSize()
 
+
+    console.log({cart})
     const handleRemoveFromCart = async (key) => {
         const req = await fetch ('/api/removeFromCart?key=' + key)
         const res = await req.json()
@@ -21,6 +23,10 @@ const ShoppingCartPage = ({ preview }) => {
         mutate()
 
     }
+
+    const shipping = cart?.availableShippingMethods[0].rates[0]
+
+    console.log({shipping})
 
     if (!cart) return null
     return (
@@ -60,16 +66,25 @@ const ShoppingCartPage = ({ preview }) => {
                                 <div className="w-1/3">{title}</div>
                                 <div>{quantity}</div>
                                 <div>{subtotal}</div>
-                                <div><div className="text-blue-500 underline" onClick={()=>{handleRemoveFromCart(key)}}>Remove</div></div>
+                                <div><div className="text-blue-500 underline cursor-pointer" onClick={()=>{handleRemoveFromCart(key)}}>Remove</div></div>
                             </div>
                         })}
                     </div>
-                    <div className=" border-t border-[#ca6707] justify-end flex flex-col w-full items-end p-4 text-sm">
-                        <div className="font-semibold">Totals</div>
+                    <div className=" border-t border-[#ca6707] justify-between items-start flex flex-row w-full  p-4 text-sm">
+                        <div className="w-1/2">
+                            <div className="font-semibold">Shipping</div>
+                            <div className="font-thin text-gray-400">
+                                ${shipping?.cost} {shipping?.label}
+                            </div>
+                            <div className="mt-4 bg-green-500 text-white p-2 rounded-full text-sm w-2/3 text-center">
+                                Free shipping at $300!
+                            </div>
+                        </div>
+                        <div className="flex flex-col w-1/2 justify-end"><div className="font-semibold">Totals</div>
 
                         <div>Subtotal: {cart?.subtotal}</div>
                         <div>Tax: {cart?.totalTax}</div>
-                        <div>Total: <span className="text-[#ca6707] font-bold ">{cart?.total}</span></div>
+                        <div>Total: <span className="text-[#ca6707] font-bold ">{cart?.total}</span></div></div>
                     </div>
                     <div className="flex justify-between items-center flex-row border-t border-[#ca6707] p-2 mt-2 ">
                         <div className="text-right text-blue-500 underline cursor-pointer"><Link href="/shop">Continue Shopping</Link></div>

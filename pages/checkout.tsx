@@ -215,8 +215,11 @@ const CheckoutPage = ({ preview }) => {
             }),
         })
 
+        console.log('---------------------------------------------------------------- spin up', data)
+
         const response = await data.json()
        
+        console.log('response',response)
     
     }
 
@@ -356,6 +359,11 @@ const CheckoutPage = ({ preview }) => {
     }
 
     async function createWooOrder(cart, method, status) {
+
+        console.log('-> createWooOrder')
+        console.log({cart, method, status})
+        const rates = cart.availableShippingMethods[0].rates[0]
+        console.log({rates})
         const request = await fetch("/api/createWooOrder", {
             method: "POST",
             headers: {

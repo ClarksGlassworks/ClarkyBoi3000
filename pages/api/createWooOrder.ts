@@ -8,13 +8,35 @@ async function handler(req, res) {
         req.body;
 
     const customer = customerData.customer
-    const shipping = cart?.chosenShippingMethods[0]
+    const shipping = cart
+
+
+    const items = cart?.contents?.nodes?.map((item) => {
+
+        // console.log('--->item', item)
+        const decodedId= Number(atob(item.product.node.id).split(':')[1])
+        // console.log('---->decodedId', decodedId)
+        return ({
+        product_id: decodedId,
+        // item_id: item.product.node.id,
+        quantity: item.quantity,
+        // subtotal: item.subtotal,
+        // subtotalTax: item.subtotalTax,
+        // tax: item.tax,
+        // total: item.total,
+    })})
+
+
+    const chosen = cart?.chosenShippingMethods[0]
+    const theShipping = cart.availableShippingMethods[0].rates.find(r=>r.id === chosen)
+   
+    console.log('ITEMS --->', items)
     const data = {
         payment_method: payment_method,
         payment_method_title: "Direct Bank Transfer",
         set_paid: false,
-        first_name: customer?.firstName?.toString(),
-        last_name: customer?.lastName?.toString(),
+        first_name: customer?.shipping?.firstName?.toString(),
+        last_name: customer?.shipping?.lastName?.toString(),
         email: customer?.billing?.email?.toString(),
         status: status?.toString(),
         billing: {
@@ -41,20 +63,21 @@ async function handler(req, res) {
             email: customer?.billing?.email?.toString(),
             phone: customer?.shipping?.phone?.toString(),
         },
-        line_items: cart?.contents?.nodes?.map((item) => { 
-            const decodedId= Number(atob(item.product.node.id).split(':')[1])
-            return ({
-            product_id: decodedId,
-            quantity: item.quantity,
-        })}),
+        line_items: items,
         shipping_lines: [
         	{
-        		method_id: shipping.split(':')[0],
+        		method_id:theShipping.instanceId,
+                total: theShipping.cost,
+                method_title: theShipping.label,
 
         	},
         ],
     };
 
+    console.log('-----> createWooOrder')
+    // console.log(theShipping)
+    console.log(data.line_items)
+    // console.log({data});
     const WooCommerce = new WooCommerceRestApi({
         url: "https://wp.clarksglassworks.com/",
         consumerKey: process.env.WOOCOMMERCE_KEY,
@@ -64,6 +87,9 @@ async function handler(req, res) {
 
     try {
         const response = await WooCommerce.post("orders", data);
+
+        console.log(response, response.data)
+
 
         
         return res.status(200).json(response.data);

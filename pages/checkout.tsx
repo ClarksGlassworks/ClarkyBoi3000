@@ -101,6 +101,7 @@ const CheckoutPage = ({ preview }) => {
     const [{ isPending }] = usePayPalScriptReducer();
     const [showThankYou, setShowThankYou] = useState(false);
     const [showInteract, setShowInteract] = useState(false)
+    const [orderTotal, setOrderTotal] = useState(null);
     const [wooOrder, setWooOrder] = useState(null)
     const [shippingRates, setShippingRates] = useState(null);
     const { cart, mutate } = useGetCart();
@@ -430,6 +431,8 @@ const CheckoutPage = ({ preview }) => {
         updateWooOrderId(order.id)
         mutateOrder()
         spinUpListener(order)
+
+        setOrderTotal(order.total)
         setShowInteract(true);
         });
     }
@@ -723,8 +726,8 @@ const CheckoutPage = ({ preview }) => {
                     )}
 
                     {showInteract && (
-                        <div className="bg-white max-w-[500px] mx-auto p-4 pt-0 mt-[150px] pt-8 font-vt323 text-[30px] leading-[20px] text-orange-500 flex flex-col lg:flex-row">
-                            <div className="w-full lg:w-1/2">
+                        <div className="bg-white max-w-[500px] mx-auto p-4 pt-0 mt-[150px] pt-8 font-vt323 text-[30px] leading-[20px] text-orange-500 flex flex-col ">
+                            <div className="w-full ">
                                 <Image
                                     src="https://wp.clarksglassworks.com/wp-content/uploads/2024/01/money.gif"
                                     alt="Thank you"
@@ -737,8 +740,8 @@ const CheckoutPage = ({ preview }) => {
                                     }}
                                 />
                             </div>
-                            <div className="w-full lg:w-1/2">
-                                <div className="text-green-500 leading-[20px] pb-4">Money time!</div> Please send your eTransfer to <span className="text-blue-500">sales@clarksglassworks.com</span>, with your order number 
+                            <div className="w-full">
+                                <div className="text-green-500 leading-[20px] pb-4">Money time!</div> Please send your eTransfer of <span className="text-green-500 underline leading-normal">${orderTotal}</span> to <span className="text-blue-500">sales@clarksglassworks.com</span>, with your order number 
                                      <span className="text-blue-600"> {wooOrder.id}</span> in the notes.<br /><br />Your payment will be automatically deposited and your order will begin processing.<br /> <br /> You will receive an email when the order begins processing.
 
                                 <div className="">

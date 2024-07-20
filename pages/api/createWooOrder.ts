@@ -4,11 +4,12 @@
 import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
 
 async function handler(req, res) {
-    const { cart, customer:customerData, payment_method, status } =
+    const { cart, customer:customerData, payment_method, status, coupon_lines } =
         req.body;
 
     const customer = customerData.customer
     const shipping = cart
+
 
 
     const items = cart?.contents?.nodes?.map((item) => {
@@ -29,6 +30,7 @@ async function handler(req, res) {
 
     const chosen = cart?.chosenShippingMethods[0]
     const theShipping = cart.availableShippingMethods[0].rates.find(r=>r.id === chosen)
+    const coupons = cart?.appliedCoupons
    
     console.log('ITEMS --->', items)
     const data = {
@@ -72,6 +74,7 @@ async function handler(req, res) {
 
         	},
         ],
+        coupon_lines: coupons,
     };
 
     console.log('-----> createWooOrder')

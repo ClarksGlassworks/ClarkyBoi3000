@@ -24,9 +24,7 @@ const ShoppingCartPage = ({ preview }) => {
 
     }
 
-    const shipping = cart?.availableShippingMethods[0].rates[0]
-
-    console.log({shipping})
+    const shipping = cart?.availableShippingMethods?.[0]?.rates?.[0]
 
     if (!cart) return null
     return (

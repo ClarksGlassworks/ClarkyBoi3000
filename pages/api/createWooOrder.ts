@@ -29,7 +29,7 @@ async function handler(req, res) {
 
 
     const chosen = cart?.chosenShippingMethods[0]
-    const theShipping = cart.availableShippingMethods[0].rates.find(r=>r.id === chosen)
+    const theShipping = cart?.availableShippingMethods?.[0]?.rates?.find(r=>r.id === chosen)
     const coupons = cart?.appliedCoupons
    
     console.log('ITEMS --->', items)
